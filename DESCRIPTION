@@ -1,0 +1,14 @@
+Package: maldipickr
+Version: 0.0.0.9000
+Title: Dereplicate And Cherry-pick Mass Spectrometry Spectra
+Description: This package conveniently wrap-up matrix-assisted laser
+        desorption/ionization-time-of-flight (MALDI-TOF) data preprocessing steps, dereplication steps to cluster MALDI-TOF spectra and cherry-picking steps to select only representative spectra. This package relies heavily on the MALDIquant package and other tools to perform the actual work.
+Authors@R: person(given = "Charlie",
+       family = "Pauvert",
+       role = c("aut", "cre"),
+       email = "cpauvert@users.noreply.github.com",
+       comment = c(ORCID = "0000-0001-9832-2507"))
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
