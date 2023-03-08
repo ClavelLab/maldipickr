@@ -1,0 +1,213 @@
+---
+title: "flat_full.Rmd for working package"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- Run this 'development' chunk -->
+<!-- Store every call to library() that you need to explore your functions -->
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+<!--
+ You need to run the 'description' chunk in the '0-dev_history.Rmd' file before continuing your code there.
+
+If it is the first time you use {fusen}, after 'description', you can directly run the last chunk of the present file with inflate() inside.
+--> 
+
+```{r development-load}
+# Load already included functions if relevant
+pkgload::load_all(export_all = FALSE)
+```
+
+# Include some data examples in your package
+
+<!-- 
+ Store your dataset in a directory named "inst/" at the root of your project.
+ Use it for your tests in this Rmd thanks to `pkgload::load_all()` to make it available
+and `system.file()` to read it in your examples.
+
+- There already is a dataset in the "inst/" directory to be used in the examples below
+-->
+
+```{r development-dataset}
+# Run all this chunk in the console directly
+# There already is a dataset in the "inst/" directory
+# Make the dataset file available to the current Rmd during development
+pkgload::load_all(path = here::here(), export_all = FALSE)
+
+# You will be able to read your example data file in each of your function examples and tests as follows - see chunks below
+datafile <- system.file("nyc_squirrels_sample.csv", package = "maldipickr")
+nyc_squirrels <- read.csv(datafile, encoding = "UTF-8")
+
+nyc_squirrels
+```
+
+
+# Importing the report from the Bruker MALDI Biotyper device
+
+<!--
+Create a chunk for the core of the function
+
+- The chunk needs to be named `function` at least
+- It contains the code of a documented function
+- The chunk can also be named `function-my_median` to make it easily
+findable in your Rmd
+- Let the `@examples` part empty, and use the next `examples` chunk instead to present reproducible examples
+
+After inflating the template
+
+-  This function code will automatically be added in a new file in the "R/" directory
+-->
+
+```{r function_read_biotyper_report}
+#' Importing Bruker MALDI Biotyper CSV report
+#'
+#'
+#' The headerless table exported by the Compass software in the Bruker MALDI
+#' Biotyper device is separated by semi-colons and has empty columns which prevent
+#' an easy import by R. This function reads the report correctly as a tibble.
+#' 
+#' @details
+#' The headerless table contains identification information for each target processed by
+#' the Biotyper device:
+#' * `bruker_quality`: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"
+#' * `bruker_species`: the species name associated with the MALDI spectrum analyzed.
+#' * `bruker_taxid`: the NCBI Taxonomy Identifier of the species name in the column species
+#' * `bruker_hash`: a hash from an undocumented checksum function probably to encode the database entry.
+#' * `bruker_log`: the log-score of the identification.
+#' 
+#' @param path Path to the semi-colon separated table
+#' @param best_hits A logical indicating whether to return only the best hit
+#'
+#' @return
+#' A tibble (see Details for the columns description)
+#' @export
+#'
+#' @examples
+read_biotyper_report <- function(path, best_hits = TRUE){
+  require(tidyr)
+  require(dplyr)
+  require(tibble)
+  # Prepare the columns names, because 10 hits are reported by default
+  prep_names <- tidyr::expand_grid(
+    prefix = "bruker",
+    iteration = sprintf("%02d", 1:10), # Because 10 hits per spot with each 5 columns
+    variables = c("quality", "species", "taxid", "hash", "log")
+  ) %>% dplyr::mutate(
+    type = if_else( variables == "log", "d", "c"),
+    col_names = paste(prefix, iteration, variables, sep = "_")
+  )
+  
+  # Read in the report, usually warnings about problems and
+  #  inconsistent number of columns are triggered
+  breport <- read.delim(
+    path, 
+    col.names = c("spot", "sample_name", pull(prep_names, col_names)),
+    sep = ";", header = FALSE,
+    na = c("NA", "E1", "E2", "") # Added E1 identification in taxid as NA
+  )
+  no_peak_lgl <- breport$bruker_01_species == "no peaks found"
+  
+  # Remove the spot for which no peaks were detected, and warn the user
+  breport <- tibble::as_tibble(breport) %>%
+    dplyr::filter(bruker_01_species != "no peaks found")
+  if(sum(no_peak_lgl) > 0 ){
+    warning(
+      sum(no_peak_lgl), " rows out of ", length(no_peak_lgl),
+      " due to no peaks found")    
+  }
+
+  if(best_hits){
+    breport %>%
+      select(spot, sample_name, starts_with("bruker_01")) %>%
+      rename_with(~ gsub("_01", "", .x)) %>%
+      return()
+  } else{
+    return(breport)
+  }
+}
+```
+
+<!--
+Create a chunk with an example of use for your function
+
+- The chunk needs to be named `examples` at least
+- It contains working examples of your function
+- The chunk is better be named `examples-my_median` to be handled
+correctly when inflated as a vignette
+
+After inflating the template
+
+-  This example will automatically be added in the '@examples' part of our function above in the "R/" directory
+- This example will automatically be added in the vignette created from this Rmd template
+-->
+
+```{r examples_read_biotyper_report}
+# Example with your dataset in "inst/"
+biotyper <- system.file("biotyper.csv", package = "maldipickr")
+read_biotyper_report(biotyper)
+```
+
+<!--
+Create a chunk with a test of use for your function
+
+- The chunk needs to be named `tests` at least
+- It contains working tests of your function
+- The chunk is better be named `tests-my_median` to be handled
+correctly when inflated as a vignette
+
+After inflating the template
+
+-  This test code will automatically be added in the "tests/testthat/" directory
+-->
+
+```{r tests_read_biotyper_report}
+# test_that("my_median works properly and show error if needed", {
+#   expect_true(my_median(1:12) == 6.5)
+#   expect_error(my_median("text"))
+# })
+# Test with a correct and empty datasets in "inst/"
+biotyper <- system.file("biotyper.csv", package = "maldipickr")
+biotyper_empty <- system.file("biotyper_empty.csv", package = "maldipickr")
+
+# Apply test on my function
+test_that("read_biotyper_report works properly with correct dataset and best hits", {
+  expect_equal(
+    nrow(read_biotyper_report(biotyper)), 3
+  )
+  expect_equal(
+    dplyr::pull(read_biotyper_report(biotyper), bruker_species),
+    c("not reliable identification", "Escherichia coli", "Kosakonia cowanii")
+  )
+})
+test_that("read_biotyper_report is empty when no peaks are found", {
+  expect_equal(
+    nrow(read_biotyper_report(biotyper_empty)), 0
+  )
+  expect_warning(
+    read_biotyper_report(biotyper_empty),"1 rows out of 1 due to no peaks found"
+    )
+})
+```
+
+
+# Inflate your package
+
+You're one inflate from paper to box.
+Build your package from this very Rmd using `fusen::inflate()`
+
+- Verify your `"DESCRIPTION"` file has been updated
+- Verify your function is in `"R/"` directory
+- Verify your test is in `"tests/testthat/"` directory
+- Verify this Rmd appears in `"vignettes/"` directory
+
+
+```{r development-inflate, eval=FALSE}
+# Run but keep eval=FALSE to avoid infinite loop
+# Execute in the console directly
+fusen::inflate(flat_file = "dev/flat_full.Rmd", vignette_name = "Get started")
+```

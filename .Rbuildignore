@@ -1,3 +1,5 @@
 
 ^dev$
 ^LICENSE\.md$
+^maldipickr\.Rproj$
+^\.Rproj\.user$
