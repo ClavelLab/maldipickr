@@ -1,0 +1,6 @@
+flat_full.Rmd:
+  path: dev/flat_full.Rmd
+  state: active
+  R: R/read_biotyper_report.R
+  tests: tests/testthat/test-read_biotyper_report.R
+  vignettes: vignettes/get-started.Rmd
