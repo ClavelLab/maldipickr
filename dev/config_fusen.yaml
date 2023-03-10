@@ -3,4 +3,4 @@ flat_full.Rmd:
   state: active
   R: R/read_biotyper_report.R
   tests: tests/testthat/test-read_biotyper_report.R
-  vignettes: vignettes/get-started.Rmd
+  vignettes: vignettes/import-data-from-bruker-maldi-biotyper.Rmd

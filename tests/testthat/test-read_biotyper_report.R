@@ -14,8 +14,19 @@ test_that("read_biotyper_report works properly with correct dataset and best hit
     nrow(read_biotyper_report(biotyper)), 3
   )
   expect_equal(
+    ncol(read_biotyper_report(biotyper)), 7
+  )
+  expect_equal(
     dplyr::pull(read_biotyper_report(biotyper), bruker_species),
     c("not reliable identification", "Escherichia coli", "Kosakonia cowanii")
+  )
+})
+test_that("read_biotyper_report works properly with correct dataset and all hits", {
+  expect_equal(
+    nrow(read_biotyper_report(biotyper, best_hits = FALSE)), 3
+  )
+  expect_equal(
+    ncol(read_biotyper_report(biotyper, best_hits = FALSE)), 52
   )
 })
 test_that("read_biotyper_report is empty when no peaks are found", {

@@ -5,28 +5,49 @@
 #'
 #' The headerless table exported by the Compass software in the Bruker MALDI
 #' Biotyper device is separated by semi-colons and has empty columns which prevent
-#' an easy import by R. This function reads the report correctly as a tibble.
+#' an easy import in R. This function reads the report correctly as a tibble.
 #' 
 #' @details
 #' The headerless table contains identification information for each target processed by
-#' the Biotyper device:
+#' the Biotyper device and once processed by the `read_biotyper_report`,
+#' the following seven columns are available in the tibble, _when using the `best_hits = TRUE` option:
+#' * `spot`: an integer indicating the spot number of the MALDI target (i.e., plate)
+#' * `sample_name`: the character string provided during the preparation of the MALDI target (i.e., plate)
 #' * `bruker_quality`: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"
 #' * `bruker_species`: the species name associated with the MALDI spectrum analyzed.
 #' * `bruker_taxid`: the NCBI Taxonomy Identifier of the species name in the column species
 #' * `bruker_hash`: a hash from an undocumented checksum function probably to encode the database entry.
 #' * `bruker_log`: the log-score of the identification.
 #' 
+#' When all hits are returned (with `best_hits = FALSE`), the two columns `spot` and `sample_name`
+#' remains unchanged, but the five columns prefixed by `bruker_` contains the hit number:
+#'
+#' * `bruker_01_quality`
+#' * `bruker_01_species`
+#' * `bruker_01_taxid`
+#' * `bruker_01_hash`
+#' * `bruker_01_log`
+#' * `bruker_02_quality`
+#' * ...
+#' * `bruker_10_species`
+#' * `bruker_10_taxid`
+#' * `bruker_10_hash`
+#' * `bruker_10_log`
+#'
 #' @param path Path to the semi-colon separated table
 #' @param best_hits A logical indicating whether to return only the best hit
 #'
 #' @return
-#' A tibble (see Details for the columns description)
+#' A tibble of 7 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
 #' @export
 #'
 #' @examples
-#' # Example with your dataset in "inst/"
+#' # Get a example Bruker report
 #' biotyper <- system.file("biotyper.csv", package = "maldipickr")
-#' read_biotyper_report(biotyper)
+#' # Import the report as a tibble
+#' report_tibble <- read_biotyper_report(biotyper)
+#' # Display the tibble
+#' report_tibble
 read_biotyper_report <- function(path, best_hits = TRUE){
   require(tidyr)
   require(dplyr)

@@ -23,8 +23,6 @@ If it is the first time you use {fusen}, after 'description', you can directly r
 pkgload::load_all(export_all = FALSE)
 ```
 
-# Include some data examples in your package
-
 <!-- 
  Store your dataset in a directory named "inst/" at the root of your project.
  Use it for your tests in this Rmd thanks to `pkgload::load_all()` to make it available
@@ -32,20 +30,6 @@ and `system.file()` to read it in your examples.
 
 - There already is a dataset in the "inst/" directory to be used in the examples below
 -->
-
-```{r development-dataset}
-# Run all this chunk in the console directly
-# There already is a dataset in the "inst/" directory
-# Make the dataset file available to the current Rmd during development
-pkgload::load_all(path = here::here(), export_all = FALSE)
-
-# You will be able to read your example data file in each of your function examples and tests as follows - see chunks below
-datafile <- system.file("nyc_squirrels_sample.csv", package = "maldipickr")
-nyc_squirrels <- read.csv(datafile, encoding = "UTF-8")
-
-nyc_squirrels
-```
-
 
 # Importing the report from the Bruker MALDI Biotyper device
 
@@ -69,22 +53,40 @@ After inflating the template
 #'
 #' The headerless table exported by the Compass software in the Bruker MALDI
 #' Biotyper device is separated by semi-colons and has empty columns which prevent
-#' an easy import by R. This function reads the report correctly as a tibble.
+#' an easy import in R. This function reads the report correctly as a tibble.
 #' 
 #' @details
 #' The headerless table contains identification information for each target processed by
-#' the Biotyper device:
+#' the Biotyper device and once processed by the `read_biotyper_report`,
+#' the following seven columns are available in the tibble, _when using the `best_hits = TRUE` option:
+#' * `spot`: an integer indicating the spot number of the MALDI target (i.e., plate)
+#' * `sample_name`: the character string provided during the preparation of the MALDI target (i.e., plate)
 #' * `bruker_quality`: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"
 #' * `bruker_species`: the species name associated with the MALDI spectrum analyzed.
 #' * `bruker_taxid`: the NCBI Taxonomy Identifier of the species name in the column species
 #' * `bruker_hash`: a hash from an undocumented checksum function probably to encode the database entry.
 #' * `bruker_log`: the log-score of the identification.
 #' 
+#' When all hits are returned (with `best_hits = FALSE`), the two columns `spot` and `sample_name`
+#' remains unchanged, but the five columns prefixed by `bruker_` contains the hit number:
+#'
+#' * `bruker_01_quality`
+#' * `bruker_01_species`
+#' * `bruker_01_taxid`
+#' * `bruker_01_hash`
+#' * `bruker_01_log`
+#' * `bruker_02_quality`
+#' * ...
+#' * `bruker_10_species`
+#' * `bruker_10_taxid`
+#' * `bruker_10_hash`
+#' * `bruker_10_log`
+#'
 #' @param path Path to the semi-colon separated table
 #' @param best_hits A logical indicating whether to return only the best hit
 #'
 #' @return
-#' A tibble (see Details for the columns description)
+#' A tibble of 7 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
 #' @export
 #'
 #' @examples
@@ -147,9 +149,12 @@ After inflating the template
 -->
 
 ```{r examples_read_biotyper_report}
-# Example with your dataset in "inst/"
+# Get a example Bruker report
 biotyper <- system.file("biotyper.csv", package = "maldipickr")
-read_biotyper_report(biotyper)
+# Import the report as a tibble
+report_tibble <- read_biotyper_report(biotyper)
+# Display the tibble
+report_tibble
 ```
 
 <!--
@@ -180,8 +185,19 @@ test_that("read_biotyper_report works properly with correct dataset and best hit
     nrow(read_biotyper_report(biotyper)), 3
   )
   expect_equal(
+    ncol(read_biotyper_report(biotyper)), 7
+  )
+  expect_equal(
     dplyr::pull(read_biotyper_report(biotyper), bruker_species),
     c("not reliable identification", "Escherichia coli", "Kosakonia cowanii")
+  )
+})
+test_that("read_biotyper_report works properly with correct dataset and all hits", {
+  expect_equal(
+    nrow(read_biotyper_report(biotyper, best_hits = FALSE)), 3
+  )
+  expect_equal(
+    ncol(read_biotyper_report(biotyper, best_hits = FALSE)), 52
   )
 })
 test_that("read_biotyper_report is empty when no peaks are found", {
@@ -195,19 +211,8 @@ test_that("read_biotyper_report is empty when no peaks are found", {
 ```
 
 
-# Inflate your package
-
-You're one inflate from paper to box.
-Build your package from this very Rmd using `fusen::inflate()`
-
-- Verify your `"DESCRIPTION"` file has been updated
-- Verify your function is in `"R/"` directory
-- Verify your test is in `"tests/testthat/"` directory
-- Verify this Rmd appears in `"vignettes/"` directory
-
-
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
 # Execute in the console directly
-fusen::inflate(flat_file = "dev/flat_full.Rmd", vignette_name = "Get started")
+fusen::inflate(flat_file = "dev/flat_full.Rmd", vignette_name = "Import data from Bruker MALDI Biotyper")
 ```
