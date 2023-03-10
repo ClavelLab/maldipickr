@@ -13,7 +13,6 @@ Description: This package conveniently wrap-up matrix-assisted laser
 License: GPL (>= 3)
 Imports: 
     dplyr,
-    stats,
     tibble,
     tidyr
 Suggests: 
