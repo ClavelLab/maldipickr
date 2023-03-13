@@ -115,3 +115,15 @@ read_many_biotyper_reports(
 
   
 
+# Importing spectra from the Bruker MALDI Biotyper device
+
+  
+
+```{r example-import_biotyper_spectra}
+directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+spectra_list
+```
+
+  
+

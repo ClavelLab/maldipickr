@@ -2,9 +2,11 @@ flat_full.Rmd:
   path: dev/flat_full.Rmd
   state: active
   R:
+  - R/import_biotyper_spectra.R
   - R/read_biotyper_report.R
   - R/read_many_biotyper_reports.R
   tests:
   - tests/testthat/test-read_biotyper_report.R
   - tests/testthat/test-read_many_biotyper_reports.R
+  - tests/testthat/test-import_biotyper_spectra.R
   vignettes: vignettes/import-data-from-bruker-maldi-biotyper.Rmd

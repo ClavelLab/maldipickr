@@ -16,6 +16,8 @@ BugReports: https://github.com/cpauvert/maldipickr/issues
 Imports: 
     dplyr,
     magrittr,
+    MALDIquant,
+    MALDIquantForeign,
     rlang,
     tibble,
     tidyr,
