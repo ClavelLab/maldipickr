@@ -8,6 +8,7 @@
 #' @importFrom dplyr pull
 #' @importFrom dplyr rename_with
 #' @importFrom dplyr select
+#' @importFrom rlang .data
 #' @importFrom tibble as_tibble
 #' @importFrom tibble enframe
 #' @importFrom tidyr expand_grid

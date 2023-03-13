@@ -135,5 +135,8 @@ usethis::use_import_from(
   "tibble", c("as_tibble", "enframe")
 )
 usethis::use_import_from("tidyselect", "starts_with")
+# To solve "no visible binding variable error from devtools:check
+# https://dplyr.tidyverse.org/articles/programming.html#eliminating-r-cmd-check-notes
+usethis::use_import_from("rlang", ".data")
 ```
 

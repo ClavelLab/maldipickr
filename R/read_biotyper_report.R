@@ -51,19 +51,19 @@
 read_biotyper_report <- function(path, best_hits = TRUE){
   # Prepare the columns names, because 10 hits are reported by default
   prep_names <- tidyr::expand_grid(
-    prefix = "bruker",
-    iteration = sprintf("%02d", 1:10), # Because 10 hits per spot with each 5 columns
-    variables = c("quality", "species", "taxid", "hash", "log")
+    "prefix" = "bruker",
+    "iteration" = sprintf("%02d", 1:10), # Because 10 hits per spot with each 5 columns
+    "variables" = c("quality", "species", "taxid", "hash", "log")
   ) %>% dplyr::mutate(
-    type = dplyr::if_else( variables == "log", "d", "c"),
-    col_names = paste(prefix, iteration, variables, sep = "_")
+    "type" = dplyr::if_else( .data$variables == "log", "d", "c"),
+    "col_names" = paste(.data$prefix, .data$iteration, .data$variables, sep = "_")
   )
   
   # Read in the report, usually warnings about problems and
   #  inconsistent number of columns are triggered
   breport <- utils::read.delim(
     path, 
-    col.names = c("spot", "sample_name", pull(prep_names, col_names)),
+    col.names = c("spot", "sample_name", prep_names$col_names),
     sep = ";", header = FALSE,
     na = c("NA", "E1", "E2", "") # Added E1 identification in taxid as NA
   )
@@ -71,7 +71,7 @@ read_biotyper_report <- function(path, best_hits = TRUE){
   
   # Remove the spot for which no peaks were detected, and warn the user
   breport <- tibble::as_tibble(breport) %>%
-    dplyr::filter(bruker_01_species != "no peaks found")
+    dplyr::filter(.data$bruker_01_species != "no peaks found")
   if(sum(no_peak_lgl) > 0 ){
     warning(
       "Remove ", sum(no_peak_lgl), " row(s) out of ", length(no_peak_lgl),
@@ -80,7 +80,7 @@ read_biotyper_report <- function(path, best_hits = TRUE){
 
   if(best_hits){
     breport %>%
-      dplyr::select(spot, sample_name, starts_with("bruker_01")) %>%
+      dplyr::select(.data$spot, .data$sample_name, tidyselect::starts_with("bruker_01")) %>%
       dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
   } else{

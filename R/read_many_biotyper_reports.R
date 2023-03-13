@@ -35,13 +35,13 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
   names(breports) <- report_ids
   # Conversion of a named list of dataframe to the dataframe with the name as
   #  a column is now super easy with enframe()
-  tibble::enframe(breports) %>% tidyr::unnest(value) %>%
+  tibble::enframe(breports) %>% tidyr::unnest("value") %>%
     dplyr::mutate(
-      name = paste(gsub("-", "_", name), spot, sep = "_"),
-      bruker_species = if_else(
-        bruker_species == "not reliable identification",
-        paste(bruker_species, name), # make the unmatched species unique for later counts
-        bruker_species
+      "name" = paste(gsub("-", "_", .data$name), .data$spot, sep = "_"),
+      "bruker_species" = if_else(
+        .data$bruker_species == "not reliable identification",
+        paste(.data$bruker_species, .data$name), # make the unmatched species unique for later counts
+        .data$bruker_species
       ),
       ...
     )  %>% return()

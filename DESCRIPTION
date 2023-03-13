@@ -16,6 +16,7 @@ BugReports: https://github.com/cpauvert/maldipickr/issues
 Imports: 
     dplyr,
     magrittr,
+    rlang,
     tibble,
     tidyr,
     tidyselect,
