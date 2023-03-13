@@ -34,6 +34,6 @@ test_that("read_biotyper_report is empty when no peaks are found", {
     nrow(read_biotyper_report(biotyper_empty)), 0
   )
   expect_warning(
-    read_biotyper_report(biotyper_empty),"1 rows out of 1 due to no peaks found"
+    read_biotyper_report(biotyper_empty),"due to no peaks found"
     )
 })

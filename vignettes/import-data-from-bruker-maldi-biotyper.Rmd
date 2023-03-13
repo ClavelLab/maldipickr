@@ -42,6 +42,8 @@ and `system.file()` to read it in your examples.
 
 # Importing the report from the Bruker MALDI Biotyper device
 
+## Importing a single report
+
 <!--
 Create a chunk for the core of the function
 
@@ -94,4 +96,22 @@ After inflating the template
 -  This test code will automatically be added in the "tests/testthat/" directory
 -->
 
+
+## Importing multiple reports
+
+  
+
+```{r example-read_many_biotyper_reports}
+# List of Bruker MALDI Biotyper reports
+reports_paths <- system.file(
+  c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
+  package = "maldipickr")
+read_many_biotyper_reports(
+  reports_paths,
+  report_ids = c("first","second","third"),
+  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate                 
+)
+```
+
+  
 

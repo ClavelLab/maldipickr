@@ -120,3 +120,19 @@ devtools::build(vignettes = TRUE)
 fusen::init_share_on_github()
 ```
 
+# Manage dependencies
+
+```{r dependencies, eval=FALSE}
+usethis::use_import_from(
+  "dplyr",
+  c("mutate", "filter", "select", "if_else", "pull", "rename_with")
+)
+usethis::use_import_from(
+  "tidyr",
+  c("expand_grid", "unnest")
+)
+usethis::use_import_from(
+  "tibble", c("as_tibble", "enframe")
+)
+```
+

@@ -49,22 +49,19 @@
 #' # Display the tibble
 #' report_tibble
 read_biotyper_report <- function(path, best_hits = TRUE){
-  require(tidyr)
-  require(dplyr)
-  require(tibble)
   # Prepare the columns names, because 10 hits are reported by default
   prep_names <- tidyr::expand_grid(
     prefix = "bruker",
     iteration = sprintf("%02d", 1:10), # Because 10 hits per spot with each 5 columns
     variables = c("quality", "species", "taxid", "hash", "log")
   ) %>% dplyr::mutate(
-    type = if_else( variables == "log", "d", "c"),
+    type = dplyr::if_else( variables == "log", "d", "c"),
     col_names = paste(prefix, iteration, variables, sep = "_")
   )
   
   # Read in the report, usually warnings about problems and
   #  inconsistent number of columns are triggered
-  breport <- read.delim(
+  breport <- utils::read.delim(
     path, 
     col.names = c("spot", "sample_name", pull(prep_names, col_names)),
     sep = ";", header = FALSE,
@@ -77,14 +74,14 @@ read_biotyper_report <- function(path, best_hits = TRUE){
     dplyr::filter(bruker_01_species != "no peaks found")
   if(sum(no_peak_lgl) > 0 ){
     warning(
-      sum(no_peak_lgl), " rows out of ", length(no_peak_lgl),
+      "Remove ", sum(no_peak_lgl), " row(s) out of ", length(no_peak_lgl),
       " due to no peaks found")    
   }
 
   if(best_hits){
     breport %>%
-      select(spot, sample_name, starts_with("bruker_01")) %>%
-      rename_with(~ gsub("_01", "", .x)) %>%
+      dplyr::select(spot, sample_name, starts_with("bruker_01")) %>%
+      dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
   } else{
     return(breport)

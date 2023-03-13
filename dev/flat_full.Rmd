@@ -33,6 +33,8 @@ and `system.file()` to read it in your examples.
 
 # Importing the report from the Bruker MALDI Biotyper device
 
+## Importing a single report
+
 <!--
 Create a chunk for the core of the function
 
@@ -91,22 +93,19 @@ After inflating the template
 #'
 #' @examples
 read_biotyper_report <- function(path, best_hits = TRUE){
-  require(tidyr)
-  require(dplyr)
-  require(tibble)
   # Prepare the columns names, because 10 hits are reported by default
   prep_names <- tidyr::expand_grid(
     prefix = "bruker",
     iteration = sprintf("%02d", 1:10), # Because 10 hits per spot with each 5 columns
     variables = c("quality", "species", "taxid", "hash", "log")
   ) %>% dplyr::mutate(
-    type = if_else( variables == "log", "d", "c"),
+    type = dplyr::if_else( variables == "log", "d", "c"),
     col_names = paste(prefix, iteration, variables, sep = "_")
   )
   
   # Read in the report, usually warnings about problems and
   #  inconsistent number of columns are triggered
-  breport <- read.delim(
+  breport <- utils::read.delim(
     path, 
     col.names = c("spot", "sample_name", pull(prep_names, col_names)),
     sep = ";", header = FALSE,
@@ -119,14 +118,14 @@ read_biotyper_report <- function(path, best_hits = TRUE){
     dplyr::filter(bruker_01_species != "no peaks found")
   if(sum(no_peak_lgl) > 0 ){
     warning(
-      sum(no_peak_lgl), " rows out of ", length(no_peak_lgl),
+      "Remove ", sum(no_peak_lgl), " row(s) out of ", length(no_peak_lgl),
       " due to no peaks found")    
   }
 
   if(best_hits){
     breport %>%
-      select(spot, sample_name, starts_with("bruker_01")) %>%
-      rename_with(~ gsub("_01", "", .x)) %>%
+      dplyr::select(spot, sample_name, starts_with("bruker_01")) %>%
+      dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
   } else{
     return(breport)
@@ -205,11 +204,90 @@ test_that("read_biotyper_report is empty when no peaks are found", {
     nrow(read_biotyper_report(biotyper_empty)), 0
   )
   expect_warning(
-    read_biotyper_report(biotyper_empty),"1 rows out of 1 due to no peaks found"
+    read_biotyper_report(biotyper_empty),"due to no peaks found"
     )
 })
 ```
 
+## Importing multiple reports
+
+```{r function-read_many_biotyper_reports}
+#' Importing a list of Bruker MALDI Biotyper CSV reports
+#'
+#' @param path_to_reports A vector of paths to the csv files to be imported by [read_biotyper_report()].
+#' @param report_ids A vector of character names for each of the reports.
+#' @param best_hits A logical indicating whether to return only the best hit in the [read_biotyper_report()] function.
+#' @param ... Name-value pairs to be passed on to [dplyr::mutate()]
+#'
+#' @return A tibble just like the [read_biotyper_report()] function except for an additional column `name` with the `report_ids` used as a prefix of the `spot` name.
+#' 
+#' @seealso [read_biotyper_report()]
+#' 
+#' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`). 
+#' 
+#' @export
+#'
+#' @examples
+read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = TRUE, ...){
+  # Import the Bruker Biotyper reports as a named list
+  breports <- lapply(
+    path_to_reports,
+    read_biotyper_report,
+    best_hits
+  )
+  names(breports) <- report_ids
+  # Conversion of a named list of dataframe to the dataframe with the name as
+  #  a column is now super easy with enframe()
+  tibble::enframe(breports) %>% tidyr::unnest(value) %>%
+    dplyr::mutate(
+      name = paste(gsub("-", "_", name), spot, sep = "_"),
+      bruker_species = if_else(
+        bruker_species == "not reliable identification",
+        paste(bruker_species, name), # make the unmatched species unique for later counts
+        bruker_species
+      ),
+      ...
+    )  %>% return()
+}
+```
+  
+```{r example-read_many_biotyper_reports}
+# List of Bruker MALDI Biotyper reports
+reports_paths <- system.file(
+  c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
+  package = "maldipickr")
+read_many_biotyper_reports(
+  reports_paths,
+  report_ids = c("first","second","third"),
+  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate                 
+)
+```
+  
+```{r tests-read_many_biotyper_reports}
+dummy_multiple_paths <- system.file(
+  c("biotyper.csv","biotyper_empty.csv", "biotyper.csv"),
+  package = "maldipickr")
+test_that("read_many_biotyper_reports works", {
+  expect_equal(
+    nrow(
+      read_many_biotyper_reports(
+        dummy_multiple_paths,
+        report_ids = c("first","second","third")
+      )
+    ), 6
+  )
+})
+test_that("read_many_biotyper_reports works with arguments passed to mutate", {
+  expect_equal(
+    read_many_biotyper_reports(
+      dummy_multiple_paths,
+      report_ids = c("first","second","third"),
+      growth_temperature = 37.0
+    ) %>%
+      dplyr::pull(growth_temperature) %>% unique(), 37 
+  )
+})
+```
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop

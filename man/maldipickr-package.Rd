@@ -8,6 +8,14 @@
 \description{
 This package conveniently wrap-up matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) data preprocessing steps, dereplication steps to cluster MALDI-TOF spectra and cherry-picking steps to select only representative spectra. This package relies heavily on the MALDIquant package and other tools to perform the actual work.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/cpauvert/maldipickr}
+  \item Report bugs at \url{https://github.com/cpauvert/maldipickr/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Charlie Pauvert \email{cpauvert@users.noreply.github.com} (\href{https://orcid.org/0000-0001-9832-2507}{ORCID})
 
