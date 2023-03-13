@@ -18,6 +18,7 @@ Imports:
     magrittr,
     tibble,
     tidyr,
+    tidyselect,
     utils
 Suggests: 
     knitr,

@@ -107,7 +107,7 @@ read_biotyper_report <- function(path, best_hits = TRUE){
   #  inconsistent number of columns are triggered
   breport <- utils::read.delim(
     path, 
-    col.names = c("spot", "sample_name", pull(prep_names, col_names)),
+    col.names = c("spot", "sample_name", dplyr::pull(prep_names, col_names)),
     sep = ";", header = FALSE,
     na = c("NA", "E1", "E2", "") # Added E1 identification in taxid as NA
   )
@@ -124,7 +124,7 @@ read_biotyper_report <- function(path, best_hits = TRUE){
 
   if(best_hits){
     breport %>%
-      dplyr::select(spot, sample_name, starts_with("bruker_01")) %>%
+      dplyr::select(spot, sample_name, tidyselect::starts_with("bruker_01")) %>%
       dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
   } else{

@@ -12,5 +12,6 @@
 #' @importFrom tibble enframe
 #' @importFrom tidyr expand_grid
 #' @importFrom tidyr unnest
+#' @importFrom tidyselect starts_with
 ## usethis namespace: end
 NULL
