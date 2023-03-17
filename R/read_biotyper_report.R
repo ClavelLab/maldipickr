@@ -80,7 +80,9 @@ read_biotyper_report <- function(path, best_hits = TRUE){
 
   if(best_hits){
     breport %>%
-      dplyr::select(.data$spot, .data$sample_name, tidyselect::starts_with("bruker_01")) %>%
+      # Replaced .data$spot by "spot"
+      # src: https://tidyselect.r-lib.org/news/index.html#lifecycle-changes-1-2-0
+      dplyr::select("spot", "sample_name", tidyselect::starts_with("bruker_01")) %>%
       dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
   } else{

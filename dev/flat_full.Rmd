@@ -124,7 +124,9 @@ read_biotyper_report <- function(path, best_hits = TRUE){
 
   if(best_hits){
     breport %>%
-      dplyr::select(.data$spot, .data$sample_name, tidyselect::starts_with("bruker_01")) %>%
+      # Replaced .data$spot by "spot"
+      # src: https://tidyselect.r-lib.org/news/index.html#lifecycle-changes-1-2-0
+      dplyr::select("spot", "sample_name", tidyselect::starts_with("bruker_01")) %>%
       dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
   } else{
@@ -204,7 +206,7 @@ test_that("read_biotyper_report is empty when no peaks are found", {
     nrow(read_biotyper_report(biotyper_empty)), 0
   )
   expect_warning(
-    read_biotyper_report(biotyper_empty),"due to no peaks found"
+    read_biotyper_report(biotyper_empty),"Remove"
     )
 })
 ```
@@ -407,10 +409,10 @@ check_spectra <- function(spectra_list) {
       unique() %>%
       paste(collapse = ",")
     warning(
-      "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
-      "They can be removed as follow:\n",
-      " spectra_list <- spectra_list[-c(", to_remove, ")]"
-    )
+  "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
+  "They can be removed as follow:\n",
+  " spectra_list <- spectra_list[-c(", to_remove, ")]"
+)
   }
   return(checking_list)
 }
@@ -426,14 +428,14 @@ check_spectra(spectra_list)
 test_that("check_spectra works", {
   expect_type(
     check_spectra(
-      c(createMassSpectrum(1:3, 1:3), createMassSpectrum(11:13, 11:13))
+      c(MALDIquant::createMassSpectrum(1:3, 1:3), MALDIquant::createMassSpectrum(11:13, 11:13))
     ), "list"
   )
 })
 test_that("check_spectra warns with empty spectra", {
   expect_warning(
-    check_spectra(createMassSpectrum(mass = 0, intensity = 0)),
-    "are incorrect (empty, outlier length or irregular)"
+    check_spectra(c(MALDIquant::createMassSpectrum(mass = 0, intensity = 0))),
+    "Some spectra"
   )
 })
 ```

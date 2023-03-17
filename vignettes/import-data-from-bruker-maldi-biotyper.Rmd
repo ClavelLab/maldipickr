@@ -40,7 +40,7 @@ and `system.file()` to read it in your examples.
 -->
 
 
-# Importing the report from the Bruker MALDI Biotyper device
+# Importing generated reports from the Bruker MALDI Biotyper device
 
 ## Importing a single report
 
@@ -117,6 +117,8 @@ read_many_biotyper_reports(
 
 # Importing spectra from the Bruker MALDI Biotyper device
 
+## Importing multiple spectra from a directory hierarchy
+
   
 
 ```{r example-import_biotyper_spectra}
@@ -126,4 +128,19 @@ spectra_list
 ```
 
   
+
+## Evaluate the quality of the spectra
+
+  
+
+```{r example-check_spectra}
+directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+check_spectra(spectra_list)
+```
+
+  
+
+  
+
 
