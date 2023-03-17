@@ -41,10 +41,10 @@ check_spectra <- function(spectra_list) {
       unique() %>%
       paste(collapse = ",")
     warning(
-  "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
-  "They can be removed as follow:\n",
-  " spectra_list <- spectra_list[-c(", to_remove, ")]"
-)
+      "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
+      "They can be removed as follow:\n",
+      " spectra_list <- spectra_list[-c(", to_remove, ")]"
+    )
   }
   return(checking_list)
 }

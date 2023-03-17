@@ -28,11 +28,12 @@ The report identifiers are sanitised to convert all dashes (\code{-}) as undersc
 # List of Bruker MALDI Biotyper reports
 reports_paths <- system.file(
   c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
-  package = "maldipickr")
+  package = "maldipickr"
+)
 read_many_biotyper_reports(
   reports_paths,
-  report_ids = c("first","second","third"),
-  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate                 
+  report_ids = c("first", "second", "third"),
+  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate
 )
 }
 \seealso{

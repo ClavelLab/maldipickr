@@ -5,5 +5,5 @@ test_that("import_biotyper_spectra works", {
   expect_length(
     import_biotyper_spectra(directory_for_biotyper_spectra),
     6
-  ) 
+  )
 })

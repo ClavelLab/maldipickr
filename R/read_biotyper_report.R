@@ -6,7 +6,7 @@
 #' The headerless table exported by the Compass software in the Bruker MALDI
 #' Biotyper device is separated by semi-colons and has empty columns which prevent
 #' an easy import in R. This function reads the report correctly as a tibble.
-#' 
+#'
 #' @details
 #' The headerless table contains identification information for each target processed by
 #' the Biotyper device and once processed by the `read_biotyper_report`,
@@ -18,7 +18,7 @@
 #' * `bruker_taxid`: the NCBI Taxonomy Identifier of the species name in the column species
 #' * `bruker_hash`: a hash from an undocumented checksum function probably to encode the database entry.
 #' * `bruker_log`: the log-score of the identification.
-#' 
+#'
 #' When all hits are returned (with `best_hits = FALSE`), the two columns `spot` and `sample_name`
 #' remains unchanged, but the five columns prefixed by `bruker_` contains the hit number:
 #'
@@ -48,44 +48,45 @@
 #' report_tibble <- read_biotyper_report(biotyper)
 #' # Display the tibble
 #' report_tibble
-read_biotyper_report <- function(path, best_hits = TRUE){
+read_biotyper_report <- function(path, best_hits = TRUE) {
   # Prepare the columns names, because 10 hits are reported by default
   prep_names <- tidyr::expand_grid(
     "prefix" = "bruker",
     "iteration" = sprintf("%02d", 1:10), # Because 10 hits per spot with each 5 columns
     "variables" = c("quality", "species", "taxid", "hash", "log")
   ) %>% dplyr::mutate(
-    "type" = dplyr::if_else( .data$variables == "log", "d", "c"),
+    "type" = dplyr::if_else(.data$variables == "log", "d", "c"),
     "col_names" = paste(.data$prefix, .data$iteration, .data$variables, sep = "_")
   )
-  
+
   # Read in the report, usually warnings about problems and
   #  inconsistent number of columns are triggered
   breport <- utils::read.delim(
-    path, 
+    path,
     col.names = c("spot", "sample_name", prep_names$col_names),
     sep = ";", header = FALSE,
     na = c("NA", "E1", "E2", "") # Added E1 identification in taxid as NA
   )
   no_peak_lgl <- breport$bruker_01_species == "no peaks found"
-  
+
   # Remove the spot for which no peaks were detected, and warn the user
   breport <- tibble::as_tibble(breport) %>%
     dplyr::filter(.data$bruker_01_species != "no peaks found")
-  if(sum(no_peak_lgl) > 0 ){
+  if (sum(no_peak_lgl) > 0) {
     warning(
       "Remove ", sum(no_peak_lgl), " row(s) out of ", length(no_peak_lgl),
-      " due to no peaks found")    
+      " due to no peaks found"
+    )
   }
 
-  if(best_hits){
+  if (best_hits) {
     breport %>%
       # Replaced .data$spot by "spot"
       # src: https://tidyselect.r-lib.org/news/index.html#lifecycle-changes-1-2-0
       dplyr::select("spot", "sample_name", tidyselect::starts_with("bruker_01")) %>%
       dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
-  } else{
+  } else {
     return(breport)
   }
 }

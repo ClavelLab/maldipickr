@@ -8,24 +8,25 @@
 #' @param ... Name-value pairs to be passed on to [dplyr::mutate()]
 #'
 #' @return A tibble just like the [read_biotyper_report()] function except for an additional column `name` with the `report_ids` used as a prefix of the `spot` name.
-#' 
+#'
 #' @seealso [read_biotyper_report()]
-#' 
-#' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`). 
-#' 
+#'
+#' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`).
+#'
 #' @export
 #'
 #' @examples
 #' # List of Bruker MALDI Biotyper reports
 #' reports_paths <- system.file(
 #'   c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
-#'   package = "maldipickr")
+#'   package = "maldipickr"
+#' )
 #' read_many_biotyper_reports(
 #'   reports_paths,
-#'   report_ids = c("first","second","third"),
-#'   growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate                 
+#'   report_ids = c("first", "second", "third"),
+#'   growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate
 #' )
-read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = TRUE, ...){
+read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = TRUE, ...) {
   # Import the Bruker Biotyper reports as a named list
   breports <- lapply(
     path_to_reports,
@@ -35,7 +36,8 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
   names(breports) <- report_ids
   # Conversion of a named list of dataframe to the dataframe with the name as
   #  a column is now super easy with enframe()
-  tibble::enframe(breports) %>% tidyr::unnest("value") %>%
+  tibble::enframe(breports) %>%
+    tidyr::unnest("value") %>%
     dplyr::mutate(
       "name" = paste(gsub("-", "_", .data$name), .data$spot, sep = "_"),
       "bruker_species" = if_else(
@@ -44,5 +46,6 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
         .data$bruker_species
       ),
       ...
-    )  %>% return()
+    ) %>%
+    return()
 }

@@ -56,7 +56,7 @@ After inflating the template
 #' The headerless table exported by the Compass software in the Bruker MALDI
 #' Biotyper device is separated by semi-colons and has empty columns which prevent
 #' an easy import in R. This function reads the report correctly as a tibble.
-#' 
+#'
 #' @details
 #' The headerless table contains identification information for each target processed by
 #' the Biotyper device and once processed by the `read_biotyper_report`,
@@ -68,7 +68,7 @@ After inflating the template
 #' * `bruker_taxid`: the NCBI Taxonomy Identifier of the species name in the column species
 #' * `bruker_hash`: a hash from an undocumented checksum function probably to encode the database entry.
 #' * `bruker_log`: the log-score of the identification.
-#' 
+#'
 #' When all hits are returned (with `best_hits = FALSE`), the two columns `spot` and `sample_name`
 #' remains unchanged, but the five columns prefixed by `bruker_` contains the hit number:
 #'
@@ -92,44 +92,45 @@ After inflating the template
 #' @export
 #'
 #' @examples
-read_biotyper_report <- function(path, best_hits = TRUE){
+read_biotyper_report <- function(path, best_hits = TRUE) {
   # Prepare the columns names, because 10 hits are reported by default
   prep_names <- tidyr::expand_grid(
     "prefix" = "bruker",
     "iteration" = sprintf("%02d", 1:10), # Because 10 hits per spot with each 5 columns
     "variables" = c("quality", "species", "taxid", "hash", "log")
   ) %>% dplyr::mutate(
-    "type" = dplyr::if_else( .data$variables == "log", "d", "c"),
+    "type" = dplyr::if_else(.data$variables == "log", "d", "c"),
     "col_names" = paste(.data$prefix, .data$iteration, .data$variables, sep = "_")
   )
-  
+
   # Read in the report, usually warnings about problems and
   #  inconsistent number of columns are triggered
   breport <- utils::read.delim(
-    path, 
+    path,
     col.names = c("spot", "sample_name", prep_names$col_names),
     sep = ";", header = FALSE,
     na = c("NA", "E1", "E2", "") # Added E1 identification in taxid as NA
   )
   no_peak_lgl <- breport$bruker_01_species == "no peaks found"
-  
+
   # Remove the spot for which no peaks were detected, and warn the user
   breport <- tibble::as_tibble(breport) %>%
     dplyr::filter(.data$bruker_01_species != "no peaks found")
-  if(sum(no_peak_lgl) > 0 ){
+  if (sum(no_peak_lgl) > 0) {
     warning(
       "Remove ", sum(no_peak_lgl), " row(s) out of ", length(no_peak_lgl),
-      " due to no peaks found")    
+      " due to no peaks found"
+    )
   }
 
-  if(best_hits){
+  if (best_hits) {
     breport %>%
       # Replaced .data$spot by "spot"
       # src: https://tidyselect.r-lib.org/news/index.html#lifecycle-changes-1-2-0
       dplyr::select("spot", "sample_name", tidyselect::starts_with("bruker_01")) %>%
       dplyr::rename_with(~ gsub("_01", "", .x)) %>%
       return()
-  } else{
+  } else {
     return(breport)
   }
 }
@@ -206,8 +207,8 @@ test_that("read_biotyper_report is empty when no peaks are found", {
     nrow(read_biotyper_report(biotyper_empty)), 0
   )
   expect_warning(
-    read_biotyper_report(biotyper_empty),"Remove"
-    )
+    read_biotyper_report(biotyper_empty), "Remove"
+  )
 })
 ```
 
@@ -222,15 +223,15 @@ test_that("read_biotyper_report is empty when no peaks are found", {
 #' @param ... Name-value pairs to be passed on to [dplyr::mutate()]
 #'
 #' @return A tibble just like the [read_biotyper_report()] function except for an additional column `name` with the `report_ids` used as a prefix of the `spot` name.
-#' 
+#'
 #' @seealso [read_biotyper_report()]
-#' 
-#' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`). 
-#' 
+#'
+#' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`).
+#'
 #' @export
 #'
 #' @examples
-read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = TRUE, ...){
+read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = TRUE, ...) {
   # Import the Bruker Biotyper reports as a named list
   breports <- lapply(
     path_to_reports,
@@ -240,7 +241,8 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
   names(breports) <- report_ids
   # Conversion of a named list of dataframe to the dataframe with the name as
   #  a column is now super easy with enframe()
-  tibble::enframe(breports) %>% tidyr::unnest("value") %>%
+  tibble::enframe(breports) %>%
+    tidyr::unnest("value") %>%
     dplyr::mutate(
       "name" = paste(gsub("-", "_", .data$name), .data$spot, sep = "_"),
       "bruker_species" = if_else(
@@ -249,7 +251,8 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
         .data$bruker_species
       ),
       ...
-    )  %>% return()
+    ) %>%
+    return()
 }
 ```
   
@@ -257,24 +260,26 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
 # List of Bruker MALDI Biotyper reports
 reports_paths <- system.file(
   c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
-  package = "maldipickr")
+  package = "maldipickr"
+)
 read_many_biotyper_reports(
   reports_paths,
-  report_ids = c("first","second","third"),
-  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate                 
+  report_ids = c("first", "second", "third"),
+  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate
 )
 ```
   
 ```{r tests-read_many_biotyper_reports}
 dummy_multiple_paths <- system.file(
-  c("biotyper.csv","biotyper_empty.csv", "biotyper.csv"),
-  package = "maldipickr")
+  c("biotyper.csv", "biotyper_empty.csv", "biotyper.csv"),
+  package = "maldipickr"
+)
 test_that("read_many_biotyper_reports works", {
   expect_equal(
     nrow(
       read_many_biotyper_reports(
         dummy_multiple_paths,
-        report_ids = c("first","second","third")
+        report_ids = c("first", "second", "third")
       )
     ), 6
   )
@@ -283,10 +288,10 @@ test_that("read_many_biotyper_reports works with arguments passed to mutate", {
   expect_equal(
     read_many_biotyper_reports(
       dummy_multiple_paths,
-      report_ids = c("first","second","third"),
+      report_ids = c("first", "second", "third"),
       growth_temperature = 37.0
     ) %>%
-      dplyr::pull(growth_temperature) %>% unique(), 37 
+      dplyr::pull(growth_temperature) %>% unique(), 37
   )
 })
 ```
@@ -297,52 +302,57 @@ test_that("read_many_biotyper_reports works with arguments passed to mutate", {
 
 ```{r function-import_biotyper_spectra}
 #' Importing spectra from the Bruker MALDI Biotyper device
-#' 
+#'
 #' This function is a wrapper around the [MALDIquantForeign::importBrukerFlex()] to read both `acqus` and `acqu` MALDI files.
-#' 
-#' 
+#'
+#'
 #' @details When using [MALDIquantForeign::importBrukerFlex()] on `acqus` files (instead of the native `acqu` files), the function will fail with the following error message:
-#' 
+#'
 #' ```
 #' Error in .readAcquFile(fidFile = fidFile, verbose = verbose) :
 #' File ‘/data/maldi_dir/targetA/0_D10/1/1SLin/acqu’ doesn't exists!
 #' ```
-#' 
+#'
 #' But it turns out that `acqu` and `acqus` files [are the same]([https://github.com/sgibb/readBrukerFlexData/wiki/acqu-file), so the function here create `acqu` symbolic links that point to `acqus` files.
-#' 
+#'
 #' @param biotyper_directory A path to the folder tree with the spectra to be imported.
 #' @param remove_calibration A vector of characters used as regex to indicate which (calibration) spectra are going to be removed.
 #'
 #' @return A list of [MALDIquant::MassSpectrum] objects
-#' 
+#'
 #' @export
-import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("BTS", "Autocalibration")){
+import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("BTS", "Autocalibration")) {
   # List all the acqus files
   acqus_files <- list.files(
-    biotyper_directory, pattern = "acqus$",
-    recursive = TRUE, full.names = TRUE)
+    biotyper_directory,
+    pattern = "acqus$",
+    recursive = TRUE, full.names = TRUE
+  )
   # Prepare the absolute filename for acqu
-  acqu_files <- gsub("acqus$","acqu", acqus_files)
+  acqu_files <- gsub("acqus$", "acqu", acqus_files)
   # Acqu files as symbolic links if they do not exist
   do_symbolic_links <- !file.exists(acqu_files)
-  if(any(do_symbolic_links)){
+  if (any(do_symbolic_links)) {
     links_status <- file.symlink(
       from = acqus_files[do_symbolic_links],
       to = acqu_files[do_symbolic_links]
     )
-    if(any(!links_status)){
-      stop("Symbolic links could not be created for the files:",
-           acqus_files[!links_status]
+    if (any(!links_status)) {
+      stop(
+        "Symbolic links could not be created for the files:",
+        acqus_files[!links_status]
       )
     }
   }
   biotyper_list <- MALDIquantForeign::importBrukerFlex(biotyper_directory)
   # Catch the arguments of which spectrum to remove
   remove_calibration <- match.arg(remove_calibration, several.ok = T)
-  if(length(remove_calibration) != 0){
+  if (length(remove_calibration) != 0) {
     # Regex to remove the chosen spectrum
-    to_catch <- c("BTS" = "BTS|BTS_Validation",
-                  "Autocalibration" = "Autocalibration")
+    to_catch <- c(
+      "BTS" = "BTS|BTS_Validation",
+      "Autocalibration" = "Autocalibration"
+    )
     regex_to_catch <- match.arg(remove_calibration, to_catch, several.ok = T) %>%
       paste(collapse = "|")
     to_remove <- sapply(biotyper_list, function(x) grepl(regex_to_catch, MALDIquant::metaData(x)$file))
@@ -364,7 +374,7 @@ test_that("import_biotyper_spectra works", {
   expect_length(
     import_biotyper_spectra(directory_for_biotyper_spectra),
     6
-  ) 
+  )
 })
 ```
 
@@ -409,10 +419,10 @@ check_spectra <- function(spectra_list) {
       unique() %>%
       paste(collapse = ",")
     warning(
-  "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
-  "They can be removed as follow:\n",
-  " spectra_list <- spectra_list[-c(", to_remove, ")]"
-)
+      "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
+      "They can be removed as follow:\n",
+      " spectra_list <- spectra_list[-c(", to_remove, ")]"
+    )
   }
   return(checking_list)
 }
