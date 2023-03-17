@@ -1,0 +1,120 @@
+---
+title: "flat_process_spectra.Rmd empty"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+```{r development-load}
+# Load already included functions if relevant
+pkgload::load_all(export_all = FALSE)
+```
+
+# Process Bruker MALDI Biotyper spectra
+
+```{r function-process_spectra}
+#' Process Bruker MALDI Biotyper spectra à la Strejcek et al. (2018)
+#' 
+#' @details
+#' Based on the original implementation, the function performs the following tasks:
+#' 
+#' 1. Square-root transformation
+#' 2. Mass range trimming 4-10 kDA
+#' 3. Signal smoothing
+#' 4. Baseline Correction
+#' 5. Normalisation
+#' 6. Peak detection
+#' 6.1 A peak filtering step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
+#' 
+#' output a list object
+  of the feature matrix (peaks and intensities) and a spectrum metadata table
+  with median signal-to-noise ratio and peaks number
+#'
+#' @param spectra_list 
+#' @param rds_prefix A character indicating the prefix for the `.RDS` output files to be written in the `processed` directory. By default, no prefix are given and thus no files are written.
+#'
+#' @return
+#' @export
+#'
+#' @references Strejcek, Michal, Tereza Smrhova, Petra Junkova, and Ondrej Uhlik. “Whole-Cell MALDI-TOF MS versus 16S Rrna Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 (2018). <https://doi.org/10.3389/fmicb.2018.01294>. 
+#' @seealso The original R code on which this function is based is accessible at: <https://github.com/strejcem/MALDIvs16S>
+#' @examples
+process_spectrum_individually <- function(spectra_list, rds_prefix = NULL) {
+  # It returns the list and write it for future processing as an RDS file.
+
+  # 1. SQRT transformation
+  # 2. Mass range trimming
+  # 3. Signal smoothing
+  # 4. Baseline Correction
+  # 5. Normalisation
+  spectra <- spectra_list %>%
+    MALDIquant::transformIntensity("sqrt") %>%
+    MALDIquant::trim(range = c(4000, 10000)) %>%
+    MALDIquant::smoothIntensity("SavitzkyGolay", halfWindowSize = 20) %>%
+    MALDIquant::removeBaseline("SNIP", iterations = 50) %>%
+    MALDIquant::calibrateIntensity(method = "TIC")
+
+  # 6. Peak detection
+  peaks <- spectra %>%
+    MALDIquant::detectPeaks(
+      method = "SuperSmoother",
+      halfWindowSize = 20,
+      SNR = 3
+    )
+  # Added extra step to remove the peaks with
+  # negative SNR due to being on the edge of the masses trimmed
+  peaks_to_remove <- which(MALDIquant::snr < 3)
+  peaks <- peaks[-peaks_to_remove]
+
+  # Spectrum metadata table
+  # Extract signal-to-noise ratios and peaks number
+  metadata <- as.data.frame(t(sapply(peaks, function(x) {
+    c(
+      "SNR" = median(snr(x)),
+      "peaks" = length(snr(x))
+    )
+  })))
+
+  # Add the spectra identifiers to all objects
+  rownames(metadata) <- names(spectra) <- names(peaks) <- sapply(spectra, function(x) {
+    # e.g., 230117_1750_1_B1
+    MALDIquant::metaData(x)[["fullName"]] %>% str_replace_all("[-\\.]", "_")
+  })
+
+  # Aggregate the objects to a list
+  processed_list <- list("spectra" = spectra, "peaks" = peaks, "metadata" = metadata)
+
+  # Optional: writing objects to RDS files
+  if (!is.null(rds_prefix)) {
+    if (!dir.exists("processed")) {
+      dir.create("processed")
+    }
+    write_rds(processed_list,
+      file = paste0("processed/", prefix_sample, ".RDS")
+    )
+  }
+  return(processed_list)
+}
+```
+
+```{r examples-process_spectra}
+process_spectra()
+```
+
+```{r tests-process_spectra}
+test_that("process_spectra works", {
+
+})
+```
+
+
+```{r development-inflate, eval=FALSE}
+# Run but keep eval=FALSE to avoid infinite loop
+# Execute in the console directly
+fusen::inflate(flat_file = "dev/flat_process_spectra.Rmd", vignette_name = "Dereplicate Bruker MALDI Biotyper spectra")
+```
+
