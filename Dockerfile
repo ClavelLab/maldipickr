@@ -2,7 +2,7 @@
 # 2023-03-08
 FROM rocker/tidyverse:4.2
 
-RUN install2.r --repos https://thinkr-open.r-universe.dev --repos https://cloud.r-project.org --error --skipinstalled fusen MALDIquant MALDIquantForeign tidyverse tidygraph coop
+RUN install2.r --repos https://thinkr-open.r-universe.dev --repos https://cloud.r-project.org --error --skipinstalled fusen MALDIquant MALDIquantForeign tidyverse tidygraph coop markdown styler
 
 # Add configuration file for Rstudio
 RUN echo '{\
