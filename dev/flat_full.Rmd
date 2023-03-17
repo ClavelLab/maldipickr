@@ -31,7 +31,7 @@ and `system.file()` to read it in your examples.
 - There already is a dataset in the "inst/" directory to be used in the examples below
 -->
 
-# Importing the report from the Bruker MALDI Biotyper device
+# Importing generated reports from the Bruker MALDI Biotyper device
 
 ## Importing a single report
 
@@ -291,6 +291,7 @@ test_that("read_many_biotyper_reports works with arguments passed to mutate", {
 
 # Importing spectra from the Bruker MALDI Biotyper device
 
+## Importing multiple spectra from a directory hierarchy
 
 ```{r function-import_biotyper_spectra}
 #' Importing spectra from the Bruker MALDI Biotyper device
@@ -364,6 +365,79 @@ test_that("import_biotyper_spectra works", {
   ) 
 })
 ```
+
+## Evaluate the quality of the spectra
+
+
+```{r function-check_spectra}
+#' Evaluate the spectra regularities
+#'
+#' Assess whether all the spectra in the list are not empty, of the same length and correspond to profile data.
+#'
+#' @param spectra_list A list of [MALDIquant::MassSpectrum] objects
+#'
+#' @return A list of logical vectors of length `spectra_list` indicating if the spectra are empty (`is_empty`), of an odd length (`is_outlier_length`) or not a profile spectra (`is_not_regular`).
+#'
+#' @export
+check_spectra <- function(spectra_list) {
+  # Checking spectra are not empty
+  empty_spectra <- sapply(spectra_list, MALDIquant::isEmpty)
+  # Checking spectra are the same length
+  ## Getting the most common length
+  common_length <- sapply(spectra_list, length) %>%
+    # gives length as character/names and occurrence as value
+    table() %>%
+    which.max() %>%
+    # extract length
+    names() %>%
+    strtoi()
+  length_spectra <- sapply(spectra_list, length) == common_length
+  # Checking spectra are profile data
+  regular_spectra <- sapply(spectra_list, MALDIquant::isRegular)
+  # Summarise the checks
+  checking_list <- list(
+    is_empty = empty_spectra,
+    is_outlier_length = !length_spectra,
+    is_not_regular = !regular_spectra
+  )
+  if (any(Reduce(any, checking_list))) {
+    # List all the spectra that should be removed
+    to_remove <- lapply(checking_list, which) %>%
+      unlist() %>%
+      unique() %>%
+      paste(collapse = ",")
+    warning(
+      "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
+      "They can be removed as follow:\n",
+      " spectra_list <- spectra_list[-c(", to_remove, ")]"
+    )
+  }
+  return(checking_list)
+}
+```
+  
+```{r example-check_spectra}
+directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+check_spectra(spectra_list)
+```
+  
+```{r tests-check_spectra}
+test_that("check_spectra works", {
+  expect_type(
+    check_spectra(
+      c(createMassSpectrum(1:3, 1:3), createMassSpectrum(11:13, 11:13))
+    ), "list"
+  )
+})
+test_that("check_spectra warns with empty spectra", {
+  expect_warning(
+    check_spectra(createMassSpectrum(mass = 0, intensity = 0)),
+    "are incorrect (empty, outlier length or irregular)"
+  )
+})
+```
+  
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
