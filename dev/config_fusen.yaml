@@ -12,3 +12,9 @@ flat_full.Rmd:
   - tests/testthat/test-import_biotyper_spectra.R
   - tests/testthat/test-check_spectra.R
   vignettes: vignettes/import-data-from-bruker-maldi-biotyper.Rmd
+flat_process_spectra.Rmd:
+  path: dev/flat_process_spectra.Rmd
+  state: active
+  R: R/process_spectra.R
+  tests: tests/testthat/test-process_spectra.R
+  vignettes: vignettes/dereplicate-bruker-maldi-biotyper-spectra.Rmd
