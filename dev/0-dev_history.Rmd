@@ -144,7 +144,8 @@ usethis::use_import_from(
     "metaData", "createMassSpectrum",
     "isEmpty", "isRegular", "transformIntensity",
     "trim", "smoothIntensity", "removeBaseline",
-    "calibrateIntensity", "detectPeaks", "snr"
+    "calibrateIntensity", "detectPeaks", "snr",
+    "binPeaks", "intensityMatrix"
   )
 )
 usethis::use_import_from("MALDIquantForeign", "importBrukerFlex")

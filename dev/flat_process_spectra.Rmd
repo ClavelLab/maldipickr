@@ -143,6 +143,121 @@ test_that("process_spectra warns on empty spectra", {
 })
 ```
 
+# Merge multiples processed spectra
+    
+```{r function-merge_processed_spectra}
+#' Merge multiples processed spectra and peaks
+#'
+#' Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
+#'
+#' @param processed_spectra A [list] The processed spectra and associated peaks and metadata in two possible formats:
+#' * A vector of character that are the list of RDS files produced by [process_spectra].
+#' * A named list of in-memory objects (named `spectra`, `peaks`, `metadata`) produced by [process_spectra].
+#' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
+#' @param interpolate_missing A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.
+#'
+#' @return A $n \times p$ matrix, with $n$ spectra and $p$ features that are the peaks found in all the processed spectra.
+#'
+#' @seealso [process_spectra], the "Value" section in [MALDIquant::intensityMatrix]
+#' @export
+merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra = TRUE, interpolate_missing = TRUE) {
+  # Determine the type of input
+  processed <- switch(typeof(processed_spectra),
+    "character" = lapply(processed_spectra, read_rds),
+    "list" = processed_spectra
+  )
+  peakless <- list()
+  # List the spectra with no peaks detected and remove them
+  if (remove_peakless_spectra) {
+    peakless <- lapply( # Extract the metadata object from all element of the list
+      processed, `[[`, "metadata"
+    ) %>%
+      lapply(function(mdata) {
+        rownames(mdata)[mdata$peaks == 0]
+      }) %>%
+      unlist()
+    if (length(peakless) > 0) {
+      warning(
+        "No peaks were detected in the following spectra, so they will be removed\n",
+        paste(peakless, collapse = "\n"), "\n"
+      )
+    }
+  }
+
+  # 7. Bin peaks
+  peaks <- lapply( # Extract the peaks object from all element of the list
+    processed, `[[`, "peaks"
+  ) %>% unlist()
+  names_spectra <- names(peaks)
+  if (remove_peakless_spectra & length(peakless) > 0) {
+    peaks <- peaks[-which(names(peaks) %in% peakless)]
+  }
+  peaks <- MALDIquant::binPeaks(peaks, tolerance = .002, method = "strict")
+
+  # 8. Feature matrix construction (peaks as columns and spectra as rows)
+  if (interpolate_missing) {
+    # This is the default in the Strejcek et al. (2018) procedure
+    spectra_list <- lapply( # Extract the spectrum object from all element of the list
+      processed, `[[`, "spectra"
+    ) %>% unlist()
+
+    if (remove_peakless_spectra & length(peakless) > 0) {
+      spectra_list <- spectra_list[-which(names(spectra_list) %in% peakless)]
+    }
+    featureMatrix <- MALDIquant::intensityMatrix(peaks, spectra_list)
+  } else {
+    featureMatrix <- MALDIquant::intensityMatrix(peaks)
+    featureMatrix[is.na(featureMatrix)] <- 0
+  }
+  # Adding the correct rownames to the matrix
+  if (remove_peakless_spectra & length(peakless) > 0) {
+    rownames(featureMatrix) <- names_spectra[-which(names_spectra %in% peakless)]
+  } else {
+    rownames(featureMatrix) <- names_spectra
+  }
+  return(featureMatrix)
+}
+```
+  
+```{r example-merge_processed_spectra}
+# Import example spectra and process spectra
+directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+processed <- process_spectra(spectra_list)
+# Merge the spectra to produce the feature matrix
+fm <- merge_processed_spectra(list(processed))
+dim(fm)
+# Notice the difference when the interpolation is turned off
+fm_no_interpolation <- merge_processed_spectra(list(processed), interpolate_missing = FALSE)
+sum(fm == 0) # 0
+sum(fm_no_interpolation == 0)
+```
+  
+```{r tests-merge_processed_spectra}
+directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+spectra_list_test <- import_biotyper_spectra(directory_for_biotyper_spectra)[1:2]
+processed_test <- process_spectra(spectra_list_test)
+test_that("merge_processed_spectra works", {
+  expect_equal(
+    dim(merge_processed_spectra(list(processed_test))),
+    c(2, 26)
+  )
+})
+test_that("merge_processed_spectra fails with only empty peaks", {
+  expect_error(
+    list(
+      createMassSpectrum(
+        mass = 4500:5000,
+        intensity = rep(0, 501),
+        metaData = list(fullName = "foo")
+      )
+    ) %>% process_spectra() %>%
+      list() %>% merge_processed_spectra(),
+    "no list of MALDIquant::MassPeaks objects!"
+  )
+})
+```
+  
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
