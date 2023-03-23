@@ -25,6 +25,33 @@ library(maldipickr)
 ```{r examples-process_spectra}
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
-process_spectra(spectra_list)
+processed <- process_spectra(spectra_list)
+str(processed, max.level = 2)
+processed$metadata
 ```
+
+# Merge multiples processed spectra
+
+    
+
+  
+
+```{r example-merge_processed_spectra}
+# Import example spectra and process spectra
+directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+processed <- process_spectra(spectra_list)
+# Merge the spectra to produce the feature matrix
+fm <- merge_processed_spectra(list(processed))
+dim(fm)
+# Notice the difference when the interpolation is turned off
+fm_no_interpolation <- merge_processed_spectra(list(processed), interpolate_missing = FALSE)
+sum(fm == 0) # 0
+sum(fm_no_interpolation == 0)
+```
+
+  
+
+  
+
 

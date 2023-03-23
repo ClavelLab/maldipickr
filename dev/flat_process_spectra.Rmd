@@ -156,14 +156,14 @@ test_that("process_spectra warns on empty spectra", {
 #' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
 #' @param interpolate_missing A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.
 #'
-#' @return A $n \times p$ matrix, with $n$ spectra and $p$ features that are the peaks found in all the processed spectra.
+#' @return A *n*×*p* matrix, with $n$ spectra as rows and $p$ features as columns that are the peaks found in all the processed spectra.
 #'
 #' @seealso [process_spectra], the "Value" section in [MALDIquant::intensityMatrix]
 #' @export
 merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra = TRUE, interpolate_missing = TRUE) {
   # Determine the type of input
   processed <- switch(typeof(processed_spectra),
-    "character" = lapply(processed_spectra, read_rds),
+    "character" = lapply(processed_spectra, readRDS),
     "list" = processed_spectra
   )
   peakless <- list()
@@ -209,7 +209,7 @@ merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra =
     featureMatrix <- MALDIquant::intensityMatrix(peaks)
     featureMatrix[is.na(featureMatrix)] <- 0
   }
-  # Adding the correct rownames to the matrix
+  # Adding the correct rownames fto the matrix
   if (remove_peakless_spectra & length(peakless) > 0) {
     rownames(featureMatrix) <- names_spectra[-which(names_spectra %in% peakless)]
   } else {

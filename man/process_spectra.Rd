@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_spectra.R
 \name{process_spectra}
 \alias{process_spectra}
-\title{Process Bruker MALDI Biotyper spectra à la Strejcek et al. (2018)}
+\title{Process Bruker MALDI Biotyper spectra \emph{à la} Strejcek et al. (2018)}
 \usage{
 process_spectra(spectra_list, rds_prefix = NULL)
 }
@@ -20,7 +20,7 @@ A named list of three objects:
 }
 }
 \description{
-Process Bruker MALDI Biotyper spectra à la Strejcek et al. (2018)
+Process Bruker MALDI Biotyper spectra \emph{à la} Strejcek et al. (2018)
 }
 \details{
 Based on the original implementation, the function performs the following tasks:
@@ -31,7 +31,7 @@ Based on the original implementation, the function performs the following tasks:
 \item Baseline Correction
 \item Normalisation
 \item Peak detection
-6.1 A peak filtering step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
+\item Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 }
 }
 \note{
@@ -40,10 +40,12 @@ The original R code on which this function is based is accessible at: \url{https
 \examples{
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
-process_spectra(spectra_list)
+processed <- process_spectra(spectra_list)
+str(processed, max.level = 2)
+processed$metadata
 }
 \references{
-Strejcek, Michal, Tereza Smrhova, Petra Junkova, and Ondrej Uhlik. “Whole-Cell MALDI-TOF MS versus 16S Rrna Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” \emph{Frontiers in Microbiology} 9 (2018). \url{https://doi.org/10.3389/fmicb.2018.01294}.
+Strejcek, Michal, Tereza Smrhova, Petra Junkova, and Ondrej Uhlik. “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” \emph{Frontiers in Microbiology} 9 (2018). \url{https://doi.org/10.3389/fmicb.2018.01294}.
 }
 \seealso{
 \link{import_biotyper_spectra}

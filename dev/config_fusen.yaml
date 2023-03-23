@@ -15,6 +15,10 @@ flat_full.Rmd:
 flat_process_spectra.Rmd:
   path: dev/flat_process_spectra.Rmd
   state: active
-  R: R/process_spectra.R
-  tests: tests/testthat/test-process_spectra.R
+  R:
+  - R/merge_processed_spectra.R
+  - R/process_spectra.R
+  tests:
+  - tests/testthat/test-process_spectra.R
+  - tests/testthat/test-merge_processed_spectra.R
   vignettes: vignettes/dereplicate-bruker-maldi-biotyper-spectra.Rmd
