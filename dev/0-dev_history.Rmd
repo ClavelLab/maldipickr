@@ -152,3 +152,9 @@ usethis::use_import_from("MALDIquantForeign", "importBrukerFlex")
 usethis::use_import_from("stats", "median")
 ```
 
+# Add a logo
+
+```{r logo, eval=FALSE}
+usethis::use_logo("/data/logo-maldipickr.png")
+```
+
