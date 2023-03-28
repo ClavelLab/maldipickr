@@ -52,6 +52,60 @@ sum(fm_no_interpolation == 0)
 
   
 
+# Compute a similarity matrix between all processed spectra (not included)
+
+Once all the batch of spectra have been processed together, we can use a distance metric to evaluate how close the spectra are to one another.
+[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) recommend the *cosine* metric to compare the spectra and they use the implementation in the `coop` package.
+
+```
+
+# install.packages("coop")
+
+# Note that the feature matrix from maldipickr::merge_processed_spectra()
+
+# has spectra as rows and peaks values as columns.
+
+# 
+
+# So to get a similarity matrix between spectra, the feature matrix
+
+# must be transposed before cosine computation.
+
+sim_matrix <- coop::cosine(t(fm))
+```
+
+
+# Delineate clusters from a similarity matrix
+
+  
+
+```{r example-similarity_to_clusters}
+cosine_similarity <- matrix(
+  c(
+    1, 0.79, 0.77, 0.99, 0.98, 0.98,
+    0.79, 1, 0.98, 0.79, 0.8, 0.8,
+    0.77, 0.98, 1, 0.77, 0.77, 0.77,
+    0.99, 0.79, 0.77, 1, 1, 0.99,
+    0.98, 0.8, 0.77, 1, 1, 1,
+    0.98, 0.8, 0.77, 0.99, 1, 1
+  ),
+  nrow = 6,
+  dimnames = list(
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    ),
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    )
+  )
+)
+similarity_to_clusters(cosine_similarity, threshold = 0.92)
+```
+
+  
+
   
 
 

@@ -18,7 +18,9 @@ flat_process_spectra.Rmd:
   R:
   - R/merge_processed_spectra.R
   - R/process_spectra.R
+  - R/similarity_to_clusters.R
   tests:
   - tests/testthat/test-process_spectra.R
   - tests/testthat/test-merge_processed_spectra.R
+  - tests/testthat/test-similarity_to_clusters.R
   vignettes: vignettes/dereplicate-bruker-maldi-biotyper-spectra.Rmd
