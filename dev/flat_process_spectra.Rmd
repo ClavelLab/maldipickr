@@ -332,14 +332,14 @@ similarity_to_clusters <- function(sim_matrix, threshold) {
     diag = FALSE
   ) %>%
     tidygraph::as_tbl_graph() %>%
-    tidygraph::activate(nodes) %>% # Working on the nodes not the edges
+    tidygraph::activate("nodes") %>% # Working on the nodes not the edges
     dplyr::mutate( # Gather connected components
-      membership = tidygraph::group_components()
+      "membership" = tidygraph::group_components()
     ) %>%
-    dplyr::group_by(membership) %>%
+    dplyr::group_by(.data$membership) %>%
     tibble::as_tibble() %>% # to be able to export only the nodes tibble
     dplyr::mutate(
-      cluster_size = dplyr::n()
+      "cluster_size" = dplyr::n()
     ) %>%
     dplyr::ungroup() %>%
     return()
