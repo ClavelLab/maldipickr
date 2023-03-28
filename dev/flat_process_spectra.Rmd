@@ -257,6 +257,166 @@ test_that("merge_processed_spectra fails with only empty peaks", {
   )
 })
 ```
+
+# Compute a similarity matrix between all processed spectra (not included)
+
+Once all the batch of spectra have been processed together, we can use a distance metric to evaluate how close the spectra are to one another.
+[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) recommend the *cosine* metric to compare the spectra and they use the implementation in the `coop` package.
+
+```
+# install.packages("coop")
+# Note that the feature matrix from maldipickr::merge_processed_spectra()
+# has spectra as rows and peaks values as columns.
+#
+# So to get a similarity matrix between spectra, the feature matrix
+# must be transposed before cosine computation.
+sim_matrix <- coop::cosine(t(fm))
+```
+
+# Delineate clusters from a similarity matrix
+
+
+```{r function-similarity_to_clusters}
+#' Delineate clusters from a similarity matrix
+#'
+#' From a matrix of spectra similarity (e.g., with the cosine metric,
+#' or Pearson product moment), infer the species clusters based on a
+#' threshold **above** (or **equal to**) which spectra are considered alike.
+#'
+#' @param sim_matrix A *n*×*n* similarity matrix, with $n$ the number of spectra. Columns should be named as the rows.
+#' @param threshold A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.
+#'
+#' @return A tibble of *n* rows for each spectra and 3 columns:
+#' * `name`: the rownames of the similarity matrix indicating the spectra names
+#' * `membership: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
+#' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
+#'
+#' @details The matrix is transformed into a network without loops,
+#'  where nodes are spectra and links exist between spectra only if the similarity
+#'  between the spectra is above the threshold.
+#'
+#'  The original idea comes from a [StackOverflow answer by the user
+#'  ekstroem](https://stackoverflow.com/a/57613463). However, here the
+#'  implementation differs in two way:
+#'
+#'  1. It relies on the connected components of the network instead of the fast greedy
+#'   modularity algorithm.
+#'  2. It uses [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
+#'  to stay within the tibble and tidyverse for consistency.
+#'
+#' @export
+similarity_to_clusters <- function(sim_matrix, threshold) {
+  if (!is.matrix(sim_matrix)) {
+    stop("The similarity matrix is not a matrix.")
+  }
+  if (nrow(sim_matrix) != ncol(sim_matrix)) {
+    stop("The similarity matrix is not square: nrow != ncol.")
+  }
+  if (is.null(rownames(sim_matrix)) || is.null(colnames(sim_matrix))) {
+    stop("The similarity matrix has no rownames or colnames.")
+  }
+  if (any(rownames(sim_matrix) != colnames(sim_matrix))) {
+    stop("The similarity matrix has no identical names.")
+  }
+  if (!is.numeric(threshold)) {
+    stop("The threshold provided is not a numeric.")
+  }
+  # No loops
+  diag(sim_matrix) <- 0
+  # Spectra as nodes are connected only if similarity is above the threshold
+  sim_matrix[sim_matrix < threshold] <- 0
+  # Delineate clusters
+  igraph::graph_from_adjacency_matrix(sim_matrix,
+    mode = "directed",
+    weighted = TRUE,
+    diag = FALSE
+  ) %>%
+    tidygraph::as_tbl_graph() %>%
+    tidygraph::activate(nodes) %>% # Working on the nodes not the edges
+    dplyr::mutate( # Gather connected components
+      membership = tidygraph::group_components()
+    ) %>%
+    dplyr::group_by(membership) %>%
+    tibble::as_tibble() %>% # to be able to export only the nodes tibble
+    dplyr::mutate(
+      cluster_size = dplyr::n()
+    ) %>%
+    dplyr::ungroup() %>%
+    return()
+}
+```
+  
+```{r example-similarity_to_clusters}
+cosine_similarity <- matrix(
+  c(
+    1, 0.79, 0.77, 0.99, 0.98, 0.98,
+    0.79, 1, 0.98, 0.79, 0.8, 0.8,
+    0.77, 0.98, 1, 0.77, 0.77, 0.77,
+    0.99, 0.79, 0.77, 1, 1, 0.99,
+    0.98, 0.8, 0.77, 1, 1, 1,
+    0.98, 0.8, 0.77, 0.99, 1, 1
+  ),
+  nrow = 6,
+  dimnames = list(
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    ),
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    )
+  )
+)
+similarity_to_clusters(cosine_similarity, threshold = 0.92)
+```
+  
+```{r tests-similarity_to_clusters}
+cosine_similarity <- matrix(
+  c(
+    1, 0.79, 0.77, 0.99, 0.98, 0.98,
+    0.79, 1, 0.98, 0.79, 0.8, 0.8,
+    0.77, 0.98, 1, 0.77, 0.77, 0.77,
+    0.99, 0.79, 0.77, 1, 1, 0.99,
+    0.98, 0.8, 0.77, 1, 1, 1,
+    0.98, 0.8, 0.77, 0.99, 1, 1
+  ),
+  nrow = 6,
+  dimnames = list(
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    ),
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    )
+  )
+)
+test_that("similarity_to_clusters works", {
+  expect_equal(
+    nrow(similarity_to_clusters(cosine_similarity, 0.92)), 6
+  )
+  expect_equal(
+    similarity_to_clusters(cosine_similarity, 0.92)$membership,
+    c(1, 2, 2, 1, 1, 1)
+  )
+})
+test_that("similarity_to_clusters fails with wrong input", {
+  expect_error(
+    similarity_to_clusters(cosine_similarity[, -1], 0.92),
+    "not square"
+  )
+  expect_error(
+    similarity_to_clusters(unname(cosine_similarity), 0.92),
+    "no rownames or colnames."
+  )
+  expect_error(
+    similarity_to_clusters(cosine_similarity, TRUE),
+    "not a numeric"
+  )
+})
+```
   
 
 ```{r development-inflate, eval=FALSE}
