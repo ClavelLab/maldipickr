@@ -39,6 +39,10 @@ to stay within the tibble and tidyverse for consistency.
 }
 }
 \examples{
+# Toy similarity matrix between the six example spectra of
+#  three species. The cosine metric is used and a value of
+#  zero indicates dissimilar spectra and a value of one
+#  indicates identical spectra.
 cosine_similarity <- matrix(
   c(
     1, 0.79, 0.77, 0.99, 0.98, 0.98,
@@ -60,5 +64,7 @@ cosine_similarity <- matrix(
     )
   )
 )
+# Delineate clusters based on a 0.92 threshold applied
+#  to the similarity matrix
 similarity_to_clusters(cosine_similarity, threshold = 0.92)
 }

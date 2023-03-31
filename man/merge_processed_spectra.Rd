@@ -28,17 +28,21 @@ A \emph{n}×\emph{p} matrix, with $n$ spectra as rows and $p$ features as column
 Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
 }
 \examples{
-# Import example spectra and process spectra
+# Get an example directory of six Bruker MALDI Biotyper spectra
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+# Import the six spectra
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+# Transform the spectra signals according to Strejcek et al. (2018)
 processed <- process_spectra(spectra_list)
 # Merge the spectra to produce the feature matrix
 fm <- merge_processed_spectra(list(processed))
+# The feature matrix has 6 spectra as rows and
+#  35 peaks as columns
 dim(fm)
 # Notice the difference when the interpolation is turned off
 fm_no_interpolation <- merge_processed_spectra(list(processed), interpolate_missing = FALSE)
 sum(fm == 0) # 0
-sum(fm_no_interpolation == 0)
+sum(fm_no_interpolation == 0) # 68
 }
 \seealso{
 \link{process_spectra}, the "Value" section in \link[MALDIquant:intensityMatrix-functions]{MALDIquant::intensityMatrix}

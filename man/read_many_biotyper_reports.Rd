@@ -30,6 +30,7 @@ reports_paths <- system.file(
   c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
   package = "maldipickr"
 )
+# Read the list of reports and combine them in a single tibble
 read_many_biotyper_reports(
   reports_paths,
   report_ids = c("first", "second", "third"),

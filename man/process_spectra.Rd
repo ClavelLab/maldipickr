@@ -26,9 +26,9 @@ Process Bruker MALDI Biotyper spectra \emph{à la} Strejcek et al. (2018)
 Based on the original implementation, the function performs the following tasks:
 \enumerate{
 \item Square-root transformation
-\item Mass range trimming to 4-10 kDA
+\item Mass range trimming to 4-10 kDa
 \item Signal smoothing
-\item Baseline Correction
+\item Baseline correction
 \item Normalisation
 \item Peak detection
 \item Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
@@ -38,10 +38,18 @@ Based on the original implementation, the function performs the following tasks:
 The original R code on which this function is based is accessible at: \url{https://github.com/strejcem/MALDIvs16S}
 }
 \examples{
+# Get an example directory of six Bruker MALDI Biotyper spectra
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+# Import the six spectra
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+# Transform the spectra signals according to Strejcek et al. (2018)
 processed <- process_spectra(spectra_list)
+# Overview of the list architecture that is returned
+#  with the list of processed spectra, peaks identified and the
+#  metadata table
 str(processed, max.level = 2)
+# A detailed view of the metadata with the median signal-to-noise
+#  ratio (SNR) and the number of peaks
 processed$metadata
 }
 \references{
