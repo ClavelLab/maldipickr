@@ -1,0 +1,11 @@
+SOURCE_FILE,QUALITY,REFERENCE,REFERENCE_NUMBER,REFERENCE_GROUP,STRAIN,BRUKER_TOPHIT,BRUKER_SCORE
+species1_G2,GREEN,Yes,0,0,,,
+species2_E11,ORANGE,No,1,1,,,
+species2_E12,GREEN,Yes,1,1,,,
+species3_F7,GREEN,Yes,2,2,,,
+species3_F8,ORANGE,No,3,3,,,
+species3_F9,GREEN,Yes,3,3,,,
+
+Not matched:
+
+Rejected spectra:
