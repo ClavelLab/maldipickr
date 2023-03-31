@@ -1,5 +1,5 @@
 ---
-title: "flat_process_spectra.Rmd empty"
+title: "dereplicate-spectra"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -14,7 +14,29 @@ library(testthat)
 pkgload::load_all(export_all = FALSE)
 ```
 
+Bacterial colony identification with the Bruker MALDI Biotyper is a high-throughput method with the built-in tools, provided that the selected bacteria belong to the internal database.
+
+Scientific projects where the number of unknown bacteria is expected to be high needs reference-free methods to be able to reduce the redundancy of isolated bacterial colonies, a process called *dereplication*.
+
+[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) proposed such a method by processing the spectra and suggest similarity thresholds between spectra above which spectra, and therefore the measured bacterial colonies, can be considered identical at a given taxonomic rank. Their processing procedure is implemented in the [`maldipickr`](https://github.com/cpauvert/maldipickr) package and illustrated in the following vignette.
+
+In addition, we provide functions to enable the dereplication of different batches of Bruker MALDI Biotyper runs and combine the results, in order to be able to delineate the clusters from a common similarity matrix.
+
+More importantly, we provide a function to select a spectra to be picked in each cluster, a process called *cherry-picking*, depending on external metadata and potential out-groups to be excluded for the current cherry-picking steps.
+
 # Process Bruker MALDI Biotyper spectra
+
+From the imported raw data from the Bruker MALDI Biotyper, the processing of the spectra is based on the original implementation, and run the following tasks:
+
+1. Square-root transformation
+2. Mass range trimming to 4-10 kDa as they were deemed most determinant by Strejcek et al. (2018)
+3. Signal smoothing using the Savitzky-Golay method and a half window size of 20
+4. Baseline correction with the SNIP procedure
+5. Normalisation by Total Ion Current
+6. Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
+7. Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
+
+The full procedure is illustrated in the example below. While in this case, all the resulting processed spectra, peaks and final spectra metadata are stored in-memory, the `process_spectra` function enables storing these files locally for scalable high-throughput analyses.
 
 ```{r function-process_spectra}
 #' Process Bruker MALDI Biotyper spectra _à la_ Strejcek et al. (2018)
@@ -23,9 +45,9 @@ pkgload::load_all(export_all = FALSE)
 #' Based on the original implementation, the function performs the following tasks:
 #'
 #' 1. Square-root transformation
-#' 2. Mass range trimming to 4-10 kDA
+#' 2. Mass range trimming to 4-10 kDa
 #' 3. Signal smoothing
-#' 4. Baseline Correction
+#' 4. Baseline correction
 #' 5. Normalisation
 #' 6. Peak detection
 #' 7. Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
@@ -112,10 +134,18 @@ process_spectra <- function(spectra_list, rds_prefix = NULL) {
 ```
 
 ```{r examples-process_spectra}
+# Get an example directory of six Bruker MALDI Biotyper spectra
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+# Import the six spectra
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+# Transform the spectra signals according to Strejcek et al. (2018)
 processed <- process_spectra(spectra_list)
+# Overview of the list architecture that is returned
+#  with the list of processed spectra, peaks identified and the
+#  metadata table
 str(processed, max.level = 2)
+# A detailed view of the metadata with the median signal-to-noise
+#  ratio (SNR) and the number of peaks
 processed$metadata
 ```
 
@@ -144,7 +174,15 @@ test_that("process_spectra warns on empty spectra", {
 ```
 
 # Merge multiples processed spectra
-    
+
+During high-throughput analyses, multiples runs of Bruker MALDI Biotyper are expected resulting in several batches of spectra to be processed and compared.
+While their processing is natively independent, and could natively be run in parallell, the integration of the batches for their comparison needs an additional step.
+
+The `merge_processed_spectra` function aggregates the processed spectra and bins together the detected peaks, with a tolerance of `r format(.002*10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
+
+By default, as in the Strejeck et al. (2018) procedure, the intensity values for spectra with missing peaks are interpolated from the processed spectra signal.
+The current function enables the analyst to decide whether to interpolate the values or leave missing peaks as `NA` which would then be converted to an null intensity value.
+
 ```{r function-merge_processed_spectra}
 #' Merge multiples processed spectra and peaks
 #'
@@ -220,17 +258,21 @@ merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra =
 ```
   
 ```{r example-merge_processed_spectra}
-# Import example spectra and process spectra
+# Get an example directory of six Bruker MALDI Biotyper spectra
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+# Import the six spectra
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+# Transform the spectra signals according to Strejcek et al. (2018)
 processed <- process_spectra(spectra_list)
 # Merge the spectra to produce the feature matrix
 fm <- merge_processed_spectra(list(processed))
+# The feature matrix has 6 spectra as rows and
+#  35 peaks as columns
 dim(fm)
 # Notice the difference when the interpolation is turned off
 fm_no_interpolation <- merge_processed_spectra(list(processed), interpolate_missing = FALSE)
 sum(fm == 0) # 0
-sum(fm_no_interpolation == 0)
+sum(fm_no_interpolation == 0) # 68
 ```
   
 ```{r tests-merge_processed_spectra}
@@ -260,20 +302,29 @@ test_that("merge_processed_spectra fails with only empty peaks", {
 
 # Compute a similarity matrix between all processed spectra (not included)
 
-Once all the batch of spectra have been processed together, we can use a distance metric to evaluate how close the spectra are to one another.
-[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) recommend the *cosine* metric to compare the spectra and they use the implementation in the `coop` package.
+Once all the batches of spectra have been processed together, we can use a distance metric to evaluate how close the spectra are to one another.
+[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) recommend the *cosine* metric to compare the spectra and they use the fast implementation in the `coop` package.
+
+While we do not provide specific functions to generate the similarity matrix, we illustrate below how it can be easily computed.
+Note that the feature matrix from `merge_processed_spectra` has spectra as rows and peaks values as columns.
+So to get a similarity matrix between spectra, the feature matrix must be transposed before cosine computation.
 
 ```
+# Install the coop package
 # install.packages("coop")
-# Note that the feature matrix from maldipickr::merge_processed_spectra()
-# has spectra as rows and peaks values as columns.
-#
-# So to get a similarity matrix between spectra, the feature matrix
-# must be transposed before cosine computation.
-sim_matrix <- coop::cosine(t(fm))
+
+# Compute the similarity matrix on the transposed feature matrix
+sim_matrix <- coop::cosine( t(fm) )
 ```
 
 # Delineate clusters from a similarity matrix
+
+When the similarity matrix is computed between all pairs of the studied spectra, the next step is to delineate clusters of spectra to dereplicate the measured bacterial colonies.
+
+The `similarity_to_clusters` is agnostic of the similarity metric used, whether it is the cosine metric or the  Pearson product moment, provided that a numeric threshold relevant to the metric used is given.
+
+Indeed, the matrix is transformed into a network without loops, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
+This representation allows to infer the clusters. A table summarises for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
 
 
 ```{r function-similarity_to_clusters}
@@ -347,6 +398,10 @@ similarity_to_clusters <- function(sim_matrix, threshold) {
 ```
   
 ```{r example-similarity_to_clusters}
+# Toy similarity matrix between the six example spectra of
+#  three species. The cosine metric is used and a value of
+#  zero indicates dissimilar spectra and a value of one
+#  indicates identical spectra.
 cosine_similarity <- matrix(
   c(
     1, 0.79, 0.77, 0.99, 0.98, 0.98,
@@ -368,6 +423,8 @@ cosine_similarity <- matrix(
     )
   )
 )
+# Delineate clusters based on a 0.92 threshold applied
+#  to the similarity matrix
 similarity_to_clusters(cosine_similarity, threshold = 0.92)
 ```
   
@@ -418,9 +475,12 @@ test_that("similarity_to_clusters fails with wrong input", {
 })
 ```
   
+# References
+
+* Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
 # Execute in the console directly
-fusen::inflate(flat_file = "dev/flat_process_spectra.Rmd", vignette_name = "Dereplicate Bruker MALDI Biotyper spectra")
+fusen::inflate(flat_file = "dev/dereplicate-spectra.Rmd", vignette_name = "Dereplicate Bruker MALDI Biotyper spectra")
 ```
