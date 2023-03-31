@@ -1,5 +1,5 @@
 ---
-title: "flat_full.Rmd for working package"
+title: "import-data"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -31,9 +31,24 @@ and `system.file()` to read it in your examples.
 - There already is a dataset in the "inst/" directory to be used in the examples below
 -->
 
+The matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) technology is coupled with mass spectrometry in the Bruker MALDI Biotyper device in order to identify microorganisms.
+The device generates two types of data:
+
+1. A report of the identification using its proprietary database of mass spectrum projections (MSPs).
+2. The raw mass spectrometry data.
+
+The following vignette describe how to streamline the import of these two types of data into R using the [`maldipickr`](https://github.com/cpauvert/maldipickr) package
+
 # Importing generated reports from the Bruker MALDI Biotyper device
 
 ## Importing a single report
+
+The Bruker MALDI Biotyper generates a report via the Compass software summarizing the identification of the microorganisms using its internal database.
+While the file is separated by semi-colons, it contains no headers.
+The report has many columns in a long format to describe the ten hits when identification is feasible, or only a few when no identification was possible.
+All-in-all, this makes the table import into R and its manipulation relatively painful.
+
+Below is an example of import of a single Bruker MALDI Biotyper report into a [`tibble`](https://tibble.tidyverse.org) for use with the [`tidyverse`](https://tidyverse.tidyverse.org/) suite. By default, only the best hit of each colony is reported.
 
 <!--
 Create a chunk for the core of the function
@@ -214,6 +229,10 @@ test_that("read_biotyper_report is empty when no peaks are found", {
 
 ## Importing multiple reports
 
+During large-scale analysis, batches of identification are run and can easily be imported using the `read_many_biotyper_reports` function along with their custom-made metadata.
+
+Below is an example of such usage, where one report was artificially extended into multiple reports.
+
 ```{r function-read_many_biotyper_reports}
 #' Importing a list of Bruker MALDI Biotyper CSV reports
 #'
@@ -262,6 +281,7 @@ reports_paths <- system.file(
   c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
   package = "maldipickr"
 )
+# Read the list of reports and combine them in a single tibble
 read_many_biotyper_reports(
   reports_paths,
   report_ids = c("first", "second", "third"),
@@ -298,7 +318,26 @@ test_that("read_many_biotyper_reports works with arguments passed to mutate", {
 
 # Importing spectra from the Bruker MALDI Biotyper device
 
+Other than the identification reports, the Bruker MALDI Biotyper device outputs the raw data used for the identification (if not the database) in the form of mass spectra.
+Thankfully, the [`MALDIquant`](https://strimmerlab.github.io/software/maldiquant) and [`MALDIquantForeign`](https://strimmerlab.github.io/software/maldiquant) packages helps users import and manipulate these data in R.
+
+
 ## Importing multiple spectra from a directory hierarchy
+
+However, when the Bruker MALDI Biotyper device produces `acqus` files (instead of the native `acqu` files), the `importBrukerFlex()` function from the [`MALDIquantForeign`](https://strimmerlab.github.io/software/maldiquant) package
+ will fail with the following error message:
+
+```
+Error in .readAcquFile(fidFile = fidFile, verbose = verbose) :
+File ‘/data/maldi_dir/targetA/0_D10/1/1SLin/acqu’ doesn't exists!
+```
+
+The following `import_biotyper_spectra` used in the example below circumvent this error by creating a symbolic link and conveniently helps removing calibration samples.
+
+The toy dataset bundled with this package is a subset of a dataset in the `MALDIquantExamples` package and consist here of six spectra:
+* 1 replicate of species 1
+* 2 replicates of species 2
+* 3 replicates of species 3
 
 ```{r function-import_biotyper_spectra}
 #' Importing spectra from the Bruker MALDI Biotyper device
@@ -363,8 +402,11 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
 ```
   
 ```{r example-import_biotyper_spectra}
+# Get an example directory of six Bruker MALDI Biotyper spectra
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+# Import the six spectra
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+# Display the list of spectra
 spectra_list
 ```
   
@@ -380,6 +422,9 @@ test_that("import_biotyper_spectra works", {
 
 ## Evaluate the quality of the spectra
 
+Once the spectra are imported, the `check_spectra` can easily assess whether all the spectra in the list are not empty, of the same length and correspond to profile data.
+If some spectra do not satisfy these criteria, the function will exit with a warning and indicate the faulty spectra.
+Either way, the function outputs a list of logical vectors (`TRUE` or `FALSE`) indicating whether each of the spectra are empty (`is_empty`), of an odd length (`is_outlier_length`) or not a profile spectra (`is_not_regular`).
 
 ```{r function-check_spectra}
 #' Evaluate the spectra regularities
@@ -429,9 +474,14 @@ check_spectra <- function(spectra_list) {
 ```
   
 ```{r example-check_spectra}
+# Get an example directory of six Bruker MALDI Biotyper spectra
 directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+# Import the six spectra
 spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+# Display the list of checks, with FALSE where no anomaly is detected
 check_spectra(spectra_list)
+# The overall sanity can be checked with Reduce
+Reduce(any, x) # Should be FALSE
 ```
   
 ```{r tests-check_spectra}
@@ -454,5 +504,5 @@ test_that("check_spectra warns with empty spectra", {
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
 # Execute in the console directly
-fusen::inflate(flat_file = "dev/flat_full.Rmd", vignette_name = "Import data from Bruker MALDI Biotyper")
+fusen::inflate(flat_file = "dev/import-data.Rmd", vignette_name = "Import data from Bruker MALDI Biotyper")
 ```
