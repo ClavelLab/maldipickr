@@ -7,7 +7,7 @@
 similarity_to_clusters(sim_matrix, threshold)
 }
 \arguments{
-\item{sim_matrix}{A \emph{n}×\emph{n} similarity matrix, with $n$ the number of spectra. Columns should be named as the rows.}
+\item{sim_matrix}{A \emph{n}×\emph{n} similarity matrix, with \emph{n} the number of spectra. Columns should be named as the rows.}
 
 \item{threshold}{A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.}
 }
@@ -15,7 +15,7 @@ similarity_to_clusters(sim_matrix, threshold)
 A tibble of \emph{n} rows for each spectra and 3 columns:
 \itemize{
 \item \code{name}: the rownames of the similarity matrix indicating the spectra names
-\item `membership: integers stating the cluster number to which the spectra belong to. It starts from 1 to \emph{c}, the total number of clusters.
+\item \code{membership}: integers stating the cluster number to which the spectra belong to. It starts from 1 to \emph{c}, the total number of clusters.
 \item \code{cluster_size}: integers indicating the total number of spectra in the corresponding cluster.
 }
 }

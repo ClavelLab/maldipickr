@@ -1,5 +1,5 @@
 ---
-title: "import-data"
+title: "01-import-data-from-bruker-maldi-biotyper"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -504,5 +504,10 @@ test_that("check_spectra warns with empty spectra", {
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
 # Execute in the console directly
-fusen::inflate(flat_file = "dev/import-data.Rmd", vignette_name = "Import data from Bruker MALDI Biotyper")
+fusen::inflate(
+  flat_file = "dev/import-data.Rmd",
+  vignette_name = c(
+    "Import data from Bruker MALDI Biotyper" = "01-import-data-from-bruker-maldi-biotyper"
+  )
+)
 ```

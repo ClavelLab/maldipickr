@@ -6,12 +6,12 @@
 #' or Pearson product moment), infer the species clusters based on a
 #' threshold **above** (or **equal to**) which spectra are considered alike.
 #'
-#' @param sim_matrix A *n*×*n* similarity matrix, with $n$ the number of spectra. Columns should be named as the rows.
+#' @param sim_matrix A *n*×*n* similarity matrix, with *n* the number of spectra. Columns should be named as the rows.
 #' @param threshold A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.
 #'
 #' @return A tibble of *n* rows for each spectra and 3 columns:
 #' * `name`: the rownames of the similarity matrix indicating the spectra names
-#' * `membership: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
+#' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
 #'
 #' @details The matrix is transformed into a network without loops,
