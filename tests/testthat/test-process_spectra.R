@@ -7,11 +7,12 @@ test_that("process_spectra works", {
     process_spectra(spectra_list_test)$metadata,
     structure(
       list(
+        name = c("species1_G2", "species2_E11"),
         SNR = c(5.08959045014141, 5.54373537030499),
         peaks = c(21, 22)
       ),
-      class = "data.frame",
-      row.names = c("species1_G2", "species2_E11")
+      row.names = c(NA, -2L),
+      class = c("tbl_df", "tbl", "data.frame")
     )
   )
 })

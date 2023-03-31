@@ -16,7 +16,7 @@ A named list of three objects:
 \itemize{
 \item \code{spectra}: a list the length of the spectra list of \link[MALDIquant:MassSpectrum-class]{MALDIquant::MassSpectrum} objects.
 \item \code{peaks}: a list the length of the spectra list of \link[MALDIquant:MassPeaks-class]{MALDIquant::MassPeaks} objects.
-\item \code{metadata}: a data frame indicating the median signal-to-noise ratio and peaks number for all spectra list, with their names as rownames.
+\item \code{metadata}: a tibble indicating the median signal-to-noise ratio (\code{SNR}) and peaks number for all spectra list (\code{peaks}), with spectra names in the \code{name} column.
 }
 }
 \description{
@@ -26,11 +26,11 @@ Process Bruker MALDI Biotyper spectra \emph{à la} Strejcek et al. (2018)
 Based on the original implementation, the function performs the following tasks:
 \enumerate{
 \item Square-root transformation
-\item Mass range trimming to 4-10 kDa
-\item Signal smoothing
-\item Baseline correction
-\item Normalisation
-\item Peak detection
+\item Mass range trimming to 4-10 kDa as they were deemed most determinant by Strejcek et al. (2018)
+\item Signal smoothing using the Savitzky-Golay method and a half window size of 20
+\item Baseline correction with the SNIP procedure
+\item Normalisation by Total Ion Current
+\item Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
 \item Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 }
 }

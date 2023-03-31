@@ -6,11 +6,11 @@
 #' Based on the original implementation, the function performs the following tasks:
 #'
 #' 1. Square-root transformation
-#' 2. Mass range trimming to 4-10 kDa
-#' 3. Signal smoothing
-#' 4. Baseline correction
-#' 5. Normalisation
-#' 6. Peak detection
+#' 2. Mass range trimming to 4-10 kDa as they were deemed most determinant by Strejcek et al. (2018)
+#' 3. Signal smoothing using the Savitzky-Golay method and a half window size of 20
+#' 4. Baseline correction with the SNIP procedure
+#' 5. Normalisation by Total Ion Current
+#' 6. Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
 #' 7. Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 #'
 #'
@@ -20,7 +20,7 @@
 #' @return A named list of three objects:
 #' * `spectra`: a list the length of the spectra list of [MALDIquant::MassSpectrum] objects.
 #' * `peaks`: a list the length of the spectra list of [MALDIquant::MassPeaks] objects.
-#' * `metadata`: a data frame indicating the median signal-to-noise ratio and peaks number for all spectra list, with their names as rownames.
+#' * `metadata`: a tibble indicating the median signal-to-noise ratio (`SNR`) and peaks number for all spectra list (`peaks`), with spectra names in the `name` column.
 #' @export
 #'
 #' @references Strejcek, Michal, Tereza Smrhova, Petra Junkova, and Ondrej Uhlik. “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 (2018). <https://doi.org/10.3389/fmicb.2018.01294>.
@@ -90,7 +90,8 @@ process_spectra <- function(spectra_list, rds_prefix = NULL) {
   processed_list <- list(
     "spectra" = spectra,
     "peaks" = peaks,
-    "metadata" = metadata
+    # convert the data.frame to a tibble
+    "metadata" = tibble::as_tibble(metadata, rownames = "name")
   )
 
   # Optional: writing objects to RDS files
