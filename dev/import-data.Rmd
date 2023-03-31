@@ -481,7 +481,7 @@ spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
 # Display the list of checks, with FALSE where no anomaly is detected
 check_spectra(spectra_list)
 # The overall sanity can be checked with Reduce
-Reduce(any, x) # Should be FALSE
+Reduce(any, check_spectra(spectra_list)) # Should be FALSE
 ```
   
 ```{r tests-check_spectra}
