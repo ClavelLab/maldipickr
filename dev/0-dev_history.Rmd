@@ -164,3 +164,9 @@ usethis::use_import_from("utils", c("read.delim", "read.csv"))
 usethis::use_logo("/data/logo-maldipickr.png")
 ```
 
+# Ignore files during package build
+
+```{r build_ignore, eval=FALSE}
+usethis::use_build_ignore(c("Dockerfile")
+```
+
