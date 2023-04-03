@@ -563,7 +563,7 @@ test_that("import_spede_clusters is empty when no spectra where matched", {
 fusen::inflate(
   flat_file = "dev/dereplicate-spectra.Rmd",
   vignette_name = c(
-    "Dereplicate Bruker MALDI Biotyper spectra" = "02-dereplicate-bruker-maldi-biotyper-spectra"
+    "Dereplicate Bruker MALDI Biotyper spectra" = "B-dereplicate-bruker-maldi-biotyper-spectra"
   )
 )
 ```
