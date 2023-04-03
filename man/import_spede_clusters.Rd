@@ -21,11 +21,19 @@ A tibble with the following columns:
 }
 \description{
 Reformat the table output from the analysis of raw Bruker MALDI Biotyper
-spectra by the SPeDE tool to be consistent with the Strejcek et al. (2018) procedure followed
+spectra by the SPeDE tool from Dumolin et al. (2019) to be consistent with the Strejcek et al. (2018) procedure followed
 in the \link{maldipickr} package.
 }
 \examples{
+# Reformat the output from SPeDE table
+# https://github.com/LM-UGent/SPeDE
 import_spede_clusters(
   system.file("spede.csv", package = "maldipickr")
 )
+}
+\references{
+Dumolin C, Aerts M, Verheyde B, Schellaert S, Vandamme T, Van Der Jeugt F, De Canck E, Cnockaert M, Wieme AD, Cleenwerck I, Peiren J, Dawyndt P, Vandamme P, & Carlier A. (2019). "Introducing SPeDE: High-Throughput Dereplication and Accurate Determination of Microbial Diversity from Matrix-Assisted Laser Desorption–Ionization Time of Flight Mass Spectrometry Data". \emph{MSystems} 4(5). \url{https://doi.org/10.1128/msystems.00437-19}.
+}
+\seealso{
+\url{https://github.com/LM-UGent/SPeDE}
 }
