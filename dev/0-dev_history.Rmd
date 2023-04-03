@@ -151,7 +151,10 @@ usethis::use_import_from(
 usethis::use_import_from("MALDIquantForeign", "importBrukerFlex")
 usethis::use_import_from("stats", "median")
 usethis::use_import_from("igraph", "graph_from_adjacency_matrix")
-usethis::use_import_from("tidygraph", c("as_tbl_graph", "activate", "group_components"))
+usethis::use_import_from(
+  "tidygraph",
+  c("as_tbl_graph", "activate", "group_components")
+)
 usethis::use_import_from("utils", c("read.delim", "read.csv"))
 ```
 
