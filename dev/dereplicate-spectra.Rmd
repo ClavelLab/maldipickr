@@ -499,7 +499,7 @@ test_that("similarity_to_clusters fails with wrong input", {
 #' @export
 set_reference_spectra <- function(cluster_df, metadata_df) {
   # Checking the tibbles sizes
-  if (nrow(cluster_df) != nrow(metadata_df)) {
+  if (base::nrow(cluster_df) != base::nrow(metadata_df)) {
     stop(
       "The tibbles do not have the same number of rows!",
       "Note: if multiple batches are included in 'cluster_df'",
@@ -524,21 +524,21 @@ set_reference_spectra <- function(cluster_df, metadata_df) {
   # reference spectra
   cluster_df %>%
     # Keep track of the row order via a numeric id
-    rowid_to_column() %>%
+    dplyr::rowid_to_column() %>%
     dplyr::inner_join(metadata_df, by = "name") %>%
     # Make sure the sorting is done within groups
-    group_by(.data$membership) %>%
-    arrange(desc(.data$SNR), desc(.data$peaks), .by_group = TRUE) %>%
+    dplyr::group_by(.data$membership) %>%
+    dplyr::arrange(dplyr::desc(.data$SNR), dplyr::desc(.data$peaks), .by_group = TRUE) %>%
     # first() gives the name of the spectra so needs for an
     # extra step to convert to a logical vector
-    mutate(
-      "is_reference" = first(.data$name),
+    dplyr::mutate(
+      "is_reference" = dplyr::first(.data$name),
       "is_reference" = .data$is_reference == .data$name
     ) %>%
-    ungroup() %>%
+    dplyr::ungroup() %>%
     # Sort the tibble in the original order
-    arrange(.data$rowid) %>%
-    select(-c("rowid")) %>%
+    dplyr::arrange(.data$rowid) %>%
+    dplyr::select(-c("rowid")) %>%
     return()
 }
 ```
@@ -586,9 +586,9 @@ set_reference_spectra(clusters, processed$metadata)
 ```
   
 ```{r tests-set_reference_spectra}
-processed <- system.file("toy-species-spectra", package = "maldipickr") %>% 
+processed <- system.file("toy-species-spectra", package = "maldipickr") %>%
   import_biotyper_spectra() %>%
-  suppressMessages() %>% 
+  suppressMessages() %>%
   process_spectra()
 cosine_similarity <- matrix(
   c(
@@ -620,15 +620,15 @@ test_that("set_reference_spectra works", {
 })
 test_that("set_reference_spectra fails with inadequate metadata", {
   expect_error(
-    set_reference_spectra(clusters, processed$metadata[1:2,]),
+    set_reference_spectra(clusters, processed$metadata[1:2, ]),
     "The tibbles do not have the same number of rows!"
   )
   expect_error(
-    set_reference_spectra(clusters[,-2], processed$metadata),
+    set_reference_spectra(clusters[, -2], processed$metadata),
     "lacks one of the following columns"
   )
   expect_error(
-    set_reference_spectra(clusters, processed$metadata[,-2]),
+    set_reference_spectra(clusters, processed$metadata[, -2]),
     "lacks one of the following columns"
   )
 })

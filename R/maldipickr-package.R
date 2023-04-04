@@ -2,9 +2,13 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom dplyr arrange
+#' @importFrom dplyr desc
 #' @importFrom dplyr filter
+#' @importFrom dplyr first
 #' @importFrom dplyr group_by
 #' @importFrom dplyr if_else
+#' @importFrom dplyr inner_join
 #' @importFrom dplyr mutate
 #' @importFrom dplyr n
 #' @importFrom dplyr pull
@@ -30,11 +34,14 @@
 #' @importFrom stats median
 #' @importFrom tibble as_tibble
 #' @importFrom tibble enframe
+#' @importFrom tibble rowid_to_column
 #' @importFrom tidygraph activate
 #' @importFrom tidygraph as_tbl_graph
 #' @importFrom tidygraph group_components
 #' @importFrom tidyr expand_grid
 #' @importFrom tidyr unnest
 #' @importFrom tidyselect starts_with
+#' @importFrom utils read.csv
+#' @importFrom utils read.delim
 ## usethis namespace: end
 NULL

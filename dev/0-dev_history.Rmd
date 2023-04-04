@@ -125,14 +125,17 @@ fusen::init_share_on_github()
 ```{r dependencies, eval=FALSE}
 usethis::use_import_from(
   "dplyr",
-  c("mutate", "filter", "select", "if_else", "pull", "rename_with", "group_by", "n", "ungroup")
+  c(
+    "mutate", "filter", "select", "if_else", "pull", "rename_with",
+    "group_by", "n", "ungroup", "arrange", "inner_join", "desc", "first"
+  )
 )
 usethis::use_import_from(
   "tidyr",
   c("expand_grid", "unnest")
 )
 usethis::use_import_from(
-  "tibble", c("as_tibble", "enframe")
+  "tibble", c("as_tibble", "enframe", "rowid_to_column")
 )
 usethis::use_import_from("tidyselect", "starts_with")
 # To solve "no visible binding variable error from devtools:check
