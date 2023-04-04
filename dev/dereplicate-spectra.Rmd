@@ -524,7 +524,7 @@ set_reference_spectra <- function(cluster_df, metadata_df) {
   # reference spectra
   cluster_df %>%
     # Keep track of the row order via a numeric id
-    dplyr::rowid_to_column() %>%
+    tibble::rowid_to_column() %>%
     dplyr::inner_join(metadata_df, by = "name") %>%
     # Make sure the sorting is done within groups
     dplyr::group_by(.data$membership) %>%
