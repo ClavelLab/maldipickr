@@ -491,7 +491,7 @@ test_that("similarity_to_clusters fails with wrong input", {
 #' * `name`: the rownames of the similarity matrix indicating the spectra names
 #' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
-#' @param metadata_df A tibble of *n* rows for each spectra produced by the [processed_spectra] function with median signal-to-noise ratio (`SNR`), peaks number (`peaks`), and spectra names in the `name` column.
+#' @param metadata_df A tibble of *n* rows for each spectra produced by the [process_spectra] function with median signal-to-noise ratio (`SNR`), peaks number (`peaks`), and spectra names in the `name` column.
 #'
 #'
 #' @return A merged tibble in the same order as `cluster_df` with both the columns of `cluster_df` and `metadata_df`, as well as a logical column `is_reference` indicating if the spectrum is the reference spectra of the cluster.
@@ -613,7 +613,7 @@ cosine_similarity <- matrix(
 )
 clusters <- similarity_to_clusters(cosine_similarity, threshold = 0.92)
 test_that("set_reference_spectra works", {
-  expect_equals(
+  expect_equal(
     set_reference_spectra(clusters, processed$metadata)$is_reference,
     c(FALSE, FALSE, TRUE, FALSE, TRUE, FALSE)
   )
