@@ -715,6 +715,123 @@ test_that("import_spede_clusters is empty when no spectra where matched", {
   )
 })
 ```
+
+
+# Cherry-pick Bruker MALDI Biotyper spectra
+    
+```{r function-pick_spectra}
+#' Cherry-pick Bruker MALDI Biotyper spectra
+#' 
+#' If no metadata/criteria is provided, the reference spectra would be picked
+#' 
+#' @param cluster_df A tibble 
+#' @param metadata_df Optional tibble with relevant metadata to guide the
+#' picking process (e.g., OD600).
+#' @param discard_regex 
+#'
+#' @return
+#' 
+#' @export
+pick_spectra <- function(cluster_df, metadata_df = NULL, discard_regex = NULL, is_sorted=FALSE) {
+# Check that the mandatory column describing the cluster are present
+  if (any(!c("name", "membership") %in% colnames(cluster_df))) {
+    stop(
+      "'cluster_df' lacks one of the following columns: name or membership"
+    )
+  }
+  # Keep the initial order of the rows
+  original_cluster_df <- cluster_df
+  cluster_df <- rowid_to_column(cluster_df, "rowid")
+  
+  # If there is a regex for labeling a group that should be discarded
+    # in the dereplication process and not be chosen from
+    #  e.g. 24h in the 24h vs 48h comparison
+    #  e.g. fast in the fast vs slow growers comparison
+  if (!is.null(discard_regex)) {
+    clusters_to_keep <- cluster_df %>%
+      # 1. Label the group to be discarded
+      dplyr::mutate(
+        "to_discard" = base::grepl(.data$name, discard_regex)
+        ) %>%
+      dplyr::group_by(.data$membership) %>%
+      # 2. Label the clusters as to be discarded if they contain:
+      #   spectra from the discard group
+      #   or spectra from both group (meaning the cluster was picked already)
+      dplyr::summarise(
+        "n" = dplyr::n_distinct(.data$to_discard),
+        "to_discard" = base::unique(.data$to_discard),
+        .groups = "keep"
+      ) %>%
+      dplyr::filter(n == 1 & !to_discard) %>%
+      dplyr::pull(.data$membership)
+    if(only_show_discarded){
+      message("The following clusters are discarded:")
+      dplyr::filter(cluster_df, !.data$membership %in% clusters_to_keep) %>%
+        dplyr::pull(.data$name) %>% 
+        cat()
+      return(0)
+    }
+    # Remove the clusters where picking is forbidden
+    cluster_df <- dplyr::filter(cluster_df, .data$membership %in% clusters_to_keep)
+  }
+  # Check that clusters have a reference spectra to be picked if no metadata are provided
+  if (is.null(metadata_df) & !"is_reference" %in% colnames(cluster_df)) {
+    stop(
+      "No additional metadata are provided ('metadata_df' tibble is NULL)",
+      " and there is no 'is_reference' column in the 'cluster_df' tibble.",
+      "Please do one of the following strategy:",
+      "    1. Either run the 'set_reference_spectra' or 'import_spede_clusters'",
+      "       function beforehand to indicate a reference spectra",
+      "    2. Provide a 'metadata' tibble"
+    )
+  }
+  
+  if(!is.null(metadata_df) & !is_sorted){
+  cluster_df %>%
+    dplyr::left_join(metadata_df, by = "name") %>%
+    tibble::rowid_to_column() %>% 
+      dplyr::group_by(.data$membership) %>%
+    # dplyr::arrange(desc(.data$OD600), .by_group = TRUE) %>%
+  }
+    
+    
+    # first() gives the name of the spectra so needs for an
+    # extra step to convert to a logical vector
+    dplyr::mutate(
+      "to_pick" = dplyr::first(.data$name),
+      "to_pick" = .data$to_pick == .data$name
+    )
+    
+    
+    cluster_df %>% 
+    dplyr::ungroup() %>%
+      
+    # Sort the tibble in the original order
+    dplyr::arrange(.data$rowid) %>%
+    dplyr::select(-c("rowid")) %>%
+    return()
+
+
+  # end merge the name, to_pick T/F with the original cluster_df
+}
+```
+  
+```{r example-pick_spectra}
+# Simulate OD600 values with uniform distribution
+#  for each of the colonies we measured with
+#  the Bruker MALDI Biotyper
+set.seed(104)
+metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = n()))
+
+species2_E12 was picked before
+pick_spectra(clusters, metadata)
+```
+  
+```{r tests-pick_spectra}
+test_that("pick_spectra works", {
+  expect_true(inherits(pick_spectra, "function")) 
+})
+```
   
 
 # References
