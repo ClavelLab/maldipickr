@@ -127,12 +127,13 @@ usethis::use_import_from(
   "dplyr",
   c(
     "mutate", "filter", "select", "if_else", "pull", "rename_with",
-    "group_by", "n", "ungroup", "arrange", "inner_join", "desc", "first"
+    "group_by", "n", "ungroup", "arrange", "inner_join", "desc", "first",
+    "right_join"
   )
 )
 usethis::use_import_from(
   "tidyr",
-  c("expand_grid", "unnest")
+  c("expand_grid", "unnest", "replace_na")
 )
 usethis::use_import_from(
   "tibble", c("as_tibble", "enframe", "rowid_to_column")

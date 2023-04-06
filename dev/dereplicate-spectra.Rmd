@@ -721,58 +721,50 @@ test_that("import_spede_clusters is empty when no spectra where matched", {
     
 ```{r function-pick_spectra}
 #' Cherry-pick Bruker MALDI Biotyper spectra
-#' 
-#' If no metadata/criteria is provided, the reference spectra would be picked
-#' 
-#' @param cluster_df A tibble 
+#'
+#' Using the clusters information, and potential additional metadata as external
+#' criteria, spectra are labelled as to be picked for each cluster. Note that some
+#' spectra and therefore clusters can be explicitly removed from the picking decision
+#' using regular expressions, if they have been previously picked. If no metadata
+#' are provided, the reference spectra of each cluster will be picked.
+#'
+#' @param cluster_df A tibble with clusters information
+#' from the [similarity_to_cluster] or the [import_spede_clusters] function.
 #' @param metadata_df Optional tibble with relevant metadata to guide the
 #' picking process (e.g., OD600).
-#' @param discard_regex 
+#' @param criteria_column Optional character indicating the column in `metadata_df`
+#' to be used as a criteria.
+#' @param is_descending_order Optional logical indicating whether to sort in
+#' descending order or not.
+#' @param discard_regex Optional [regex] to remove spectra and therefore
+#' clusters from the picking decision (e.g., if they have been picked already).
+#' @param only_show_discarded Optional logical to be used in conjunction to
+#' `discard_regex` to **only print** the names of the spectra to be discarded
+#' as a verification step.
+#' @param is_sorted Optional logical to indicate that the `cluster_df` is
+#' already sorted by cluster based on (usually multiple) internal criteria to
+#' pick the first of each cluster. This flag is **overriden** if a `metadata_df`
+#' is provided.
 #'
-#' @return
-#' 
+#' @return A tibble with as many rows as `cluster_df` with an additional logical
+#' column named `to_pick` to indicate whether the colony associated to the spectra
+#' should be picked. If `metadata_df` is provided, then additional columns from
+#' this tibble are added to the returned tibble. When the `discard_regex` is used,
+#' the `to_pick` column of the tibble for the discarded spectra displays `FALSE`.
+#' When `only_show_discarded` is used, it returns $0$ and print
+#' out the list of spectra to be removed.
+#'
 #' @export
-pick_spectra <- function(cluster_df, metadata_df = NULL, discard_regex = NULL, is_sorted=FALSE) {
-# Check that the mandatory column describing the cluster are present
+pick_spectra <- function(
+    cluster_df,
+    metadata_df = NULL, criteria_column = NULL, is_descending_order = TRUE,
+    discard_regex = NULL, only_show_discarded = FALSE,
+    is_sorted = FALSE) {
+  # Check that the mandatory column describing the cluster are present
   if (any(!c("name", "membership") %in% colnames(cluster_df))) {
     stop(
       "'cluster_df' lacks one of the following columns: name or membership"
     )
-  }
-  # Keep the initial order of the rows
-  original_cluster_df <- cluster_df
-  cluster_df <- rowid_to_column(cluster_df, "rowid")
-  
-  # If there is a regex for labeling a group that should be discarded
-    # in the dereplication process and not be chosen from
-    #  e.g. 24h in the 24h vs 48h comparison
-    #  e.g. fast in the fast vs slow growers comparison
-  if (!is.null(discard_regex)) {
-    clusters_to_keep <- cluster_df %>%
-      # 1. Label the group to be discarded
-      dplyr::mutate(
-        "to_discard" = base::grepl(.data$name, discard_regex)
-        ) %>%
-      dplyr::group_by(.data$membership) %>%
-      # 2. Label the clusters as to be discarded if they contain:
-      #   spectra from the discard group
-      #   or spectra from both group (meaning the cluster was picked already)
-      dplyr::summarise(
-        "n" = dplyr::n_distinct(.data$to_discard),
-        "to_discard" = base::unique(.data$to_discard),
-        .groups = "keep"
-      ) %>%
-      dplyr::filter(n == 1 & !to_discard) %>%
-      dplyr::pull(.data$membership)
-    if(only_show_discarded){
-      message("The following clusters are discarded:")
-      dplyr::filter(cluster_df, !.data$membership %in% clusters_to_keep) %>%
-        dplyr::pull(.data$name) %>% 
-        cat()
-      return(0)
-    }
-    # Remove the clusters where picking is forbidden
-    cluster_df <- dplyr::filter(cluster_df, .data$membership %in% clusters_to_keep)
   }
   # Check that clusters have a reference spectra to be picked if no metadata are provided
   if (is.null(metadata_df) & !"is_reference" %in% colnames(cluster_df)) {
@@ -785,51 +777,195 @@ pick_spectra <- function(cluster_df, metadata_df = NULL, discard_regex = NULL, i
       "    2. Provide a 'metadata' tibble"
     )
   }
-  
-  if(!is.null(metadata_df) & !is_sorted){
-  cluster_df %>%
-    dplyr::left_join(metadata_df, by = "name") %>%
-    tibble::rowid_to_column() %>% 
-      dplyr::group_by(.data$membership) %>%
-    # dplyr::arrange(desc(.data$OD600), .by_group = TRUE) %>%
+  # Check that when metadata (resp. a criteria column) is provided,
+  #  a criteria column (resp. metadata)
+  if (
+    (!is.null(metadata_df) & is.null(criteria_column)) ||
+      (is.null(metadata_df) & !is.null(criteria_column))
+  ) {
+    stop(
+      "Additional metadata ('metadata_df' tibble) should be provided",
+      " with a criteria column ('criteria_column') to be sorted.",
+      "Please provide the two together."
+    )
   }
-    
-    
+
+  # Check that to show the discarded clusters, the regex should be provided
+  if (only_show_discarded & is.null(discard_regex)) {
+    stop(
+      "No regex to discard clusters were provided, while the 'only_show_discarded'",
+      " flag is still on.",
+      "Please either provide a regex ('discard_regex') or set 'only_show_discarded'",
+      " to FALSE."
+    )
+  }
+
+  # Warn that metadata table are prioritize over the 'is_sorted' flag
+  if (is_sorted & !is.null(metadata_df)) {
+    message(
+      "The 'is_sorted' flag is set to TRUE, while a metadata table is",
+      " provided.",
+      "Please note that the metadata table takes precedence and the cherry-picking",
+      " step will rely on the 'criteria_column'."
+    )
+    # Set the flag to FALSE for consistency
+    is_sorted <- FALSE
+  }
+  # Keep the initial order of the rows
+  cluster_df <- tibble::rowid_to_column(cluster_df, "rowid")
+  # And a copy of the unchanged data.frame
+  orig_cluster_df <- dplyr::select(cluster_df, c("rowid", "name"))
+
+
+  # If there is a regex for labeling a group that should be discarded
+  # in the dereplication process and not be chosen from
+  #  e.g. 24h in the 24h vs 48h comparison
+  #  e.g. fast in the fast vs slow growers comparison
+  if (!is.null(discard_regex)) {
+    clusters_to_keep <- cluster_df %>%
+      # 1. Label the group to be discarded
+      dplyr::mutate(
+        "to_discard" = base::grepl(discard_regex, .data$name)
+      ) %>%
+      dplyr::group_by(.data$membership) %>%
+      # 2. Label the clusters as to be discarded if they contain:
+      #   spectra from the discard group
+      #   or spectra from both group (meaning the cluster was picked already)
+      dplyr::summarise(
+        "n" = dplyr::n_distinct(.data$to_discard),
+        "to_discard" = base::unique(.data$to_discard),
+        .groups = "keep"
+      ) %>%
+      dplyr::filter(n == 1 & !to_discard) %>%
+      dplyr::pull(.data$membership)
+    if (only_show_discarded) {
+      cat("The following spectra are discarded:\n")
+      dplyr::filter(cluster_df, !.data$membership %in% clusters_to_keep) %>%
+        dplyr::pull(.data$name) %>%
+        cat(., "\n")
+      return(0)
+    }
+    # Remove the clusters where picking is forbidden
+    cluster_df <- dplyr::filter(cluster_df, .data$membership %in% clusters_to_keep)
+  }
+
+  # Sort the spectra within each cluster using the provided metadata
+  if (!is.null(metadata_df) & !is_sorted) {
+    cluster_df <- cluster_df %>%
+      dplyr::left_join(metadata_df, by = "name") %>%
+      dplyr::group_by(.data$membership)
+    if (is_descending_order) {
+      cluster_df <- dplyr::arrange(
+        cluster_df, dplyr::desc(.data[[criteria_column]]),
+        .by_group = TRUE
+      )
+    } else {
+      cluster_df <- dplyr::arrange(
+        cluster_df, .data[[criteria_column]],
+        .by_group = TRUE
+      )
+    }
+  }
+
+  # Pick the reference spectra if no metadata are present
+  if (is.null(metadata_df)) {
+    cluster_df <- cluster_df %>%
+      dplyr::mutate(
+        "to_pick" = .data$is_reference
+      )
+  } else {
     # first() gives the name of the spectra so needs for an
     # extra step to convert to a logical vector
-    dplyr::mutate(
-      "to_pick" = dplyr::first(.data$name),
-      "to_pick" = .data$to_pick == .data$name
-    )
-    
-    
-    cluster_df %>% 
+    cluster_df <- cluster_df %>%
+      dplyr::mutate(
+        "to_pick" = dplyr::first(.data$name),
+        "to_pick" = .data$to_pick == .data$name
+      )
+  }
+  # Merge with original tibble to keep potential discarded regex spectra
+  # and same row number and order
+  # NA in 'to_pick' are replaced with FALSE in the case of discarded clusters
+  cluster_df %>%
     dplyr::ungroup() %>%
-      
+    dplyr::right_join(orig_cluster_df, by = c("rowid", "name")) %>%
+    dplyr::mutate(
+      "to_pick" = tidyr::replace_na(.data$to_pick, FALSE)
+    ) %>%
     # Sort the tibble in the original order
     dplyr::arrange(.data$rowid) %>%
     dplyr::select(-c("rowid")) %>%
     return()
-
-
-  # end merge the name, to_pick T/F with the original cluster_df
 }
 ```
   
 ```{r example-pick_spectra}
+# Load a toy example of a tibble of clusters created by the `similarity_to_cluster`
+#  function.
+clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
+
+# By default and if no other metadata are provided, the function
+#  picks the reference spectrum of each clusters.
+pick_spectra(clusters)
+
 # Simulate OD600 values with uniform distribution
 #  for each of the colonies we measured with
 #  the Bruker MALDI Biotyper
 set.seed(104)
 metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = n()))
+metadata
 
-species2_E12 was picked before
-pick_spectra(clusters, metadata)
+# Pick the spectra based on the highest OD600 value per cluster
+pick_spectra(clusters, metadata, "OD600")
+
+# Say that spectra 'species2_E11' was picked before in a previous experiment
+#  we do not want to pick a cluster where species2_E11 is included to limit redundancy
+# The function can peform a dry run to indicate which spectra would be removed
+pick_spectra(clusters, discard_regex = "E11", only_show_discarded = TRUE)
+# Once checked, the real dereplication can be performed.
+pick_spectra(clusters, discard_regex = "E11")
 ```
   
 ```{r tests-pick_spectra}
+clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
+set.seed(104)
+metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = n()))
 test_that("pick_spectra works", {
-  expect_true(inherits(pick_spectra, "function")) 
+  expect_true(
+    identical(
+      pick_spectra(clusters)$is_reference,
+      pick_spectra(clusters)$to_pick
+    )
+  )
+  expect_output(
+    pick_spectra(clusters, discard_regex = "E11", only_show_discarded = TRUE),
+    "species2_E11 species2_E12"
+  )
+  expect_equal(
+    pick_spectra(clusters, metadata, "OD600")$to_pick,
+    c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE)
+  )
+  expect_equal(
+    pick_spectra(clusters, is_sorted = TRUE)$to_pick,
+    c(FALSE, FALSE, TRUE, FALSE, TRUE, FALSE)
+  )
+})
+test_that("pick_spectra fails without metadata and column", {
+  expect_error(
+    pick_spectra(clusters[, -1]),
+    "lacks one of the following columns"
+  )
+  expect_error(
+    pick_spectra(clusters[, -6]),
+    "No additional metadata are provided"
+  )
+  expect_error(
+    pick_spectra(clusters, only_show_discarded = TRUE),
+    "No regex to discard clusters were provided"
+  )
+  expect_error(
+    pick_spectra(clusters, metadata),
+    "Additional metadata"
+  )
 })
 ```
   
