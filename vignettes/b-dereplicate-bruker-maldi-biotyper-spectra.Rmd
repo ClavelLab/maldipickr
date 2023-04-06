@@ -235,6 +235,41 @@ import_spede_clusters(
 
   
 
+# Cherry-pick Bruker MALDI Biotyper spectra
+
+    
+
+  
+
+```{r example-pick_spectra}
+# Load a toy example of a tibble of clusters created by the `similarity_to_clusters`
+#  function.
+clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
+
+# By default and if no other metadata are provided, the function
+#  picks the reference spectrum of each clusters.
+pick_spectra(clusters)
+
+# Simulate OD600 values with uniform distribution
+#  for each of the colonies we measured with
+#  the Bruker MALDI Biotyper
+set.seed(104)
+metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
+metadata
+
+# Pick the spectra based on the highest OD600 value per cluster
+pick_spectra(clusters, metadata, "OD600")
+
+# Say that spectra 'species2_E11' was picked before in a previous experiment
+#  we do not want to pick a cluster where species2_E11 is included to limit redundancy
+# The function can peform a dry run to indicate which spectra would be removed
+pick_spectra(clusters, discard_regex = "E11", only_show_discarded = TRUE)
+# Once checked, the real dereplication can be performed.
+pick_spectra(clusters, discard_regex = "E11")
+```
+
+  
+
   
 
 

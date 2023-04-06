@@ -4,6 +4,7 @@ dereplicate-spectra.Rmd:
   R:
   - R/import_spede_clusters.R
   - R/merge_processed_spectra.R
+  - R/pick_spectra.R
   - R/process_spectra.R
   - R/set_reference_spectra.R
   - R/similarity_to_clusters.R
@@ -13,6 +14,7 @@ dereplicate-spectra.Rmd:
   - tests/testthat/test-similarity_to_clusters.R
   - tests/testthat/test-set_reference_spectra.R
   - tests/testthat/test-import_spede_clusters.R
+  - tests/testthat/test-pick_spectra.R
   vignettes: vignettes/b-dereplicate-bruker-maldi-biotyper-spectra.Rmd
 import-data.Rmd:
   path: dev/import-data.Rmd
