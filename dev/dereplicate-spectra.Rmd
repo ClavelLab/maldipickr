@@ -729,7 +729,7 @@ test_that("import_spede_clusters is empty when no spectra where matched", {
 #' are provided, the reference spectra of each cluster will be picked.
 #'
 #' @param cluster_df A tibble with clusters information
-#' from the [similarity_to_cluster] or the [import_spede_clusters] function.
+#' from the [similarity_to_clusters] or the [import_spede_clusters] function.
 #' @param metadata_df Optional tibble with relevant metadata to guide the
 #' picking process (e.g., OD600).
 #' @param criteria_column Optional character indicating the column in `metadata_df`
@@ -836,13 +836,13 @@ pick_spectra <- function(
         "to_discard" = base::unique(.data$to_discard),
         .groups = "keep"
       ) %>%
-      dplyr::filter(n == 1 & !to_discard) %>%
+      dplyr::filter(n == 1 & !.data$to_discard) %>%
       dplyr::pull(.data$membership)
     if (only_show_discarded) {
       cat("The following spectra are discarded:\n")
       dplyr::filter(cluster_df, !.data$membership %in% clusters_to_keep) %>%
         dplyr::pull(.data$name) %>%
-        cat(., "\n")
+        cat("\n")
       return(0)
     }
     # Remove the clusters where picking is forbidden
@@ -899,7 +899,7 @@ pick_spectra <- function(
 ```
   
 ```{r example-pick_spectra}
-# Load a toy example of a tibble of clusters created by the `similarity_to_cluster`
+# Load a toy example of a tibble of clusters created by the `similarity_to_clusters`
 #  function.
 clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
 
@@ -911,7 +911,7 @@ pick_spectra(clusters)
 #  for each of the colonies we measured with
 #  the Bruker MALDI Biotyper
 set.seed(104)
-metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = n()))
+metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
 metadata
 
 # Pick the spectra based on the highest OD600 value per cluster
@@ -928,7 +928,7 @@ pick_spectra(clusters, discard_regex = "E11")
 ```{r tests-pick_spectra}
 clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
 set.seed(104)
-metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = n()))
+metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
 test_that("pick_spectra works", {
   expect_true(
     identical(
