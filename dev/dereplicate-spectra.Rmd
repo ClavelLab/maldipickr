@@ -478,6 +478,12 @@ test_that("similarity_to_clusters fails with wrong input", {
 ```
   
 # Set a reference spectrum for each cluster
+  
+Once the table of clusters is generated from the similarity matrix, a reference spectrum can be assigned to each cluster.  
+
+We choose to define high-quality spectra as representative spectra of the clusters using internal information. That is, representative spectra have, within their cluster, the highest median signal-to-noise ratio and then the highest number of detected peaks.
+
+The function `set_reference_spectra` does not change the order of the cluster table but merely add an additional column `is_reference` to indicate if the corresponding spectrum is representative of the cluster. 
     
 ```{r function-set_reference_spectra}
 #' Set a reference spectrum for each cluster
