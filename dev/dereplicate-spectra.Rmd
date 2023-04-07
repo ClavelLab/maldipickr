@@ -725,6 +725,19 @@ test_that("import_spede_clusters is empty when no spectra where matched", {
 
 # Cherry-pick Bruker MALDI Biotyper spectra
     
+When isolating bacteria from an environment, experimenters want to be thorough but also work-, time- and cost-savvy. One approach is to reduce the redundancy of the bacterial isolates by analyzing their MALDI-TOF spectra from the Bruker Biotyper. All the steps previously described in this vignette consisted of processing the spectra to be able to pick only non-redundant spectra, using the `pick_spectra` function.
+
+The function, as illustrated in the example below, can pick spectra using different types of inputs:
+
+* the reference spectra information that is present in the cluster table (after using `similarity_to_clusters` or  `import_spede_clusters` functions)
+* an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster
+* a regular expression applied to the spectra names to explicitly removed some spectra and therefore clusters from the picking decision. This is particularly useful if some spectra  have been previously picked. For example, the regular expression could match a date or time to exclude colonies grown and picked 24h after streaking when comparing with colonies grown for 72h, or match a growth condition such as a temperature or an antibiotic provided this information is in the spectra name. A dry-run option is provided to display the spectra to be removed with the regular expression _without actually performing  the picking decision_.
+
+Advanced users can also provide directly a cluster table with a custom sort by cluster to accommodate complex design.
+
+Ultimately, the function delivers a table with as many rows as the cluster table with an additional logical column named `to_pick` to indicate whether the colony associated with the spectra should be picked (`TRUE`) or not picked (`FALSE`).
+
+    
 ```{r function-pick_spectra}
 #' Cherry-pick Bruker MALDI Biotyper spectra
 #'
