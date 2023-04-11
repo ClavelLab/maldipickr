@@ -1,3 +1,5 @@
 template:
-  package: preferably
+  bootswatch: lux
   bootstrap: 5
+  bslib:
+    pkgdown-nav-height: 125px
