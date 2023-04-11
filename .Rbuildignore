@@ -6,3 +6,4 @@
 ^README\.Rmd$
 ^data\.Rproj$
 ^Dockerfile$
+^\.github$

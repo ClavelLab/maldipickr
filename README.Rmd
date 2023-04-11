@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![R-CMD-check](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of [`maldipickr`](https://github.com/cpauvert/maldipickr) is to provide documented and tested R functions to dereplicate matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) data and cherry-pick representative spectra.
