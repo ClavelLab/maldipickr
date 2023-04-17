@@ -3,6 +3,7 @@
 clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
 set.seed(104)
 metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
+altered_metadata <- dplyr::mutate(metadata, name = gsub("species", "", name))
 test_that("pick_spectra works", {
   expect_true(
     identical(
@@ -39,5 +40,9 @@ test_that("pick_spectra fails without metadata and column", {
   expect_error(
     pick_spectra(clusters, metadata),
     "Additional metadata"
+  )
+  expect_error(
+    pick_spectra(clusters, altered_metadata, "OD600"),
+    "The spectra names in the metadata"
   )
 })

@@ -94,6 +94,14 @@ pick_spectra <- function(
       "Please provide the two together."
     )
   }
+  # Check the spectra name in the metadata table are also present in
+  #  the clusters table
+  if (any(!metadata_df$name %in% cluster_df$name)) {
+    stop(
+      "The spectra names in the metadata ('metadata_df' tibble) table",
+      " do not match the names in the clusters table ('cluster_df')."
+    )
+  }
 
   # Check that to show the discarded clusters, the regex should be provided
   if (only_show_discarded & is.null(discard_regex)) {
