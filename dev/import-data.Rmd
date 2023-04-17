@@ -37,7 +37,7 @@ The device generates two types of data:
 1. A report of the identification using its proprietary database of mass spectrum projections (MSPs).
 2. The raw mass spectrometry data.
 
-The following vignette describe how to streamline the import of these two types of data into R using the [`maldipickr`](https://github.com/cpauvert/maldipickr) package
+The following vignette describe how to streamline the import of these two types of data into R using the [`maldipickr`](https://github.com/ClavelLab/maldipickr) package
 
 # Importing generated reports from the Bruker MALDI Biotyper device
 

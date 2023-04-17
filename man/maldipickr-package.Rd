@@ -13,8 +13,8 @@ This package conveniently wrap-up matrix-assisted laser desorption/ionization-ti
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/cpauvert/maldipickr}
-  \item Report bugs at \url{https://github.com/cpauvert/maldipickr/issues}
+  \item \url{https://github.com/ClavelLab/maldipickr}
+  \item Report bugs at \url{https://github.com/ClavelLab/maldipickr/issues}
 }
 
 }

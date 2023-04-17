@@ -10,7 +10,7 @@
 #' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
 #' @param interpolate_missing A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.
 #'
-#' @return A *n*×*p* matrix, with $n$ spectra as rows and $p$ features as columns that are the peaks found in all the processed spectra.
+#' @return A *n*×*p* matrix, with *n* spectra as rows and *p* features as columns that are the peaks found in all the processed spectra.
 #'
 #' @seealso [process_spectra], the "Value" section in [MALDIquant::intensityMatrix]
 #' @export

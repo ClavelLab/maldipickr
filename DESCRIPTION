@@ -11,8 +11,8 @@ Description: This package conveniently wrap-up matrix-assisted laser
     package relies heavily on the MALDIquant package and other tools to
     perform the actual work.
 License: GPL (>= 3)
-URL: https://github.com/cpauvert/maldipickr
-BugReports: https://github.com/cpauvert/maldipickr/issues
+URL: https://github.com/ClavelLab/maldipickr
+BugReports: https://github.com/ClavelLab/maldipickr/issues
 Imports: 
     dplyr,
     igraph,

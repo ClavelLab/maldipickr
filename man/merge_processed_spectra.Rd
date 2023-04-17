@@ -22,7 +22,7 @@ merge_processed_spectra(
 \item{interpolate_missing}{A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.}
 }
 \value{
-A \emph{n}×\emph{p} matrix, with $n$ spectra as rows and $p$ features as columns that are the peaks found in all the processed spectra.
+A \emph{n}×\emph{p} matrix, with \emph{n} spectra as rows and \emph{p} features as columns that are the peaks found in all the processed spectra.
 }
 \description{
 Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
