@@ -171,6 +171,6 @@ usethis::use_logo("/data/logo-maldipickr.png")
 # Ignore files during package build
 
 ```{r build_ignore, eval=FALSE}
-usethis::use_build_ignore(c("Dockerfile")
+usethis::use_build_ignore(c("Dockerfile", "_pkgdown.yml"))
 ```
 

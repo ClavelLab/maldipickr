@@ -7,3 +7,4 @@
 ^data\.Rproj$
 ^Dockerfile$
 ^\.github$
+^_pkgdown\.yml$
