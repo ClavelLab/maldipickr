@@ -30,6 +30,7 @@
 #' @importFrom MALDIquant transformIntensity
 #' @importFrom MALDIquant trim
 #' @importFrom MALDIquantForeign importBrukerFlex
+#' @importFrom readBrukerFlexData readBrukerFlexDir
 #' @importFrom rlang .data
 #' @importFrom stats median
 #' @importFrom tibble as_tibble

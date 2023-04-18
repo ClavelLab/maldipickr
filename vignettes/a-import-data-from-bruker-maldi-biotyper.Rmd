@@ -146,7 +146,7 @@ Thankfully, the [`MALDIquant`](https://strimmerlab.github.io/software/maldiquant
 
 ## Importing multiple spectra from a directory hierarchy
 
-However, when the Bruker MALDI Biotyper device produces `acqus` files (instead of the native `acqu` files), the `importBrukerFlex()` function from the [`MALDIquantForeign`](https://strimmerlab.github.io/software/maldiquant) package
+However, when the Bruker MALDI Biotyper device produces `acqus` files (instead of the native `acqu` files), the `readBrukerFlexDir()` function from the [`readBrukerFlexData`](https://cran.r-project.org/package=readBrukerFlexData) package
  will fail with the following error message:
 
 ```

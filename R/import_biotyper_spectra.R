@@ -2,10 +2,10 @@
 
 #' Importing spectra from the Bruker MALDI Biotyper device
 #'
-#' This function is a wrapper around the [MALDIquantForeign::importBrukerFlex()] to read both `acqus` and `acqu` MALDI files.
+#' This function is a wrapper around the [readBrukerFlexData::readBrukerFlexDir()] to read both `acqus` and `acqu` MALDI files.
 #'
 #'
-#' @details When using [MALDIquantForeign::importBrukerFlex()] on `acqus` files (instead of the native `acqu` files), the function will fail with the following error message:
+#' @details When using [readBrukerFlexData::readBrukerFlexDir()] on `acqus` files (instead of the native `acqu` files), the function will fail with the following error message:
 #'
 #' ```
 #' Error in .readAcquFile(fidFile = fidFile, verbose = verbose) :
@@ -50,7 +50,20 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
       )
     }
   }
-  biotyper_list <- MALDIquantForeign::importBrukerFlex(biotyper_directory)
+  # MALDIquantForeign::importBrukerFlex depends on
+  # readMzXmlData (>= 2.7) which itself needs R >= 4.2.0
+  # but the import of BrukerFlex does not really needs
+  # these dependency. Therefore, simplifying the import with
+  # the readBrukerFlexData.
+  biotyper_list <- readBrukerFlexData::readBrukerFlexDir(biotyper_directory)
+  biotyper_list <- lapply(biotyper_list, function(raw) {
+    MALDIquant::createMassSpectrum(
+      mass = raw$spectrum$mass,
+      intensity = raw$spectrum$intensity,
+      metaData = raw$metaData
+    )
+  })
+  biotyper_list <- unname(biotyper_list)
   # Catch the arguments of which spectrum to remove
   remove_calibration <- match.arg(remove_calibration, several.ok = T)
   if (length(remove_calibration) != 0) {

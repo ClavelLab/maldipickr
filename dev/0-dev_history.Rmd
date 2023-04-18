@@ -152,7 +152,7 @@ usethis::use_import_from(
     "binPeaks", "intensityMatrix"
   )
 )
-usethis::use_import_from("MALDIquantForeign", "importBrukerFlex")
+usethis::use_import_from("readBrukerFlexData", "readBrukerFlexDir")
 usethis::use_import_from("stats", "median")
 usethis::use_import_from("igraph", "graph_from_adjacency_matrix")
 usethis::use_import_from(

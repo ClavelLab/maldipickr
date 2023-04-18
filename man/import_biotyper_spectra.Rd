@@ -18,10 +18,10 @@ import_biotyper_spectra(
 A list of \link[MALDIquant:MassSpectrum-class]{MALDIquant::MassSpectrum} objects
 }
 \description{
-This function is a wrapper around the \code{\link[MALDIquantForeign:importBrukerFlex-functions]{MALDIquantForeign::importBrukerFlex()}} to read both \code{acqus} and \code{acqu} MALDI files.
+This function is a wrapper around the \code{\link[readBrukerFlexData:readBrukerFlexDir]{readBrukerFlexData::readBrukerFlexDir()}} to read both \code{acqus} and \code{acqu} MALDI files.
 }
 \details{
-When using \code{\link[MALDIquantForeign:importBrukerFlex-functions]{MALDIquantForeign::importBrukerFlex()}} on \code{acqus} files (instead of the native \code{acqu} files), the function will fail with the following error message:
+When using \code{\link[readBrukerFlexData:readBrukerFlexDir]{readBrukerFlexData::readBrukerFlexDir()}} on \code{acqus} files (instead of the native \code{acqu} files), the function will fail with the following error message:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{Error in .readAcquFile(fidFile = fidFile, verbose = verbose) :
 File ‘/data/maldi_dir/targetA/0_D10/1/1SLin/acqu’ doesn't exists!
