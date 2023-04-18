@@ -85,7 +85,7 @@
     <p>When using <code><a href="https://rdrr.io/pkg/MALDIquantForeign/man/importBrukerFlex-functions.html" class="external-link">MALDIquantForeign::importBrukerFlex()</a></code> on <code>acqus</code> files (instead of the native <code>acqu</code> files), the function will fail with the following error message:</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Error <span class="cf">in</span> <span class="fu">.readAcquFile</span>(<span class="at">fidFile =</span> fidFile, <span class="at">verbose =</span> verbose) <span class="sc">:</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>File ‘<span class="sc">/</span>data<span class="sc">/</span>maldi_dir<span class="sc">/</span>targetA<span class="sc">/</span>0_D10<span class="sc">/</span><span class="dv">1</span><span class="sc">/</span>1SLin<span class="sc">/</span>acqu’ doesn<span class="st">'t exists!</span></span></code></pre><p></p></div>
-<p>But it turns out that <code>acqu</code> and <code>acqus</code> files <a href="%5Bhttps://github.com/sgibb/readBrukerFlexData/wiki/acqu-file" class="external-link">are the same</a>, so the function here create <code>acqu</code> symbolic links that point to <code>acqus</code> files.</p>
+<p>But it turns out that <code>acqu</code> and <code>acqus</code> files <a href="https://github.com/sgibb/readBrukerFlexData/wiki/acqu-file" class="external-link">are the same</a>, so the function here create <code>acqu</code> symbolic links that point to <code>acqus</code> files.</p>
     </div>
 
     <div class="section level2">
