@@ -29,7 +29,6 @@
 #' @importFrom MALDIquant snr
 #' @importFrom MALDIquant transformIntensity
 #' @importFrom MALDIquant trim
-#' @importFrom MALDIquantForeign importBrukerFlex
 #' @importFrom readBrukerFlexData readBrukerFlexDir
 #' @importFrom rlang .data
 #' @importFrom stats median
