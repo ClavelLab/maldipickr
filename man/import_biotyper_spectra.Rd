@@ -27,7 +27,7 @@ When using \code{\link[MALDIquantForeign:importBrukerFlex-functions]{MALDIquantF
 File ‘/data/maldi_dir/targetA/0_D10/1/1SLin/acqu’ doesn't exists!
 }\if{html}{\out{</div>}}
 
-But it turns out that \code{acqu} and \code{acqus} files \href{[https://github.com/sgibb/readBrukerFlexData/wiki/acqu-file}{are the same}, so the function here create \code{acqu} symbolic links that point to \code{acqus} files.
+But it turns out that \code{acqu} and \code{acqus} files \href{https://github.com/sgibb/readBrukerFlexData/wiki/acqu-file}{are the same}, so the function here create \code{acqu} symbolic links that point to \code{acqus} files.
 }
 \examples{
 # Get an example directory of six Bruker MALDI Biotyper spectra

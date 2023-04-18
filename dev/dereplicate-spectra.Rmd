@@ -664,7 +664,7 @@ The resulting dereplication step produces a comma separated table. The example b
 #' * `is_reference`: a logical indicating whether the corresponding spectra is a reference spectra of the cluster.
 #'
 #' @seealso <https://github.com/LM-UGent/SPeDE>
-#' @references Dumolin C, Aerts M, Verheyde B, Schellaert S, Vandamme T, Van Der Jeugt F, De Canck E, Cnockaert M, Wieme AD, Cleenwerck I, Peiren J, Dawyndt P, Vandamme P, & Carlier A. (2019). "Introducing SPeDE: High-Throughput Dereplication and Accurate Determination of Microbial Diversity from Matrix-Assisted Laser Desorption–Ionization Time of Flight Mass Spectrometry Data". *MSystems* 4(5). <https://doi.org/10.1128/msystems.00437-19>.
+#' @references Dumolin C, Aerts M, Verheyde B, Schellaert S, Vandamme T, Van Der Jeugt F, De Canck E, Cnockaert M, Wieme AD, Cleenwerck I, Peiren J, Dawyndt P, Vandamme P, & Carlier A. (2019). "Introducing SPeDE: High-Throughput Dereplication and Accurate Determination of Microbial Diversity from Matrix-Assisted Laser Desorption–Ionization Time of Flight Mass Spectrometry Data". *MSystems* 4(5). <doi:10.1128/msystems.00437-19>.
 #' @export
 import_spede_clusters <- function(path) {
   # Import the SPeDE csv table with only the columns planned to be used
@@ -1004,8 +1004,8 @@ test_that("pick_spectra fails without metadata and column", {
 
 # References
 
-* Dumolin C, Aerts M, Verheyde B, Schellaert S, Vandamme T, Van Der Jeugt F, De Canck E, Cnockaert M, Wieme AD, Cleenwerck I, Peiren J, Dawyndt P, Vandamme P, & Carlier A. (2019). "Introducing SPeDE: High-Throughput Dereplication and Accurate Determination of Microbial Diversity from Matrix-Assisted Laser Desorption–Ionization Time of Flight Mass Spectrometry Data". *MSystems* 4(5). <https://doi.org/10.1128/msystems.00437-19>.
-* Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.
+* Dumolin C, Aerts M, Verheyde B, Schellaert S, Vandamme T, Van Der Jeugt F, De Canck E, Cnockaert M, Wieme AD, Cleenwerck I, Peiren J, Dawyndt P, Vandamme P, & Carlier A. (2019). "Introducing SPeDE: High-Throughput Dereplication and Accurate Determination of Microbial Diversity from Matrix-Assisted Laser Desorption–Ionization Time of Flight Mass Spectrometry Data". *MSystems* 4(5). <doi:10.1128/msystems.00437-19>.
+* Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <doi:10.3389/fmicb.2018.01294>.
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop

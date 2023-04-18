@@ -17,7 +17,7 @@
 #' * `is_reference`: a logical indicating whether the corresponding spectra is a reference spectra of the cluster.
 #'
 #' @seealso <https://github.com/LM-UGent/SPeDE>
-#' @references Dumolin C, Aerts M, Verheyde B, Schellaert S, Vandamme T, Van Der Jeugt F, De Canck E, Cnockaert M, Wieme AD, Cleenwerck I, Peiren J, Dawyndt P, Vandamme P, & Carlier A. (2019). "Introducing SPeDE: High-Throughput Dereplication and Accurate Determination of Microbial Diversity from Matrix-Assisted Laser Desorption–Ionization Time of Flight Mass Spectrometry Data". *MSystems* 4(5). <https://doi.org/10.1128/msystems.00437-19>.
+#' @references Dumolin C, Aerts M, Verheyde B, Schellaert S, Vandamme T, Van Der Jeugt F, De Canck E, Cnockaert M, Wieme AD, Cleenwerck I, Peiren J, Dawyndt P, Vandamme P, & Carlier A. (2019). "Introducing SPeDE: High-Throughput Dereplication and Accurate Determination of Microbial Diversity from Matrix-Assisted Laser Desorption–Ionization Time of Flight Mass Spectrometry Data". *MSystems* 4(5). <doi:10.1128/msystems.00437-19>.
 #' @export
 #' @examples
 #' # Reformat the output from SPeDE table

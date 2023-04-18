@@ -25,8 +25,7 @@ from a suite of Rmarkdown files using the
 [`fusen`](https://thinkr-open.github.io/fusen/) package by Rochette S
 (2023). It relies on:
 
-1.  the
-    [`MALDIquant`](https://cran.r-project.org/web/packages/MALDIquant/index.html)
+1.  the [`MALDIquant`](https://cran.r-project.org/package=MALDIquant)
     package from Gibb & Strimmer (2012) for spectra functions
 2.  the work of Strejcek et al. (2018) for the dereplication procedure.
 

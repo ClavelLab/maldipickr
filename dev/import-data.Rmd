@@ -352,7 +352,7 @@ The toy dataset bundled with this package is a subset of a dataset in the `MALDI
 #' File ‘/data/maldi_dir/targetA/0_D10/1/1SLin/acqu’ doesn't exists!
 #' ```
 #'
-#' But it turns out that `acqu` and `acqus` files [are the same]([https://github.com/sgibb/readBrukerFlexData/wiki/acqu-file), so the function here create `acqu` symbolic links that point to `acqus` files.
+#' But it turns out that `acqu` and `acqus` files [are the same](https://github.com/sgibb/readBrukerFlexData/wiki/acqu-file), so the function here create `acqu` symbolic links that point to `acqus` files.
 #'
 #' @param biotyper_directory A path to the folder tree with the spectra to be imported.
 #' @param remove_calibration A vector of characters used as regex to indicate which (calibration) spectra are going to be removed.
