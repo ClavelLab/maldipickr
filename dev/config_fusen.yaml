@@ -16,6 +16,12 @@ dereplicate-spectra.Rmd:
   - tests/testthat/test-import_spede_clusters.R
   - tests/testthat/test-pick_spectra.R
   vignettes: vignettes/b-dereplicate-bruker-maldi-biotyper-spectra.Rmd
+flat_utils.Rmd:
+  path: dev/flat_utils.Rmd
+  state: active
+  R: R/is_well_on_edge.R
+  tests: tests/testthat/test-is_well_on_edge.R
+  vignettes: []
 import-data.Rmd:
   path: dev/import-data.Rmd
   state: active
