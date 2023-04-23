@@ -727,11 +727,15 @@ test_that("import_spede_clusters is empty when no spectra where matched", {
     
 When isolating bacteria from an environment, experimenters want to be thorough but also work-, time- and cost-savvy. One approach is to reduce the redundancy of the bacterial isolates by analyzing their MALDI-TOF spectra from the Bruker Biotyper. All the steps previously described in this vignette consisted of processing the spectra to be able to pick only non-redundant spectra, using the `pick_spectra` function.
 
-The function, as illustrated in the example below, can pick spectra using different types of inputs:
+The function, as illustrated in the examples below, can pick spectra using different types of inputs:
 
-* the reference spectra information that is present in the cluster table (after using `similarity_to_clusters` or  `import_spede_clusters` functions)
-* an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster
-* a regular expression applied to the spectra names to explicitly removed some spectra and therefore clusters from the picking decision. This is particularly useful if some spectra  have been previously picked. For example, the regular expression could match a date or time to exclude colonies grown and picked 24h after streaking when comparing with colonies grown for 72h, or match a growth condition such as a temperature or an antibiotic provided this information is in the spectra name. A dry-run option is provided to display the spectra to be removed with the regular expression _without actually performing  the picking decision_.
+* the reference spectra information that is present in the cluster table (after using `similarity_to_clusters` or  `import_spede_clusters` functions; see example 1)
+* an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster (see example 2)
+
+Spectra, and clusters, can also be excluded from the cherry-picking decision, a procedure termed _masking_ here. We distinguish two types of mask that are implemented in the `pick_spectra` function:
+
+* **soft mask** that discards the spectra only, if they correspond for instance to low-quality sample, negative control samples (see example 3)
+* **hard mask** that discards the spectra _and their clusters_ (see example 4). This is particularly useful if some spectra have been previously picked. For instance, to exclude colonies grown and picked 24h after streaking when comparing with colonies grown for 72h.
 
 Advanced users can also provide directly a cluster table with a custom sort by cluster to accommodate complex design.
 
@@ -743,9 +747,10 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #'
 #' Using the clusters information, and potential additional metadata as external
 #' criteria, spectra are labelled as to be picked for each cluster. Note that some
-#' spectra and therefore clusters can be explicitly removed from the picking decision
-#' using regular expressions, if they have been previously picked. If no metadata
-#' are provided, the reference spectra of each cluster will be picked.
+#' spectra and therefore clusters can be explicitly removed (_masked_)
+#' from the picking decision if they have been previously picked
+#' or should be discarded, using logical columns in the metadata table.
+#' If no metadata are provided, the reference spectra of each cluster will be picked.
 #'
 #' @param cluster_df A tibble with clusters information
 #' from the [similarity_to_clusters] or the [import_spede_clusters] function.
@@ -753,13 +758,9 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' picking process (e.g., OD600).
 #' @param criteria_column Optional character indicating the column in `metadata_df`
 #' to be used as a criteria.
-#' @param is_descending_order Optional logical indicating whether to sort in
-#' descending order or not.
-#' @param discard_regex Optional [regex] to remove spectra and therefore
-#' clusters from the picking decision (e.g., if they have been picked already).
-#' @param only_show_discarded Optional logical to be used in conjunction to
-#' `discard_regex` to **only print** the names of the spectra to be discarded
-#' as a verification step.
+#' @param hard_mask_column Column name in the `cluster_df` or `metadata_df` tibble indicating whether the spectra, ** and the clusters to which they belong** should be discarded (`TRUE`) or not (`FALSE`) before the picking decision.
+#' @param soft_mask_column Column name in the `cluster_df` or `metadata_df` tibble indicating whether the spectra should be discarded (`TRUE`) or not (`FALSE`) before the picking decision.
+#' @param is_descending_order Optional logical indicating whether to sort the `criteria_column` from the highest-to-lowest value (`TRUE`) or lowest-to-highest (`FALSE`).
 #' @param is_sorted Optional logical to indicate that the `cluster_df` is
 #' already sorted by cluster based on (usually multiple) internal criteria to
 #' pick the first of each cluster. This flag is **overriden** if a `metadata_df`
@@ -768,15 +769,12 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' @return A tibble with as many rows as `cluster_df` with an additional logical
 #' column named `to_pick` to indicate whether the colony associated to the spectra
 #' should be picked. If `metadata_df` is provided, then additional columns from
-#' this tibble are added to the returned tibble. When the `discard_regex` is used,
-#' the `to_pick` column of the tibble for the discarded spectra displays `FALSE`.
-#' When `only_show_discarded` is used, it returns $0$ and print
-#' out the list of spectra to be removed.
+#' this tibble are added to the returned tibble.
 #'
 #' @export
 pick_spectra <- function(
     cluster_df,
-    metadata_df = NULL, criteria_column = NULL, 
+    metadata_df = NULL, criteria_column = NULL,
     hard_mask_column = NULL, soft_mask_column = NULL,
     is_descending_order = TRUE,
     is_sorted = FALSE) {
@@ -795,11 +793,11 @@ pick_spectra <- function(
   if (is.null(metadata_df) & !"is_reference" %in% colnames(cluster_df)) {
     stop(
       "No additional metadata are provided ('metadata_df' tibble is NULL)",
-      " and there is no 'is_reference' column in the 'cluster_df' tibble.",
-      "Please do one of the following strategy:",
+      " and there is no 'is_reference' column in the 'cluster_df' tibble.\n",
+      "Please do one of the following strategy:\n",
       "    1. Either run the 'set_reference_spectra' or 'import_spede_clusters'",
-      "       function beforehand to indicate a reference spectra",
-      "    2. Provide a 'metadata' tibble"
+      "       function beforehand to indicate a reference spectra\n",
+      "    2. Provide a 'metadata' tibble\n"
     )
   }
   if (
@@ -831,7 +829,7 @@ pick_spectra <- function(
   if (is_sorted & !is.null(metadata_df)) {
     message(
       "The 'is_sorted' flag is set to TRUE, while a metadata table is",
-      " provided.",
+      " provided. ",
       "Please note that the metadata table takes precedence and the cherry-picking",
       " step will rely on the 'criteria_column'."
     )
@@ -858,18 +856,18 @@ pick_spectra <- function(
         "The 'criteria_column' is not present in the merged tibble."
       )
     }
-    if (!is.null(soft_mask_column)){
-      if(!soft_mask_column %in% colnames(cluster_df)) {
-      stop(
-        "The 'soft_mask_column' is not present in the merged tibble."
-      )
+    if (!is.null(soft_mask_column)) {
+      if (!soft_mask_column %in% colnames(cluster_df)) {
+        stop(
+          "The 'soft_mask_column' is not present in the merged tibble."
+        )
       }
     }
-    if (!is.null(hard_mask_column)){
-      if(!hard_mask_column %in% colnames(cluster_df)) {
-      stop(
-        "The 'hard_mask_column' is not present in the merged tibble."
-      )
+    if (!is.null(hard_mask_column)) {
+      if (!hard_mask_column %in% colnames(cluster_df)) {
+        stop(
+          "The 'hard_mask_column' is not present in the merged tibble."
+        )
       }
     }
 
@@ -937,13 +935,17 @@ pick_spectra <- function(
         "to_pick" = .data$to_pick == .data$name
       )
   }
-  # Merge with original tibble to keep potential discarded regex spectra
+  # Merge with original tibble to keep potential masked/discarded spectra
   # and same row number and order
   # NA in 'to_pick' are replaced with FALSE in the case of discarded clusters
 
+  cols <- base::intersect(
+    colnames(cluster_df),
+    colnames(orig_cluster_df)
+  )
   cluster_df %>%
     dplyr::ungroup() %>%
-    dplyr::right_join(orig_cluster_df) %>%
+    dplyr::right_join(orig_cluster_df, by = cols) %>%
     dplyr::mutate(
       "to_pick" = tidyr::replace_na(.data$to_pick, FALSE)
     ) %>%
@@ -955,49 +957,73 @@ pick_spectra <- function(
 ```
   
 ```{r example-pick_spectra}
-# 0. Load a toy example of a tibble of clusters created by the `similarity_to_clusters`
-#  function.
-clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
-
-# 1. By default and if no other metadata are provided, the function
-#  picks the reference spectrum of each clusters.
+# 0. Load a toy example of a tibble of clusters created by
+#   the `similarity_to_clusters` function.
+clusters <- readRDS(
+  system.file("clusters_tibble.RDS",
+    package = "maldipickr"
+  )
+)
+# 1. By default and if no other metadata are provided,
+#   the function picks reference spectra for each clusters.
 pick_spectra(clusters)
 
 # 2.1 Simulate OD600 values with uniform distribution
 #  for each of the colonies we measured with
 #  the Bruker MALDI Biotyper
 set.seed(104)
-metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
+metadata <- dplyr::transmute(
+  clusters,
+  name = name, OD600 = runif(n = nrow(clusters))
+)
 metadata
 
-# 2.2 Pick the spectra based on the highest OD600 value per cluster
+# 2.2 Pick the spectra based on the highest
+#   OD600 value per cluster
 pick_spectra(clusters, metadata, "OD600")
 
-# 3.1 Say that the wells on the right side of the plate are 
+# 3.1 Say that the wells on the right side of the plate are
 #   used for negative controls and should not be picked.
 metadata <- metadata %>% mutate(
-  well = gsub(".*[A-Z]([0-9]{1,2}$)", "\\1", name) %>% strtoi(),
+  well = gsub(".*[A-Z]([0-9]{1,2}$)", "\\1", name) %>%
+    strtoi(),
   is_edge = is_well_on_edge(
     well_number = well, plate_layout = 96, edges = "right"
   )
 )
 
-# 3.2 
-pick_spectra(clusters, metadata, "OD600", "is_edge")
+# 3.2 Pick the spectra after discarding (or soft masking)
+#   the spectra indicated by the `is_edge` column.
+pick_spectra(clusters, metadata, "OD600",
+  soft_mask_column = "is_edge"
+)
 
-# Say that all spectra in the column F were picked before
-#   in a previous experiment. We do not want to pick clusters
-#   with those spectra included to limit redundancy.
+# 4.1 Say that some spectra were picked before
+#   (e.g., in the column F) in a previous experiment.
+# We do not want to pick clusters with those spectra
+#   included to limit redundancy.
 metadata <- metadata %>% mutate(
   picked_before = grepl("_F", name)
 )
-pick_spectra(clusters, metadata, "OD600", hard_mask_column = "picked_before")
+# 4.2 Pick the spectra from clusters without spectra
+#   labelled as `picked_before` (hard masking).
+pick_spectra(clusters, metadata, "OD600",
+  hard_mask_column = "picked_before"
+)
 ```
   
 ```{r tests-pick_spectra}
 clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
 set.seed(104)
-metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
+metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters))) %>%
+  mutate(
+    well = gsub(".*[A-Z]([0-9]{1,2}$)", "\\1", name) %>%
+      strtoi(),
+    is_edge = is_well_on_edge(
+      well_number = well, plate_layout = 96, edges = "right"
+    ),
+    picked_before = grepl("_F", name)
+  )
 altered_metadata <- dplyr::mutate(metadata, name = gsub("species", "", name))
 test_that("pick_spectra works", {
   expect_true(
@@ -1006,13 +1032,27 @@ test_that("pick_spectra works", {
       pick_spectra(clusters)$to_pick
     )
   )
-  expect_output(
-    pick_spectra(clusters, discard_regex = "E11", only_show_discarded = TRUE),
-    "species2_E11 species2_E12"
-  )
   expect_equal(
     pick_spectra(clusters, metadata, "OD600")$to_pick,
     c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE)
+  )
+  expect_equal(
+    pick_spectra(clusters, metadata, "OD600",
+      is_descending_order = FALSE
+    )$to_pick,
+    c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE)
+  )
+  expect_equal(
+    pick_spectra(clusters, metadata, "OD600",
+      soft_mask_column = "is_edge"
+    )$to_pick,
+    c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE)
+  )
+  expect_equal(
+    pick_spectra(clusters, metadata, "OD600",
+      hard_mask_column = "picked_before"
+    )$to_pick,
+    c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE)
   )
   expect_equal(
     pick_spectra(clusters, is_sorted = TRUE)$to_pick,
@@ -1029,16 +1069,22 @@ test_that("pick_spectra fails without metadata and column", {
     "No additional metadata are provided"
   )
   expect_error(
-    pick_spectra(clusters, only_show_discarded = TRUE),
-    "No regex to discard clusters were provided"
-  )
-  expect_error(
     pick_spectra(clusters, metadata),
     "Additional metadata"
   )
   expect_error(
     pick_spectra(clusters, altered_metadata, "OD600"),
     "The spectra names in the metadata"
+  )
+  expect_error(
+    pick_spectra(clusters, metadata, "OD600",
+      hard_mask_column = "NOT_IN_TIBBLE"
+    ),
+    "The 'hard_mask_column' is not present in the merged tibble."
+  )
+  expect_error(
+    pick_spectra(clusters, hard_mask_column = "picked_before"),
+    "Masking column"
   )
 })
 ```
