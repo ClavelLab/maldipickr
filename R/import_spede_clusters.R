@@ -48,9 +48,9 @@ import_spede_clusters <- function(path) {
       "is_reference" = if_else(.data$REFERENCE == "Yes", TRUE, FALSE)
     ) %>%
     # Add the cluster_size
-    group_by(.data$membership) %>%
-    mutate("cluster_size" = dplyr::n()) %>%
-    select("name", "membership", "cluster_size", "quality", "is_reference") %>%
-    ungroup() %>%
+    dplyr::group_by(.data$membership) %>%
+    dplyr::mutate("cluster_size" = dplyr::n()) %>%
+    dplyr::select("name", "membership", "cluster_size", "quality", "is_reference") %>%
+    dplyr::ungroup() %>%
     return()
 }

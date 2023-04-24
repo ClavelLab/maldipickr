@@ -2,7 +2,15 @@
 
 clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
 set.seed(104)
-metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
+metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters))) %>%
+  dplyr::mutate(
+    well = gsub(".*[A-Z]([0-9]{1,2}$)", "\\1", name) %>%
+      strtoi(),
+    is_edge = is_well_on_edge(
+      well_number = well, plate_layout = 96, edges = "right"
+    ),
+    picked_before = grepl("_F", name)
+  )
 altered_metadata <- dplyr::mutate(metadata, name = gsub("species", "", name))
 test_that("pick_spectra works", {
   expect_true(
@@ -11,13 +19,27 @@ test_that("pick_spectra works", {
       pick_spectra(clusters)$to_pick
     )
   )
-  expect_output(
-    pick_spectra(clusters, discard_regex = "E11", only_show_discarded = TRUE),
-    "species2_E11 species2_E12"
-  )
   expect_equal(
     pick_spectra(clusters, metadata, "OD600")$to_pick,
     c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE)
+  )
+  expect_equal(
+    pick_spectra(clusters, metadata, "OD600",
+      is_descending_order = FALSE
+    )$to_pick,
+    c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE)
+  )
+  expect_equal(
+    pick_spectra(clusters, metadata, "OD600",
+      soft_mask_column = "is_edge"
+    )$to_pick,
+    c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE)
+  )
+  expect_equal(
+    pick_spectra(clusters, metadata, "OD600",
+      hard_mask_column = "picked_before"
+    )$to_pick,
+    c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE)
   )
   expect_equal(
     pick_spectra(clusters, is_sorted = TRUE)$to_pick,
@@ -34,15 +56,21 @@ test_that("pick_spectra fails without metadata and column", {
     "No additional metadata are provided"
   )
   expect_error(
-    pick_spectra(clusters, only_show_discarded = TRUE),
-    "No regex to discard clusters were provided"
-  )
-  expect_error(
     pick_spectra(clusters, metadata),
     "Additional metadata"
   )
   expect_error(
     pick_spectra(clusters, altered_metadata, "OD600"),
     "The spectra names in the metadata"
+  )
+  expect_error(
+    pick_spectra(clusters, metadata, "OD600",
+      hard_mask_column = "NOT_IN_TIBBLE"
+    ),
+    "The 'hard_mask_column' is not present in the merged tibble."
+  )
+  expect_error(
+    pick_spectra(clusters, hard_mask_column = "picked_before"),
+    "Masking column"
   )
 })

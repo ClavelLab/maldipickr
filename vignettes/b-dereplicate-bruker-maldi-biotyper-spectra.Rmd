@@ -246,11 +246,15 @@ import_spede_clusters(
     
 When isolating bacteria from an environment, experimenters want to be thorough but also work-, time- and cost-savvy. One approach is to reduce the redundancy of the bacterial isolates by analyzing their MALDI-TOF spectra from the Bruker Biotyper. All the steps previously described in this vignette consisted of processing the spectra to be able to pick only non-redundant spectra, using the `pick_spectra` function.
 
-The function, as illustrated in the example below, can pick spectra using different types of inputs:
+The function, as illustrated in the examples below, can pick spectra using different types of inputs:
 
-* the reference spectra information that is present in the cluster table (after using `similarity_to_clusters` or  `import_spede_clusters` functions)
-* an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster
-* a regular expression applied to the spectra names to explicitly removed some spectra and therefore clusters from the picking decision. This is particularly useful if some spectra  have been previously picked. For example, the regular expression could match a date or time to exclude colonies grown and picked 24h after streaking when comparing with colonies grown for 72h, or match a growth condition such as a temperature or an antibiotic provided this information is in the spectra name. A dry-run option is provided to display the spectra to be removed with the regular expression _without actually performing  the picking decision_.
+* the reference spectra information that is present in the cluster table (after using `similarity_to_clusters` or  `import_spede_clusters` functions; see example 1)
+* an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster (see example 2)
+
+Spectra, and clusters, can also be excluded from the cherry-picking decision, a procedure termed _masking_ here. We distinguish two types of mask that are implemented in the `pick_spectra` function:
+
+* **soft mask** that discards the spectra only, if they correspond for instance to low-quality sample, negative control samples (see example 3)
+* **hard mask** that discards the spectra _and their clusters_ (see example 4). This is particularly useful if some spectra have been previously picked. For instance, to exclude colonies grown and picked 24h after streaking when comparing with colonies grown for 72h.
 
 Advanced users can also provide directly a cluster table with a custom sort by cluster to accommodate complex design.
 
@@ -261,30 +265,59 @@ Ultimately, the function delivers a table with as many rows as the cluster table
   
 
 ```{r example-pick_spectra}
-# Load a toy example of a tibble of clusters created by the `similarity_to_clusters`
-#  function.
-clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
-
-# By default and if no other metadata are provided, the function
-#  picks the reference spectrum of each clusters.
+# 0. Load a toy example of a tibble of clusters created by
+#   the `similarity_to_clusters` function.
+clusters <- readRDS(
+  system.file("clusters_tibble.RDS",
+    package = "maldipickr"
+  )
+)
+# 1. By default and if no other metadata are provided,
+#   the function picks reference spectra for each clusters.
 pick_spectra(clusters)
 
-# Simulate OD600 values with uniform distribution
+# 2.1 Simulate OD600 values with uniform distribution
 #  for each of the colonies we measured with
 #  the Bruker MALDI Biotyper
 set.seed(104)
-metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters)))
+metadata <- dplyr::transmute(
+  clusters,
+  name = name, OD600 = runif(n = nrow(clusters))
+)
 metadata
 
-# Pick the spectra based on the highest OD600 value per cluster
+# 2.2 Pick the spectra based on the highest
+#   OD600 value per cluster
 pick_spectra(clusters, metadata, "OD600")
 
-# Say that spectra 'species2_E11' was picked before in a previous experiment
-#  we do not want to pick a cluster where species2_E11 is included to limit redundancy
-# The function can peform a dry run to indicate which spectra would be removed
-pick_spectra(clusters, discard_regex = "E11", only_show_discarded = TRUE)
-# Once checked, the real dereplication can be performed.
-pick_spectra(clusters, discard_regex = "E11")
+# 3.1 Say that the wells on the right side of the plate are
+#   used for negative controls and should not be picked.
+metadata <- metadata %>% dplyr::mutate(
+  well = gsub(".*[A-Z]([0-9]{1,2}$)", "\\1", name) %>%
+    strtoi(),
+  is_edge = is_well_on_edge(
+    well_number = well, plate_layout = 96, edges = "right"
+  )
+)
+
+# 3.2 Pick the spectra after discarding (or soft masking)
+#   the spectra indicated by the `is_edge` column.
+pick_spectra(clusters, metadata, "OD600",
+  soft_mask_column = "is_edge"
+)
+
+# 4.1 Say that some spectra were picked before
+#   (e.g., in the column F) in a previous experiment.
+# We do not want to pick clusters with those spectra
+#   included to limit redundancy.
+metadata <- metadata %>% dplyr::mutate(
+  picked_before = grepl("_F", name)
+)
+# 4.2 Pick the spectra from clusters without spectra
+#   labelled as `picked_before` (hard masking).
+pick_spectra(clusters, metadata, "OD600",
+  hard_mask_column = "picked_before"
+)
 ```
 
   
