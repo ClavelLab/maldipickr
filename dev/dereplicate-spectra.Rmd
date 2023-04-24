@@ -689,10 +689,10 @@ import_spede_clusters <- function(path) {
       "is_reference" = if_else(.data$REFERENCE == "Yes", TRUE, FALSE)
     ) %>%
     # Add the cluster_size
-    group_by(.data$membership) %>%
-    mutate("cluster_size" = dplyr::n()) %>%
-    select("name", "membership", "cluster_size", "quality", "is_reference") %>%
-    ungroup() %>%
+    dplyr::group_by(.data$membership) %>%
+    dplyr::mutate("cluster_size" = dplyr::n()) %>%
+    dplyr::select("name", "membership", "cluster_size", "quality", "is_reference") %>%
+    dplyr::ungroup() %>%
     return()
 }
 ```
@@ -984,7 +984,7 @@ pick_spectra(clusters, metadata, "OD600")
 
 # 3.1 Say that the wells on the right side of the plate are
 #   used for negative controls and should not be picked.
-metadata <- metadata %>% mutate(
+metadata <- metadata %>% dplyr::mutate(
   well = gsub(".*[A-Z]([0-9]{1,2}$)", "\\1", name) %>%
     strtoi(),
   is_edge = is_well_on_edge(
@@ -1002,7 +1002,7 @@ pick_spectra(clusters, metadata, "OD600",
 #   (e.g., in the column F) in a previous experiment.
 # We do not want to pick clusters with those spectra
 #   included to limit redundancy.
-metadata <- metadata %>% mutate(
+metadata <- metadata %>% dplyr::mutate(
   picked_before = grepl("_F", name)
 )
 # 4.2 Pick the spectra from clusters without spectra
@@ -1016,7 +1016,7 @@ pick_spectra(clusters, metadata, "OD600",
 clusters <- readRDS(system.file("clusters_tibble.RDS", package = "maldipickr"))
 set.seed(104)
 metadata <- dplyr::transmute(clusters, name = name, OD600 = runif(n = nrow(clusters))) %>%
-  mutate(
+  dplyr::mutate(
     well = gsub(".*[A-Z]([0-9]{1,2}$)", "\\1", name) %>%
       strtoi(),
     is_edge = is_well_on_edge(
