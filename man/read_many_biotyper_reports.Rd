@@ -34,7 +34,8 @@ reports_paths <- system.file(
 read_many_biotyper_reports(
   reports_paths,
   report_ids = c("first", "second", "third"),
-  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate
+  # Additional metadata below are passed to dplyr::mutate
+  growth_temperature = 37.0
 )
 }
 \seealso{

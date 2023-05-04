@@ -31,9 +31,12 @@ But it turns out that \code{acqu} and \code{acqus} files \href{https://github.co
 }
 \examples{
 # Get an example directory of six Bruker MALDI Biotyper spectra
-directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+directory_biotyper_spectra <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+)
 # Import the six spectra
-spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
 # Display the list of spectra
 spectra_list
 }

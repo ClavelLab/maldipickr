@@ -28,7 +28,10 @@ and the number of detected peaks
 # Get an example directory of six Bruker MALDI Biotyper spectra
 # Import the six spectra and
 # Transform the spectra signals according to Strejcek et al. (2018)
-processed <- system.file("toy-species-spectra", package = "maldipickr") \%>\%
+processed <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+) \%>\%
   import_biotyper_spectra() \%>\%
   suppressMessages() \%>\%
   process_spectra()
@@ -60,7 +63,10 @@ cosine_similarity <- matrix(
 )
 # Delineate clusters based on a 0.92 threshold applied
 #  to the similarity matrix
-clusters <- similarity_to_clusters(cosine_similarity, threshold = 0.92)
+clusters <- similarity_to_clusters(
+  cosine_similarity,
+  threshold = 0.92
+)
 
 # Set reference spectra with the toy example
 set_reference_spectra(clusters, processed$metadata)

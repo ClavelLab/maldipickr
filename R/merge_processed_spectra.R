@@ -16,9 +16,12 @@
 #' @export
 #' @examples
 #' # Get an example directory of six Bruker MALDI Biotyper spectra
-#' directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+#' directory_biotyper_spectra <- system.file(
+#'   "toy-species-spectra",
+#'   package = "maldipickr"
+#' )
 #' # Import the six spectra
-#' spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+#' spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
 #' # Transform the spectra signals according to Strejcek et al. (2018)
 #' processed <- process_spectra(spectra_list)
 #' # Merge the spectra to produce the feature matrix
@@ -27,7 +30,10 @@
 #' #  35 peaks as columns
 #' dim(fm)
 #' # Notice the difference when the interpolation is turned off
-#' fm_no_interpolation <- merge_processed_spectra(list(processed), interpolate_missing = FALSE)
+#' fm_no_interpolation <- merge_processed_spectra(
+#'   list(processed),
+#'   interpolate_missing = FALSE
+#' )
 #' sum(fm == 0) # 0
 #' sum(fm_no_interpolation == 0) # 68
 merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra = TRUE, interpolate_missing = TRUE) {

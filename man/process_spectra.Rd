@@ -39,9 +39,12 @@ The original R code on which this function is based is accessible at: \url{https
 }
 \examples{
 # Get an example directory of six Bruker MALDI Biotyper spectra
-directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+directory_biotyper_spectra <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+)
 # Import the six spectra
-spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
 # Transform the spectra signals according to Strejcek et al. (2018)
 processed <- process_spectra(spectra_list)
 # Overview of the list architecture that is returned
