@@ -2,7 +2,8 @@
 % Please edit documentation in R/is_well_on_edge.R
 \name{is_well_on_edge}
 \alias{is_well_on_edge}
-\title{Identify the wells on the edges of 96- or 384-well plates}
+\title{Identify the wells on the plate's edge
+Flag the wells located on the edges of a 96- or 384-well plate, based on the following well numbering:}
 \usage{
 is_well_on_edge(
   well_number,
@@ -21,10 +22,13 @@ is_well_on_edge(
 \item{details}{A logical controlling whether a \link{data.frame} with more details should be returned}
 }
 \value{
-A logical vector, the same length as \code{well_number} indicating whether the well is on the edge. If \code{details = TRUE}, the function returns a \link{data.frame} that complements the logical vector with the well_number, row and column positions.
+A logical vector, the same length as \code{well_number} indicating whether the well is on the edge. If \code{details = TRUE}, the function returns a \link{data.frame} that complements the logical vector with the \code{well_number}, row and column positions.
 }
 \description{
-Identify the wells on the edges of 96- or 384-well plates
+\itemize{
+\item Well numbers start at 1
+\item Well are numbered from left to right and then top to bottom of the plate.
+}
 }
 \examples{
 # Logical vector indicating whether the wells are on the four edges 
