@@ -180,22 +180,22 @@ test_that("process_spectra warns on empty spectra", {
 })
 ```
 
-# Merge multiples processed spectra
+# Merge multiple processed spectra
 
 During high-throughput analyses, multiples runs of Bruker MALDI Biotyper are expected resulting in several batches of spectra to be processed and compared.
-While their processing is natively independent, and could natively be run in parallell, the integration of the batches for their comparison needs an additional step.
+While their processing is natively independent, and could natively be run in parallel, the integration of the batches for their comparison needs an additional step.
 
-The [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) function aggregates the processed spectra and bins together the detected peaks, with a tolerance of `r format(.002*10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
+The [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) function aggregates the processed spectra and bins together the detected peaks, with a tolerance of $0.002$ between the average peak values in the bin (see [`MALDIquant::binPeaks`](https://rdrr.io/cran/MALDIquant/man/binPeaks-functions.html)), which translate to a tolerance of `r format(.002/10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
 
 By default, as in the Strejeck et al. (2018) procedure, the intensity values for spectra with missing peaks are interpolated from the processed spectra signal.
 The current function enables the analyst to decide whether to interpolate the values or leave missing peaks as `NA` which would then be converted to an null intensity value.
 
 ```{r function-merge_processed_spectra}
-#' Merge multiples processed spectra and peaks
+#' Merge multiple processed spectra and peaks
 #'
 #' Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
 #'
-#' @param processed_spectra A [list] The processed spectra and associated peaks and metadata in two possible formats:
+#' @param processed_spectra A [list] of the processed spectra and associated peaks and metadata in two possible formats:
 #' * A vector of character that are the list of RDS files produced by [process_spectra].
 #' * A named list of in-memory objects (named `spectra`, `peaks`, `metadata`) produced by [process_spectra].
 #' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
