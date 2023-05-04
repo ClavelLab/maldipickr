@@ -53,7 +53,7 @@ str(processed, max.level = 2)
 processed$metadata
 }
 \references{
-Strejcek, Michal, Tereza Smrhova, Petra Junkova, and Ondrej Uhlik. “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” \emph{Frontiers in Microbiology} 9 (2018). \url{https://doi.org/10.3389/fmicb.2018.01294}.
+Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” \emph{Frontiers in Microbiology} 9 \url{doi:10.3389/fmicb.2018.01294}.
 }
 \seealso{
 \link{import_biotyper_spectra}

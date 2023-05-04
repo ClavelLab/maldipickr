@@ -12,7 +12,7 @@
 #'
 #' @return A *n*×*p* matrix, with *n* spectra as rows and *p* features as columns that are the peaks found in all the processed spectra.
 #'
-#' @seealso [process_spectra], the "Value" section in [MALDIquant::intensityMatrix]
+#' @seealso [process_spectra], the "Value" section in [`MALDIquant::intensityMatrix`](https://rdrr.io/cran/MALDIquant/man/intensityMatrix-functions.html)
 #' @export
 #' @examples
 #' # Get an example directory of six Bruker MALDI Biotyper spectra

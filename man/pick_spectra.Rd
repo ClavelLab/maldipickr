@@ -24,7 +24,7 @@ picking process (e.g., OD600).}
 \item{criteria_column}{Optional character indicating the column in \code{metadata_df}
 to be used as a criteria.}
 
-\item{hard_mask_column}{Column name in the \code{cluster_df} or \code{metadata_df} tibble indicating whether the spectra, ** and the clusters to which they belong** should be discarded (\code{TRUE}) or not (\code{FALSE}) before the picking decision.}
+\item{hard_mask_column}{Column name in the \code{cluster_df} or \code{metadata_df} tibble indicating whether the spectra, \strong{and the clusters to which they belong} should be discarded (\code{TRUE}) or not (\code{FALSE}) before the picking decision.}
 
 \item{soft_mask_column}{Column name in the \code{cluster_df} or \code{metadata_df} tibble indicating whether the spectra should be discarded (\code{TRUE}) or not (\code{FALSE}) before the picking decision.}
 

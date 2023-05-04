@@ -45,5 +45,5 @@ sum(fm == 0) # 0
 sum(fm_no_interpolation == 0) # 68
 }
 \seealso{
-\link{process_spectra}, the "Value" section in \link[MALDIquant:intensityMatrix-functions]{MALDIquant::intensityMatrix}
+\link{process_spectra}, the "Value" section in \href{https://rdrr.io/cran/MALDIquant/man/intensityMatrix-functions.html}{\code{MALDIquant::intensityMatrix}}
 }

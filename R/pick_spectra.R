@@ -15,7 +15,7 @@
 #' picking process (e.g., OD600).
 #' @param criteria_column Optional character indicating the column in `metadata_df`
 #' to be used as a criteria.
-#' @param hard_mask_column Column name in the `cluster_df` or `metadata_df` tibble indicating whether the spectra, ** and the clusters to which they belong** should be discarded (`TRUE`) or not (`FALSE`) before the picking decision.
+#' @param hard_mask_column Column name in the `cluster_df` or `metadata_df` tibble indicating whether the spectra, **and the clusters to which they belong** should be discarded (`TRUE`) or not (`FALSE`) before the picking decision.
 #' @param soft_mask_column Column name in the `cluster_df` or `metadata_df` tibble indicating whether the spectra should be discarded (`TRUE`) or not (`FALSE`) before the picking decision.
 #' @param is_descending_order Optional logical indicating whether to sort the `criteria_column` from the highest-to-lowest value (`TRUE`) or lowest-to-highest (`FALSE`).
 #' @param is_sorted Optional logical to indicate that the `cluster_df` is

@@ -24,7 +24,7 @@ Bacterial colony identification with the Bruker MALDI Biotyper is a high-through
 
 Scientific projects where the number of unknown bacteria is expected to be high needs reference-free methods to be able to reduce the redundancy of isolated bacterial colonies, a process called *dereplication*.
 
-[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) proposed such a method by processing the spectra and suggest similarity thresholds between spectra above which spectra, and therefore the measured bacterial colonies, can be considered identical at a given taxonomic rank. Their processing procedure is implemented in the [`maldipickr`](https://github.com/ClavelLab/maldipickr) package and illustrated in the following vignette.
+[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) proposed such a method by processing the spectra and suggest similarity thresholds between spectra above which spectra, and therefore the measured bacterial colonies, can be considered identical at a given taxonomic rank. Their processing procedure is implemented in the [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package and illustrated in the following vignette.
 
 In addition, we provide functions to enable the dereplication of different batches of Bruker MALDI Biotyper runs and combine the results, in order to be able to delineate the clusters from a common similarity matrix.
 
@@ -43,7 +43,7 @@ From the imported raw data from the Bruker MALDI Biotyper, the processing of the
 6. Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
 7. Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 
-The full procedure is illustrated in the example below. While in this case, all the resulting processed spectra, peaks and final spectra metadata are stored in-memory, the `process_spectra` function enables storing these files locally for scalable high-throughput analyses.
+The full procedure is illustrated in the example below. While in this case, all the resulting processed spectra, peaks and final spectra metadata are stored in-memory, the [`process_spectra()`](https://clavellab.github.io/maldipickr/reference/process_spectra.html) function enables storing these files locally for scalable high-throughput analyses.
 
 
 ```{r examples-process_spectra}
@@ -67,7 +67,7 @@ processed$metadata
 During high-throughput analyses, multiples runs of Bruker MALDI Biotyper are expected resulting in several batches of spectra to be processed and compared.
 While their processing is natively independent, and could natively be run in parallell, the integration of the batches for their comparison needs an additional step.
 
-The `merge_processed_spectra` function aggregates the processed spectra and bins together the detected peaks, with a tolerance of `r format(.002*10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
+The [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) function aggregates the processed spectra and bins together the detected peaks, with a tolerance of `r format(.002*10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
 
 By default, as in the Strejeck et al. (2018) procedure, the intensity values for spectra with missing peaks are interpolated from the processed spectra signal.
 The current function enables the analyst to decide whether to interpolate the values or leave missing peaks as `NA` which would then be converted to an null intensity value.
@@ -98,10 +98,10 @@ sum(fm_no_interpolation == 0) # 68
 # Compute a similarity matrix between all processed spectra (not included)
 
 Once all the batches of spectra have been processed together, we can use a distance metric to evaluate how close the spectra are to one another.
-[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) recommend the *cosine* metric to compare the spectra and they use the fast implementation in the `coop` package.
+[Strejcek *et al.* (2018)](https://doi.org/10.3389/fmicb.2018.01294) recommend the *cosine* metric to compare the spectra and they use the fast implementation in the [`{coop}`](https://cran.r-project.org/package=coop) package.
 
 While we do not provide specific functions to generate the similarity matrix, we illustrate below how it can be easily computed.
-Note that the feature matrix from `merge_processed_spectra` has spectra as rows and peaks values as columns.
+Note that the feature matrix from [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) has spectra as rows and peaks values as columns.
 So to get a similarity matrix between spectra, the feature matrix must be transposed before cosine computation.
 
 ```
@@ -120,7 +120,7 @@ sim_matrix <- coop::cosine( t(fm) )
 
 When the similarity matrix is computed between all pairs of the studied spectra, the next step is to delineate clusters of spectra to dereplicate the measured bacterial colonies.
 
-The `similarity_to_clusters` is agnostic of the similarity metric used, whether it is the cosine metric or the  Pearson product moment, provided that a numeric threshold relevant to the metric used is given.
+The [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html)) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
 
 Indeed, the matrix is transformed into a network without loops, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
 This representation allows to infer the clusters. A table summarises for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
@@ -162,16 +162,13 @@ similarity_to_clusters(cosine_similarity, threshold = 0.92)
 
   
 
-  
-
 # Set a reference spectrum for each cluster
 
-  
-Once the table of clusters is generated from the similarity matrix, a reference spectrum can be assigned to each cluster.  
+Once the table of clusters is generated from the similarity matrix, a reference spectrum can be assigned to each cluster.
 
 We choose to define high-quality spectra as representative spectra of the clusters using internal information. That is, representative spectra have, within their cluster, the highest median signal-to-noise ratio and then the highest number of detected peaks.
 
-The function `set_reference_spectra` does not change the order of the cluster table but merely add an additional column `is_reference` to indicate if the corresponding spectrum is representative of the cluster. 
+The function [`set_reference_spectra()`](https://clavellab.github.io/maldipickr/reference/set_reference_spectra.html) does not change the order of the cluster table but merely adds an additional column `is_reference` to indicate whether the corresponding spectrum is representative of the cluster. 
     
 
   
@@ -226,7 +223,7 @@ set_reference_spectra(clusters, processed$metadata)
 # Import clusters results generated by SPeDE
 
 Raw spectra can also be processed and clustered by another approach, named [`SPeDE`](https://doi.org/10.1128/mSystems.00437-19), developed by Dumolin et al. (2019).
-The resulting dereplication step produces a comma separated table. The example below illustrates how to import this table into R to be consistent with the dereplication table generated within the [`maldipickr`](https://github.com/ClavelLab/maldipickr) package.
+The resulting dereplication step produces a comma separated table. The example below illustrates how to import this table into R to be consistent with the dereplication table generated within the [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package.
     
 
   
@@ -251,7 +248,7 @@ The function, as illustrated in the examples below, can pick spectra using diffe
 * the reference spectra information that is present in the cluster table (after using `similarity_to_clusters` or  `import_spede_clusters` functions; see example 1)
 * an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster (see example 2)
 
-Spectra, and clusters, can also be excluded from the cherry-picking decision, a procedure termed _masking_ here. We distinguish two types of mask that are implemented in the `pick_spectra` function:
+Spectra, and clusters, can also be excluded from the cherry-picking decision, a procedure termed _masking_ here. We distinguish two types of mask that are implemented in the [`pick_spectra()`](https://clavellab.github.io/maldipickr/reference/pick_spectra.html) function:
 
 * **soft mask** that discards the spectra only, if they correspond for instance to low-quality sample, negative control samples (see example 3)
 * **hard mask** that discards the spectra _and their clusters_ (see example 4). This is particularly useful if some spectra have been previously picked. For instance, to exclude colonies grown and picked 24h after streaking when comparing with colonies grown for 72h.
