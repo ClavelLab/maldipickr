@@ -9,7 +9,7 @@
 #'
 #' @return A tibble just like the [read_biotyper_report()] function except for an additional column `name` with the `report_ids` used as a prefix of the `spot` name.
 #'
-#' @seealso [read_biotyper_report()]
+#' @seealso [read_biotyper_report]
 #'
 #' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`).
 #'

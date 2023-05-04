@@ -21,6 +21,8 @@
 #' * `spectra`: a list the length of the spectra list of [MALDIquant::MassSpectrum] objects.
 #' * `peaks`: a list the length of the spectra list of [MALDIquant::MassPeaks] objects.
 #' * `metadata`: a tibble indicating the median signal-to-noise ratio (`SNR`) and peaks number for all spectra list (`peaks`), with spectra names in the `name` column.
+#' 
+#' @seealso [import_biotyper_spectra] and [check_spectra] for the inputs and [merge_processed_spectra] for further analysis.
 #' @export
 #'
 #' @references Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <doi:10.3389/fmicb.2018.01294>.

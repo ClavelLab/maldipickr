@@ -28,6 +28,8 @@
 #' should be picked. If `metadata_df` is provided, then additional columns from
 #' this tibble are added to the returned tibble.
 #'
+#' @seealso [similarity_to_clusters], [set_reference_spectra]. For a useful utility to soft-mask specific spectra: [is_well_on_edge].
+#'
 #' @export
 #' @examples
 #' # 0. Load a toy example of a tibble of clusters created by

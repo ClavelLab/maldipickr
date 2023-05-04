@@ -68,3 +68,6 @@ cosine_similarity <- matrix(
 #  to the similarity matrix
 similarity_to_clusters(cosine_similarity, threshold = 0.92)
 }
+\seealso{
+For similarity metrics: \href{https://rdrr.io/cran/coop/man/cosine.html}{\code{coop::cosine}}, \link[stats:cor]{stats::cor}, \href{https://rdrr.io/cran/Hmisc/man/rcorr.html}{\code{Hmisc::rcorr}}. For further analyses: \link{set_reference_spectra}.
+}

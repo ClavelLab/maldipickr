@@ -104,6 +104,9 @@ After inflating the template
 #'
 #' @return
 #' A tibble of 7 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
+#'
+#' @seealso [read_many_biotyper_report]
+#'
 #' @export
 #'
 #' @examples
@@ -243,7 +246,7 @@ Below is an example of such usage, where one report was artificially extended in
 #'
 #' @return A tibble just like the [read_biotyper_report()] function except for an additional column `name` with the `report_ids` used as a prefix of the `spot` name.
 #'
-#' @seealso [read_biotyper_report()]
+#' @seealso [read_biotyper_report]
 #'
 #' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`).
 #'
@@ -360,6 +363,8 @@ The toy dataset bundled with this package is a subset of a dataset in the [`{MAL
 #'
 #' @return A list of [MALDIquant::MassSpectrum] objects
 #'
+#' @seealso [check_spectra], [process_spectra]
+#'
 #' @export
 import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("BTS", "Autocalibration")) {
   # List all the acqus files
@@ -461,6 +466,8 @@ Either way, the function outputs a list of logical vectors (`TRUE` or `FALSE`) i
 #' @param spectra_list A list of [MALDIquant::MassSpectrum] objects
 #'
 #' @return A list of logical vectors of length `spectra_list` indicating if the spectra are empty (`is_empty`), of an odd length (`is_outlier_length`) or not a profile spectra (`is_not_regular`).
+#'
+#' @seealso [process_spectra]
 #'
 #' @export
 check_spectra <- function(spectra_list) {

@@ -60,6 +60,8 @@ The full procedure is illustrated in the example below. While in this case, all 
 #' * `spectra`: a list the length of the spectra list of [MALDIquant::MassSpectrum] objects.
 #' * `peaks`: a list the length of the spectra list of [MALDIquant::MassPeaks] objects.
 #' * `metadata`: a tibble indicating the median signal-to-noise ratio (`SNR`) and peaks number for all spectra list (`peaks`), with spectra names in the `name` column.
+#' 
+#' @seealso [import_biotyper_spectra] and [check_spectra] for the inputs and [merge_processed_spectra] for further analysis.
 #' @export
 #'
 #' @references Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <doi:10.3389/fmicb.2018.01294>.
@@ -321,10 +323,14 @@ Note that the feature matrix from [`merge_processed_spectra()`](https://clavella
 So to get a similarity matrix between spectra, the feature matrix must be transposed before cosine computation.
 
 ```
-# Install the coop package
+# A. Compute the similarity matrix on the transposed feature matrix
+#   using Pearson correlation coefficient
+sim_matrix <- stats::cor( t(fm), method = "pearson)
+
+# B.1 Install the coop package
 # install.packages("coop")
 
-# Compute the similarity matrix on the transposed feature matrix
+# B.2 Compute the similarity matrix on the transposed feature matrix
 sim_matrix <- coop::cosine( t(fm) )
 ```
 
@@ -366,6 +372,7 @@ This representation allows to infer the clusters. A table summarises for each sp
 #'  2. It uses [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
 #'  to stay within the tibble and tidyverse for consistency.
 #'
+#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For further analyses: [set_reference_spectra].
 #' @export
 similarity_to_clusters <- function(sim_matrix, threshold) {
   if (!is.matrix(sim_matrix)) {
@@ -511,6 +518,8 @@ The function [`set_reference_spectra()`](https://clavellab.github.io/maldipickr/
 #'
 #' @return A merged tibble in the same order as `cluster_df` with both the columns of `cluster_df` and `metadata_df`, as well as a logical column `is_reference` indicating if the spectrum is the reference spectra of the cluster.
 #'
+#' @seealso [similarity_to_clusters], [pick_spectra]
+#' 
 #' @export
 set_reference_spectra <- function(cluster_df, metadata_df) {
   # Checking the tibbles sizes
@@ -785,6 +794,8 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' column named `to_pick` to indicate whether the colony associated to the spectra
 #' should be picked. If `metadata_df` is provided, then additional columns from
 #' this tibble are added to the returned tibble.
+#'
+#' @seealso [similarity_to_clusters], [set_reference_spectra]. For a useful utility to soft-mask specific spectra: [is_well_on_edge].
 #'
 #' @export
 pick_spectra <- function(

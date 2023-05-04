@@ -39,6 +39,9 @@
 #'
 #' @return
 #' A tibble of 7 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
+#'
+#' @seealso [read_many_biotyper_report]
+#'
 #' @export
 #'
 #' @examples

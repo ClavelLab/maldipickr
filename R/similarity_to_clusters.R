@@ -27,6 +27,7 @@
 #'  2. It uses [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
 #'  to stay within the tibble and tidyverse for consistency.
 #'
+#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For further analyses: [set_reference_spectra].
 #' @export
 #' @examples
 #' # Toy similarity matrix between the six example spectra of

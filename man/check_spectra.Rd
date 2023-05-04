@@ -28,3 +28,6 @@ check_spectra(spectra_list)
 # The overall sanity can be checked with Reduce
 Reduce(any, check_spectra(spectra_list)) # Should be FALSE
 }
+\seealso{
+\link{process_spectra}
+}

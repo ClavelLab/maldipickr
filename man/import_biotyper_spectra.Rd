@@ -40,3 +40,6 @@ spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
 # Display the list of spectra
 spectra_list
 }
+\seealso{
+\link{check_spectra}, \link{process_spectra}
+}

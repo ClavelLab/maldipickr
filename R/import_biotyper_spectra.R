@@ -19,6 +19,8 @@
 #'
 #' @return A list of [MALDIquant::MassSpectrum] objects
 #'
+#' @seealso [check_spectra], [process_spectra]
+#'
 #' @export
 #' @examples
 #' # Get an example directory of six Bruker MALDI Biotyper spectra

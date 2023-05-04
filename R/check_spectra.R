@@ -8,6 +8,8 @@
 #'
 #' @return A list of logical vectors of length `spectra_list` indicating if the spectra are empty (`is_empty`), of an odd length (`is_outlier_length`) or not a profile spectra (`is_not_regular`).
 #'
+#' @seealso [process_spectra]
+#'
 #' @export
 #' @examples
 #' # Get an example directory of six Bruker MALDI Biotyper spectra

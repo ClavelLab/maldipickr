@@ -71,3 +71,6 @@ clusters <- similarity_to_clusters(
 # Set reference spectra with the toy example
 set_reference_spectra(clusters, processed$metadata)
 }
+\seealso{
+\link{similarity_to_clusters}, \link{pick_spectra}
+}

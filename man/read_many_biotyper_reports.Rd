@@ -39,5 +39,5 @@ read_many_biotyper_reports(
 )
 }
 \seealso{
-\code{\link[=read_biotyper_report]{read_biotyper_report()}}
+\link{read_biotyper_report}
 }

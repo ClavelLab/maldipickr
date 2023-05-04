@@ -59,5 +59,7 @@ processed$metadata
 Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” \emph{Frontiers in Microbiology} 9 \url{doi:10.3389/fmicb.2018.01294}.
 }
 \seealso{
+\link{import_biotyper_spectra} and \link{check_spectra} for the inputs and \link{merge_processed_spectra} for further analysis.
+
 \link{import_biotyper_spectra}
 }

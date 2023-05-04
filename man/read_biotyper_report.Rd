@@ -57,3 +57,6 @@ report_tibble <- read_biotyper_report(biotyper)
 # Display the tibble
 report_tibble
 }
+\seealso{
+\link{read_many_biotyper_report}
+}
