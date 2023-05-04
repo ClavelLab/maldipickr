@@ -44,11 +44,16 @@ devtools::install_github("ClavelLab/maldipickr", build_vignettes = TRUE)
 
 The package provides functions to:
 
-1.  Import spectra (with `import_biotyper_spectra()`) and identification
-    reports from Bruker MALDI Biotyper into R (with
-    `read_biotyper_report()`).
-2.  Process, dereplicate (with `process_spectra()` and
-    `similarity_to_clusters()`) and cherry-pick representative spectra.
+1.  Import spectra (with
+    [`import_biotyper_spectra()`](https://clavellab.github.io/maldipickr/reference/import_biotyper_spectra.html))
+    and identification reports from Bruker MALDI Biotyper into R (with
+    [`read_biotyper_report()`](https://clavellab.github.io/maldipickr/reference/read_biotyper_report.html)).
+2.  Process, dereplicate (with
+    [`process_spectra()`](https://clavellab.github.io/maldipickr/reference/process_spectra.html)
+    and
+    [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html))
+    and cherry-pick representative spectra
+    ([`pick_spectra()`](https://clavellab.github.io/maldipickr/reference/pick_spectra.html)).
 
 ## Disclaimer
 
