@@ -20,8 +20,9 @@ pkgload::load_all(export_all = FALSE)
 
 ```{r function-is_well_on_edge}
 #' Identify the wells on the plate's edge
-
-
+#' 
+#' 
+#' @details
 #' Flag the wells located on the edges of a 96- or 384-well plate, based on the following well numbering:
 #'
 #' * Well numbers start at 1
