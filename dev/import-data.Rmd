@@ -165,7 +165,7 @@ After inflating the template
 - This example will automatically be added in the vignette created from this Rmd template
 -->
 
-```{r examples_read_biotyper_report}
+```{r examples-read_biotyper_report}
 # Get a example Bruker report
 biotyper <- system.file("biotyper.csv", package = "maldipickr")
 # Import the report as a tibble
@@ -275,7 +275,7 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
 }
 ```
   
-```{r example-read_many_biotyper_reports}
+```{r examples-read_many_biotyper_reports}
 # List of Bruker MALDI Biotyper reports
 reports_paths <- system.file(
   c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
@@ -285,7 +285,8 @@ reports_paths <- system.file(
 read_many_biotyper_reports(
   reports_paths,
   report_ids = c("first", "second", "third"),
-  growth_temperature = 37.0 # Additional metadata passed to dplyr::mutate
+  # Additional metadata below are passed to dplyr::mutate
+  growth_temperature = 37.0
 )
 ```
   
@@ -414,18 +415,21 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
 }
 ```
   
-```{r example-import_biotyper_spectra}
+```{r examples-import_biotyper_spectra}
 # Get an example directory of six Bruker MALDI Biotyper spectra
-directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+directory_biotyper_spectra <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+)
 # Import the six spectra
-spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
 # Display the list of spectra
 spectra_list
 ```
   
 ```{r tests-import_biotyper_spectra}
-directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
-spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+directory_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
 test_that("import_biotyper_spectra works", {
   expect_length(
     spectra_list, 6
@@ -437,7 +441,7 @@ test_that("import_biotyper_spectra works", {
 test_that("import_biotyper_spectra fails", {
   expect_error(
     import_biotyper_spectra(
-      paste0(directory_for_biotyper_spectra, "/0_G2/1/1SLin/acqu")
+      paste0(directory_biotyper_spectra, "/0_G2/1/1SLin/acqu")
     ), "Directory"
   )
 })
@@ -496,11 +500,14 @@ check_spectra <- function(spectra_list) {
 }
 ```
   
-```{r example-check_spectra}
+```{r examples-check_spectra}
 # Get an example directory of six Bruker MALDI Biotyper spectra
-directory_for_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
+directory_biotyper_spectra <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+)
 # Import the six spectra
-spectra_list <- import_biotyper_spectra(directory_for_biotyper_spectra)
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
 # Display the list of checks, with FALSE where no anomaly is detected
 check_spectra(spectra_list)
 # The overall sanity can be checked with Reduce
