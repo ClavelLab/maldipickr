@@ -108,6 +108,7 @@ fusen::add_flat_template("add")
 
 ```{r}
 # set and try pkgdown documentation website locally
+# use the options(pkgdown.internet = FALSE) if air-gapped to avoid issues
 usethis::use_pkgdown()
 pkgdown::build_site()
 
