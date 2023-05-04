@@ -45,7 +45,7 @@ The device generates two types of data:
 1. A report of the identification using its proprietary database of mass spectrum projections (MSPs).
 2. The raw mass spectrometry data.
 
-The following vignette describe how to streamline the import of these two types of data into R using the [`maldipickr`](https://github.com/ClavelLab/maldipickr) package
+The following vignette describe how to streamline the import of these two types of data into R using the [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package
 
 
 # Importing generated reports from the Bruker MALDI Biotyper device
@@ -57,7 +57,7 @@ While the file is separated by semi-colons, it contains no headers.
 The report has many columns in a long format to describe the ten hits when identification is feasible, or only a few when no identification was possible.
 All-in-all, this makes the table import into R and its manipulation relatively painful.
 
-Below is an example of import of a single Bruker MALDI Biotyper report into a [`tibble`](https://tibble.tidyverse.org) for use with the [`tidyverse`](https://tidyverse.tidyverse.org/) suite. By default, only the best hit of each colony is reported.
+Below is an example of import of a single Bruker MALDI Biotyper report into a [`{tibble}`](https://tibble.tidyverse.org) for use with the [`{tidyverse}`](https://tidyverse.tidyverse.org/) suite. By default, only the best hit of each colony is reported.
 
 <!--
 Create a chunk for the core of the function
@@ -140,13 +140,13 @@ read_many_biotyper_reports(
 # Importing spectra from the Bruker MALDI Biotyper device
 
 Other than the identification reports, the Bruker MALDI Biotyper device outputs the raw data used for the identification (if not the database) in the form of mass spectra.
-Thankfully, the [`MALDIquant`](https://strimmerlab.github.io/software/maldiquant) and [`readBrukerFlexData`](https://cran.r-project.org/package=readBrukerFlexData) packages help users import and manipulate these data in R.
+Thankfully, the [`{MALDIquant}`](https://strimmerlab.github.io/software/maldiquant) and [`{readBrukerFlexData}`](https://cran.r-project.org/package=readBrukerFlexData) packages help users import and manipulate these data in R.
 
 
 
 ## Importing multiple spectra from a directory hierarchy
 
-However, when the Bruker MALDI Biotyper device produces `acqus` files (instead of the native `acqu` files), the `readBrukerFlexDir()` function from the [`readBrukerFlexData`](https://cran.r-project.org/package=readBrukerFlexData) package
+However, when the Bruker MALDI Biotyper device produces `acqus` files (instead of the native `acqu` files), the [`readBrukerFlexDir()`](https://rdrr.io/cran/readBrukerFlexData/man/readBrukerFlexDir.html) function from the [`{readBrukerFlexData}`](https://cran.r-project.org/package=readBrukerFlexData) package
  will fail with the following error message:
 
 ```
@@ -154,9 +154,9 @@ Error in .readAcquFile(fidFile = fidFile, verbose = verbose) :
 File ‘/data/maldi_dir/targetA/0_D10/1/1SLin/acqu’ doesn't exists!
 ```
 
-The following `import_biotyper_spectra` used in the example below circumvent this error by creating a symbolic link and conveniently helps removing calibration samples.
+The following [`import_biotyper_spectra()`](https://clavellab.github.io/maldipickr/reference/import_biotyper_spectra.html)) function used in the example below circumvent this error by creating a symbolic link and conveniently helps removing calibration samples.
 
-The toy dataset bundled with this package is a subset of a dataset in the `MALDIquantExamples` package and consist here of six spectra:
+The toy dataset bundled with this package is a subset of a dataset in the [`{MALDIquantExamples}`](https://github.com/sgibb/MALDIquantExamples) package and consist here of six spectra:
 * 1 replicate of species 1
 * 2 replicates of species 2
 * 3 replicates of species 3
@@ -177,7 +177,7 @@ spectra_list
 
 ## Evaluate the quality of the spectra
 
-Once the spectra are imported, the `check_spectra` can easily assess whether all the spectra in the list are not empty, of the same length and correspond to profile data.
+Once the spectra are imported, the [`check_spectra()`](https://clavellab.github.io/maldipickr/reference/check_spectra.html) function can easily assess whether all the spectra in the list are not empty, of the same length and correspond to profile data.
 If some spectra do not satisfy these criteria, the function will exit with a warning and indicate the faulty spectra.
 Either way, the function outputs a list of logical vectors (`TRUE` or `FALSE`) indicating whether each of the spectra are empty (`is_empty`), of an odd length (`is_outlier_length`) or not a profile spectra (`is_not_regular`).
 
