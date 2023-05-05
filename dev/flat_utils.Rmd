@@ -20,8 +20,8 @@ pkgload::load_all(export_all = FALSE)
 
 ```{r function-is_well_on_edge}
 #' Identify the wells on the plate's edge
-#' 
-#' 
+#'
+#'
 #' @details
 #' Flag the wells located on the edges of a 96- or 384-well plate, based on the following well numbering:
 #'
@@ -48,7 +48,7 @@ is_well_on_edge <- function(
   if (any(well_number <= 0)) {
     stop("The well number is not a positive only vector")
   }
-  if(plate_layout != 96 & plate_layout != 384) {
+  if (plate_layout != 96 & plate_layout != 384) {
     stop(
       "The expected plate layouts are 96 or 384 wells."
     )
@@ -65,7 +65,7 @@ is_well_on_edge <- function(
   if (plate_layout == 384) {
     row_col_max <- 2 * row_col_max
   }
-  
+
   # Convert well number to
   #   row identifier with the integer part of the division
   #     shifted by 1 (because 1-index in plates)
@@ -108,7 +108,7 @@ is_well_on_edge <- function(
 ```
 
 ```{r examples-is_well_on_edge}
-# Logical vector indicating whether the wells are on the four edges 
+# Logical vector indicating whether the wells are on the four edges
 is_well_on_edge(1:96, plate_layout = 96)
 # More details can be obtained to verify the results
 well_df <- is_well_on_edge(1:96, plate_layout = 96, details = TRUE)
@@ -144,6 +144,142 @@ test_that("is_well_on_edge fails", {
 })
 ```
 
+
+# is_a_rds_list
+    
+```{r function-is_a_rds_list}
+#' Check if the list provided is correctly a list of RDS paths
+#'
+#'
+#' @return A logical TRUE if the list indicates paths of RDS files that exists. FALSE otherwise.
+#'
+#' @noRd
+is_a_rds_list <- function(rds_list) {
+  if (typeof(rds_list[[1]]) != "character") {
+    stop(
+      "The list does not contain characters"
+    )
+  }
+  exts <- sapply(rds_list, tools::file_ext) %>% toupper()
+  if (any(exts != "RDS")) {
+    stop(
+      "The list contains paths that do not end with the expected .RDS suffix."
+    )
+  }
+  existences <- sapply(rds_list, file.exists)
+  if (any(!existences)) {
+    stop(
+      "The list contains paths pointing to RDS files that do not exist."
+    )
+  }
+  return(TRUE)
+}
+```
+  
+```{r example-is_a_rds_list}
+is_a_rds_list(list("does-not-exists.RDS"))
+```
+  
+```{r tests-is_a_rds_list}
+tmp <- gsub("[: ]", "_", Sys.time())
+file.create(paste0(tmp, ".RDS"))
+test_that("is_a_rds_list works", {
+  expect_true(
+    is_a_rds_list(list(paste0(tmp, ".RDS")))
+  )
+})
+file.remove(paste0(tmp, ".RDS"))
+test_that("is_a_rds_list fails", {
+  expect_error(
+    is_a_rds_list(list(T)),
+    "The list does not contain characters"
+  )
+  expect_error(
+    is_a_rds_list(list("test.RDS", "foo.bar")),
+    "The list contains paths that do not end with the expected .RDS suffix."
+  )
+  expect_error(
+    is_a_rds_list(list("does-not-exists.RDS", "does-not-exists-also.RDS")),
+    "The list contains paths pointing to RDS files that do not exist."
+  )
+})
+```
+
+
+# is_a_processed_spectra_list
+    
+```{r function-is_a_processed_spectra_list}
+#' Check if the list provided is correctly a list of processed_spectra objects paths
+#'
+#'
+#' @return A logical TRUE if the list contains objects created by [process_spectra]. FALSE otherwise.
+#'
+#' @noRd
+is_a_processed_spectra_list <- function(process_spectra_list) {
+  # List depth snippet from comment by https://stackoverflow.com/users/1201032/flodel
+  # src: https://stackoverflow.com/a/13433689
+  depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
+
+  if (depth(process_spectra_list) != 3) {
+    if (depth(process_spectra_list) == 2) {
+      stop(
+        "The processed_spectra object is not a list of lists as expected, but close enough!\n",
+        "Please wrap the provided object in list(processed_spectra)."
+      )
+    } else {
+      stop(
+        "The processed_spectra object is not a list of lists as expected!"
+      )
+    }
+  }
+  if (typeof(process_spectra_list[[1]]) != "list") {
+    stop(
+      "The list does not contain list objects ",
+      "produced by `maldipickr::process_spectra()` as expected."
+    )
+  }
+  object_names <- base::mapply(base::names, process_spectra_list) %>%
+    base::t() %>%
+    base::unique() %>%
+    base::as.vector()
+  if (any(object_names != c("spectra", "peaks", "metadata"))) {
+    stop(
+      "The list does not contain the expected named objects ",
+      "(spectra, peaks and metadata) produced by `maldipickr::process_spectra()`."
+    )
+  }
+  if (base::class(process_spectra_list[[1]][["spectra"]][[1]]) != "MassSpectrum") {
+    stop(
+      "The 'spectra' list is not a MALDIquant::MassSpectrum object!"
+    )
+  }
+  if (base::class(process_spectra_list[[1]][["peaks"]][[1]]) != "MassPeaks") {
+    stop(
+      "The 'spectra' list is not a MALDIquant::MassPeaks object!"
+    )
+  }
+  if (any(base::class(process_spectra_list[[1]]$metadata) != c("tbl_df", "tbl", "data.frame"))) {
+    stop(
+      "The 'metadata' is not a tibble!"
+    )
+  }
+  return(TRUE)
+}
+```
+  
+```{r example-is_a_processed_spectra_list}
+foo <- list("spectra" = list(MALDIquant::createMassSpectrum(1,1)),
+            "peaks" = list(MALDIquant::createMassPeaks(1,1)),
+            "metadata" = tibble())
+is_a_processed_spectra_list(list(foo))
+```
+  
+```{r tests-is_a_processed_spectra_list}
+test_that("is_a_processed_spectra_list works", {
+  expect_true(inherits(is_a_processed_spectra_list, "function"))
+})
+```
+  
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop

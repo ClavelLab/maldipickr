@@ -196,8 +196,8 @@ The current function enables the analyst to decide whether to interpolate the va
 #' Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
 #'
 #' @param processed_spectra A [list] of the processed spectra and associated peaks and metadata in two possible formats:
-#' * A vector of character that are the list of RDS files produced by [process_spectra].
-#' * A named list of in-memory objects (named `spectra`, `peaks`, `metadata`) produced by [process_spectra].
+#' * A list of **character** that are the paths to RDS files produced by [process_spectra] when using `rds_prefix`.
+#' * A list of **in-memory objects** (named `spectra`, `peaks`, `metadata`) produced by [process_spectra].
 #' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
 #' @param interpolate_missing A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.
 #'
@@ -206,11 +206,19 @@ The current function enables the analyst to decide whether to interpolate the va
 #' @seealso [process_spectra], the "Value" section in [`MALDIquant::intensityMatrix`](https://rdrr.io/cran/MALDIquant/man/intensityMatrix-functions.html)
 #' @export
 merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra = TRUE, interpolate_missing = TRUE) {
-  # Determine the type of input
-  processed <- switch(typeof(processed_spectra),
-    "character" = lapply(processed_spectra, readRDS),
-    "list" = processed_spectra
-  )
+  if(any(is.null(processed_spectra), !is.list(processed_spectra), length(processed_spectra) == 0)){
+    stop(
+      "Either 'processed_spectra' is not a list or it is an empty list."
+    )
+  }
+  # Determine the type of input with a sneak-peek at the first element
+  if(is_a_rds_list(processed_spectra)){
+  processed <- lapply(processed_spectra, readRDS)
+  } else if (typeof(processed_spectra[[1]]) == "list"){
+    processed <- processed_spectra
+  } else {
+    stop()
+  }
   peakless <- list()
   # List the spectra with no peaks detected and remove them
   if (remove_peakless_spectra) {
@@ -296,6 +304,16 @@ test_that("merge_processed_spectra works", {
   expect_equal(
     dim(merge_processed_spectra(list(processed_test))),
     c(2, 26)
+  )
+})
+test_that("merge_processed_spectra fails with the wrong input",{
+  expect_error(
+    merge_processed_spectra(list()),
+    "is not a list or it is an empty list."
+  )
+  expect_error(
+    merge_processed_spectra("foo"),
+    "is not a list or it is an empty list."
   )
 })
 test_that("merge_processed_spectra fails with only empty peaks", {
