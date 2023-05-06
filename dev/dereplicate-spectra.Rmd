@@ -782,11 +782,11 @@ test_that("import_spede_clusters is empty when no spectra where matched", {
 
 # Cherry-pick Bruker MALDI Biotyper spectra
     
-When isolating bacteria from an environment, experimenters want to be thorough but also work-, time- and cost-savvy. One approach is to reduce the redundancy of the bacterial isolates by analyzing their MALDI-TOF spectra from the Bruker Biotyper. All the steps previously described in this vignette consisted of processing the spectra to be able to pick only non-redundant spectra, using the `pick_spectra` function.
+When isolating bacteria from an environment, experimenters want to be thorough but also work-, time- and cost-savvy. One approach is to reduce the redundancy of the bacterial isolates by analyzing their MALDI-TOF spectra from the Bruker Biotyper. All the steps previously described in this vignette consisted of processing the spectra to be able to pick only non-redundant spectra, using the [`pick_spectra()`](https://clavellab.github.io/maldipickr/reference/pick_spectra.html) function.
 
 The function, as illustrated in the examples below, can pick spectra using different types of inputs:
 
-* the reference spectra information that is present in the cluster table (after using `similarity_to_clusters` or  `import_spede_clusters` functions; see example 1)
+* the reference spectra information that is present in the cluster table (after using [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html) or [`import_spede_clusters()`](https://clavellab.github.io/maldipickr/reference/import_spede_clusters.html) functions; see example 1)
 * an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster (see example 2)
 
 Spectra, and clusters, can also be excluded from the cherry-picking decision, a procedure termed _masking_ here. We distinguish two types of mask that are implemented in the [`pick_spectra()`](https://clavellab.github.io/maldipickr/reference/pick_spectra.html) function:

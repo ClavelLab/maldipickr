@@ -58,5 +58,5 @@ report_tibble <- read_biotyper_report(biotyper)
 report_tibble
 }
 \seealso{
-\link{read_many_biotyper_report}
+\link{read_many_biotyper_reports}
 }
