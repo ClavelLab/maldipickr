@@ -25,6 +25,7 @@ Imports:
     tidygraph,
     tidyr,
     tidyselect,
+    tools,
     utils
 Suggests: 
     knitr,

@@ -196,7 +196,7 @@ The current function enables the analyst to decide whether to interpolate the va
 #' Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
 #'
 #' @param processed_spectra A [list] of the processed spectra and associated peaks and metadata in two possible formats:
-#' * A list of **character** that are the paths to RDS files produced by [process_spectra] when using `rds_prefix`.
+#' * A list of **paths** to RDS files produced by [process_spectra] when using the `rds_prefix` option.
 #' * A list of **in-memory objects** (named `spectra`, `peaks`, `metadata`) produced by [process_spectra].
 #' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
 #' @param interpolate_missing A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.

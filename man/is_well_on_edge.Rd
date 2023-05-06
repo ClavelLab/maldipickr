@@ -34,7 +34,7 @@ Flag the wells located on the edges of a 96- or 384-well plate, based on the fol
 }
 }
 \examples{
-# Logical vector indicating whether the wells are on the four edges 
+# Logical vector indicating whether the wells are on the four edges
 is_well_on_edge(1:96, plate_layout = 96)
 # More details can be obtained to verify the results
 well_df <- is_well_on_edge(1:96, plate_layout = 96, details = TRUE)

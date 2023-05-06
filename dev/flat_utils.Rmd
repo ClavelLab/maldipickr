@@ -242,9 +242,9 @@ is_a_processed_spectra_list <- function(process_spectra_list) {
     base::t() %>%
     base::unique() %>%
     base::as.vector()
-  if (any(object_names != c("spectra", "peaks", "metadata"))) {
+  if (length(object_names) != 3 || any(object_names != c("spectra", "peaks", "metadata"))) {
     stop(
-      "The list does not contain the expected named objects ",
+      "The list does not contain the three expected named objects ",
       "(spectra, peaks and metadata) produced by `maldipickr::process_spectra()`."
     )
   }
@@ -268,15 +268,68 @@ is_a_processed_spectra_list <- function(process_spectra_list) {
 ```
   
 ```{r example-is_a_processed_spectra_list}
-foo <- list("spectra" = list(MALDIquant::createMassSpectrum(1,1)),
-            "peaks" = list(MALDIquant::createMassPeaks(1,1)),
-            "metadata" = tibble())
+foo <- list(
+  "spectra" = list(MALDIquant::createMassSpectrum(1, 1)),
+  "peaks" = list(MALDIquant::createMassPeaks(1, 1)),
+  "metadata" = tibble::tibble(name = "foo")
+)
 is_a_processed_spectra_list(list(foo))
 ```
   
 ```{r tests-is_a_processed_spectra_list}
+foo <- list(
+  "spectra" = list(MALDIquant::createMassSpectrum(1, 1)),
+  "peaks" = list(MALDIquant::createMassPeaks(1, 1)),
+  "metadata" = tibble::tibble(name = "foo")
+)
 test_that("is_a_processed_spectra_list works", {
-  expect_true(inherits(is_a_processed_spectra_list, "function"))
+  expect_true(
+    is_a_processed_spectra_list(list(foo))
+  )
+})
+test_that("is_a_processed_spectra_list fails", {
+  expect_error(
+    is_a_processed_spectra_list(list(TRUE)),
+    "The processed_spectra object is not a list of lists as expected!"
+  )
+  expect_error(
+    is_a_processed_spectra_list(foo),
+    "The processed_spectra object is not a list of lists as expected, but close enough!"
+  )
+  expect_error(
+    is_a_processed_spectra_list(list(list(list(TRUE)))),
+    "The list does not contain the three expected named objects"
+  )
+  expect_error(
+    is_a_processed_spectra_list(
+      list(list(
+        "spectra" = list(TRUE),
+        "peaks" = list(MALDIquant::createMassPeaks(1, 1)),
+        "metadata" = tibble::tibble(name = "foo")
+      ))
+    ),
+    "The 'spectra' list is not a MALDIquant::MassSpectrum object!"
+  )
+  expect_error(
+    is_a_processed_spectra_list(
+      list(list(
+        "spectra" = list(MALDIquant::createMassSpectrum(1, 1)),
+        "peaks" = list(TRUE),
+        "metadata" = tibble::tibble(name = "foo")
+      ))
+    ),
+    "The 'spectra' list is not a MALDIquant::MassPeaks object!"
+  )
+  expect_error(
+    is_a_processed_spectra_list(
+      list(list(
+        "spectra" = list(MALDIquant::createMassSpectrum(1, 1)),
+        "peaks" = list(MALDIquant::createMassPeaks(1, 1)),
+        "metadata" = TRUE
+      )),
+      "not a tibble"
+    )
+  )
 })
 ```
   
