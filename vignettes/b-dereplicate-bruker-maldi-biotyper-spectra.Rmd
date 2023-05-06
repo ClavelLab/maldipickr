@@ -65,12 +65,12 @@ str(processed, max.level = 2)
 processed$metadata
 ```
 
-# Merge multiples processed spectra
+# Merge multiple processed spectra
 
 During high-throughput analyses, multiples runs of Bruker MALDI Biotyper are expected resulting in several batches of spectra to be processed and compared.
-While their processing is natively independent, and could natively be run in parallell, the integration of the batches for their comparison needs an additional step.
+While their processing is natively independent, and could natively be run in parallel, the integration of the batches for their comparison needs an additional step.
 
-The [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) function aggregates the processed spectra and bins together the detected peaks, with a tolerance of `r format(.002*10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
+The [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) function aggregates the processed spectra and bins together the detected peaks, with a tolerance of $0.002$ between the average peak values in the bin (see [`MALDIquant::binPeaks`](https://rdrr.io/cran/MALDIquant/man/binPeaks-functions.html)), which translate to a tolerance of `r format(.002/10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
 
 By default, as in the Strejeck et al. (2018) procedure, the intensity values for spectra with missing peaks are interpolated from the processed spectra signal.
 The current function enables the analyst to decide whether to interpolate the values or leave missing peaks as `NA` which would then be converted to an null intensity value.
@@ -100,6 +100,13 @@ fm_no_interpolation <- merge_processed_spectra(
 )
 sum(fm == 0) # 0
 sum(fm_no_interpolation == 0) # 68
+
+# Multiple runs can be aggregated using list()
+# Merge the spectra to produce the feature matrix
+fm_all <- merge_processed_spectra(list(processed, processed, processed))
+# The feature matrix has 3×6=18 spectra as rows and
+#  35 peaks as columns
+dim(fm_all)
 ```
 
   

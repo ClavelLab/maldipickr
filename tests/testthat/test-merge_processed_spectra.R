@@ -9,6 +9,16 @@ test_that("merge_processed_spectra works", {
     c(2, 26)
   )
 })
+test_that("merge_processed_spectra fails with the wrong input", {
+  expect_error(
+    merge_processed_spectra(list()),
+    "is not a list or it is an empty list."
+  )
+  expect_error(
+    merge_processed_spectra("foo"),
+    "is not a list or it is an empty list."
+  )
+})
 test_that("merge_processed_spectra fails with only empty peaks", {
   expect_error(
     list(

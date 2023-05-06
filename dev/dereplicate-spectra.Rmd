@@ -60,7 +60,7 @@ The full procedure is illustrated in the example below. While in this case, all 
 #' * `spectra`: a list the length of the spectra list of [MALDIquant::MassSpectrum] objects.
 #' * `peaks`: a list the length of the spectra list of [MALDIquant::MassPeaks] objects.
 #' * `metadata`: a tibble indicating the median signal-to-noise ratio (`SNR`) and peaks number for all spectra list (`peaks`), with spectra names in the `name` column.
-#' 
+#'
 #' @seealso [import_biotyper_spectra] and [check_spectra] for the inputs and [merge_processed_spectra] for further analysis.
 #' @export
 #'
@@ -206,19 +206,27 @@ The current function enables the analyst to decide whether to interpolate the va
 #' @seealso [process_spectra], the "Value" section in [`MALDIquant::intensityMatrix`](https://rdrr.io/cran/MALDIquant/man/intensityMatrix-functions.html)
 #' @export
 merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra = TRUE, interpolate_missing = TRUE) {
-  if(any(is.null(processed_spectra), !is.list(processed_spectra), length(processed_spectra) == 0)){
+  if (any(
+    is.null(processed_spectra),
+    !is.list(processed_spectra),
+    length(processed_spectra) == 0
+  )
+  ) {
     stop(
       "Either 'processed_spectra' is not a list or it is an empty list."
     )
   }
   # Determine the type of input with a sneak-peek at the first element
-  if(is_a_rds_list(processed_spectra)){
-  processed <- lapply(processed_spectra, readRDS)
-  } else if (typeof(processed_spectra[[1]]) == "list"){
-    processed <- processed_spectra
+  if (typeof(processed_spectra[[1]]) == "character") {
+    if (is_a_rds_list(processed_spectra)) {
+      processed <- lapply(processed_spectra, readRDS)
+    }
   } else {
-    stop()
+    processed <- processed_spectra
   }
+
+  stopifnot(is_a_processed_spectra_list(processed))
+
   peakless <- list()
   # List the spectra with no peaks detected and remove them
   if (remove_peakless_spectra) {
@@ -294,6 +302,13 @@ fm_no_interpolation <- merge_processed_spectra(
 )
 sum(fm == 0) # 0
 sum(fm_no_interpolation == 0) # 68
+
+# Multiple runs can be aggregated using list()
+# Merge the spectra to produce the feature matrix
+fm_all <- merge_processed_spectra(list(processed, processed, processed))
+# The feature matrix has 3×6=18 spectra as rows and
+#  35 peaks as columns
+dim(fm_all)
 ```
   
 ```{r tests-merge_processed_spectra}
@@ -306,7 +321,7 @@ test_that("merge_processed_spectra works", {
     c(2, 26)
   )
 })
-test_that("merge_processed_spectra fails with the wrong input",{
+test_that("merge_processed_spectra fails with the wrong input", {
   expect_error(
     merge_processed_spectra(list()),
     "is not a list or it is an empty list."
@@ -537,7 +552,7 @@ The function [`set_reference_spectra()`](https://clavellab.github.io/maldipickr/
 #' @return A merged tibble in the same order as `cluster_df` with both the columns of `cluster_df` and `metadata_df`, as well as a logical column `is_reference` indicating if the spectrum is the reference spectra of the cluster.
 #'
 #' @seealso [similarity_to_clusters], [pick_spectra]
-#' 
+#'
 #' @export
 set_reference_spectra <- function(cluster_df, metadata_df) {
   # Checking the tibbles sizes

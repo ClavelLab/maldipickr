@@ -17,7 +17,7 @@
 #' @return A merged tibble in the same order as `cluster_df` with both the columns of `cluster_df` and `metadata_df`, as well as a logical column `is_reference` indicating if the spectrum is the reference spectra of the cluster.
 #'
 #' @seealso [similarity_to_clusters], [pick_spectra]
-#' 
+#'
 #' @export
 #' @examples
 #' # Get an example directory of six Bruker MALDI Biotyper spectra

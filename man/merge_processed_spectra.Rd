@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge_processed_spectra.R
 \name{merge_processed_spectra}
 \alias{merge_processed_spectra}
-\title{Merge multiples processed spectra and peaks}
+\title{Merge multiple processed spectra and peaks}
 \usage{
 merge_processed_spectra(
   processed_spectra,
@@ -11,10 +11,10 @@ merge_processed_spectra(
 )
 }
 \arguments{
-\item{processed_spectra}{A \link{list} The processed spectra and associated peaks and metadata in two possible formats:
+\item{processed_spectra}{A \link{list} of the processed spectra and associated peaks and metadata in two possible formats:
 \itemize{
-\item A vector of character that are the list of RDS files produced by \link{process_spectra}.
-\item A named list of in-memory objects (named \code{spectra}, \code{peaks}, \code{metadata}) produced by \link{process_spectra}.
+\item A list of \strong{paths} to RDS files produced by \link{process_spectra} when using the \code{rds_prefix} option.
+\item A list of \strong{in-memory objects} (named \code{spectra}, \code{peaks}, \code{metadata}) produced by \link{process_spectra}.
 }}
 
 \item{remove_peakless_spectra}{A logical indicating whether to discard the spectra without detected peaks.}
@@ -49,6 +49,13 @@ fm_no_interpolation <- merge_processed_spectra(
 )
 sum(fm == 0) # 0
 sum(fm_no_interpolation == 0) # 68
+
+# Multiple runs can be aggregated using list()
+# Merge the spectra to produce the feature matrix
+fm_all <- merge_processed_spectra(list(processed, processed, processed))
+# The feature matrix has 3×6=18 spectra as rows and
+#  35 peaks as columns
+dim(fm_all)
 }
 \seealso{
 \link{process_spectra}, the "Value" section in \href{https://rdrr.io/cran/MALDIquant/man/intensityMatrix-functions.html}{\code{MALDIquant::intensityMatrix}}

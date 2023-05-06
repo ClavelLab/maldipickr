@@ -21,7 +21,7 @@
 #' * `spectra`: a list the length of the spectra list of [MALDIquant::MassSpectrum] objects.
 #' * `peaks`: a list the length of the spectra list of [MALDIquant::MassPeaks] objects.
 #' * `metadata`: a tibble indicating the median signal-to-noise ratio (`SNR`) and peaks number for all spectra list (`peaks`), with spectra names in the `name` column.
-#' 
+#'
 #' @seealso [import_biotyper_spectra] and [check_spectra] for the inputs and [merge_processed_spectra] for further analysis.
 #' @export
 #'
