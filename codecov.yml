@@ -1,0 +1,14 @@
+coverage:
+  status:
+    project:
+      default:
+        threshold: 1%
+        informational: true
+    patch:
+      default:
+        threshold: 1%
+        informational: true
+
+
+# When modifying this file, please validate using
+# curl -X POST --data-binary @codecov.yml https://codecov.io/validate
