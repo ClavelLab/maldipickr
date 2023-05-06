@@ -86,13 +86,20 @@ and the number of detected peaks</p>
 
 <p>A merged tibble in the same order as <code>cluster_df</code> with both the columns of <code>cluster_df</code> and <code>metadata_df</code>, as well as a logical column <code>is_reference</code> indicating if the spectrum is the reference spectra of the cluster.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><a href="similarity_to_clusters.html">similarity_to_clusters</a>, <a href="pick_spectra.html">pick_spectra</a></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span></span>
 <span class="r-in"><span><span class="co"># Import the six spectra and</span></span></span>
 <span class="r-in"><span><span class="co"># Transform the spectra signals according to Strejcek et al. (2018)</span></span></span>
-<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"toy-species-spectra"</span>,</span></span>
+<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="process_spectra.html">process_spectra</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -124,7 +131,10 @@ and the number of detected peaks</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Delineate clusters based on a 0.92 threshold applied</span></span></span>
 <span class="r-in"><span><span class="co">#  to the similarity matrix</span></span></span>
-<span class="r-in"><span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="similarity_to_clusters.html">similarity_to_clusters</a></span><span class="op">(</span><span class="va">cosine_similarity</span>, threshold <span class="op">=</span> <span class="fl">0.92</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="similarity_to_clusters.html">similarity_to_clusters</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">cosine_similarity</span>,</span></span>
+<span class="r-in"><span>  threshold <span class="op">=</span> <span class="fl">0.92</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Set reference spectra with the toy example</span></span></span>
 <span class="r-in"><span><span class="fu">set_reference_spectra</span><span class="op">(</span><span class="va">clusters</span>, <span class="va">processed</span><span class="op">$</span><span class="va">metadata</span><span class="op">)</span></span></span>

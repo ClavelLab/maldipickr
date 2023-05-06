@@ -115,7 +115,7 @@ mass spectrum projections (MSPs).</li>
 <li>The raw mass spectrometry data.</li>
 </ol>
 <p>The following vignette describe how to streamline the import of these
-two types of data into R using the <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>maldipickr</code></a>
+two types of data into R using the <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>{maldipickr}</code></a>
 package</p>
 <div class="section level2">
 <h2 id="importing-generated-reports-from-the-bruker-maldi-biotyper-device">Importing generated reports from the Bruker MALDI Biotyper
@@ -132,8 +132,8 @@ ten hits when identification is feasible, or only a few when no
 identification was possible. All-in-all, this makes the table import
 into R and its manipulation relatively painful.</p>
 <p>Below is an example of import of a single Bruker MALDI Biotyper
-report into a <a href="https://tibble.tidyverse.org" class="external-link"><code>tibble</code></a> for use with
-the <a href="https://tidyverse.tidyverse.org/" class="external-link"><code>tidyverse</code></a>
+report into a <a href="https://tibble.tidyverse.org" class="external-link"><code>{tibble}</code></a> for use
+with the <a href="https://tidyverse.tidyverse.org/" class="external-link"><code>{tidyverse}</code></a>
 suite. By default, only the best hit of each colony is reported.</p>
 <!--
 Create a chunk for the core of the function
@@ -206,7 +206,8 @@ extended into multiple reports.</p>
 <span><span class="fu"><a href="../reference/read_many_biotyper_reports.html">read_many_biotyper_reports</a></span><span class="op">(</span></span>
 <span>  <span class="va">reports_paths</span>,</span>
 <span>  report_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"first"</span>, <span class="st">"second"</span>, <span class="st">"third"</span><span class="op">)</span>,</span>
-<span>  growth_temperature <span class="op">=</span> <span class="fl">37.0</span> <span class="co"># Additional metadata passed to dplyr::mutate</span></span>
+<span>  <span class="co"># Additional metadata below are passed to dplyr::mutate</span></span>
+<span>  growth_temperature <span class="op">=</span> <span class="fl">37.0</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 9</span></span></span>
 <span><span class="co">#&gt;   name  spot  sample_name bruker_quality bruker_species bruker_taxid bruker_hash</span></span>
@@ -228,30 +229,34 @@ extended into multiple reports.</p>
 </h2>
 <p>Other than the identification reports, the Bruker MALDI Biotyper
 device outputs the raw data used for the identification (if not the
-database) in the form of mass spectra. Thankfully, the <a href="https://strimmerlab.github.io/software/maldiquant" class="external-link"><code>MALDIquant</code></a>
-and <a href="https://cran.r-project.org/package=readBrukerFlexData" class="external-link"><code>readBrukerFlexData</code></a>
+database) in the form of mass spectra. Thankfully, the <a href="https://strimmerlab.github.io/software/maldiquant" class="external-link"><code>{MALDIquant}</code></a>
+and <a href="https://cran.r-project.org/package=readBrukerFlexData" class="external-link"><code>{readBrukerFlexData}</code></a>
 packages help users import and manipulate these data in R.</p>
 <div class="section level3">
 <h3 id="importing-multiple-spectra-from-a-directory-hierarchy">Importing multiple spectra from a directory hierarchy<a class="anchor" aria-label="anchor" href="#importing-multiple-spectra-from-a-directory-hierarchy"></a>
 </h3>
 <p>However, when the Bruker MALDI Biotyper device produces
 <code>acqus</code> files (instead of the native <code>acqu</code>
-files), the <code>readBrukerFlexDir()</code> function from the <a href="https://cran.r-project.org/package=readBrukerFlexData" class="external-link"><code>readBrukerFlexData</code></a>
+files), the <a href="https://rdrr.io/cran/readBrukerFlexData/man/readBrukerFlexDir.html" class="external-link"><code>readBrukerFlexDir()</code></a>
+function from the <a href="https://cran.r-project.org/package=readBrukerFlexData" class="external-link"><code>{readBrukerFlexData}</code></a>
 package will fail with the following error message:</p>
 <pre><code>Error in .readAcquFile(fidFile = fidFile, verbose = verbose) :
 File ‘/data/maldi_dir/targetA/0_D10/1/1SLin/acqu’ doesn't exists!</code></pre>
-<p>The following <code>import_biotyper_spectra</code> used in the
-example below circumvent this error by creating a symbolic link and
-conveniently helps removing calibration samples.</p>
+<p>The following <a href="https://clavellab.github.io/maldipickr/reference/import_biotyper_spectra.html" class="external-link"><code>import_biotyper_spectra()</code></a>)
+function used in the example below circumvent this error by creating a
+symbolic link and conveniently helps removing calibration samples.</p>
 <p>The toy dataset bundled with this package is a subset of a dataset in
-the <code>MALDIquantExamples</code> package and consist here of six
-spectra: * 1 replicate of species 1 * 2 replicates of species 2 * 3
-replicates of species 3</p>
+the <a href="https://github.com/sgibb/MALDIquantExamples" class="external-link"><code>{MALDIquantExamples}</code></a>
+package and consist here of six spectra: * 1 replicate of species 1 * 2
+replicates of species 2 * 3 replicates of species 3</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span>
-<span><span class="va">directory_for_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span>
+<span><span class="va">directory_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"toy-species-spectra"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># Import the six spectra</span></span>
-<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_for_biotyper_spectra</span><span class="op">)</span></span>
+<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_biotyper_spectra</span><span class="op">)</span></span>
 <span><span class="co"># Display the list of spectra</span></span>
 <span><span class="va">spectra_list</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
@@ -311,20 +316,24 @@ replicates of species 3</p>
 <div class="section level3">
 <h3 id="evaluate-the-quality-of-the-spectra">Evaluate the quality of the spectra<a class="anchor" aria-label="anchor" href="#evaluate-the-quality-of-the-spectra"></a>
 </h3>
-<p>Once the spectra are imported, the <code>check_spectra</code> can
-easily assess whether all the spectra in the list are not empty, of the
-same length and correspond to profile data. If some spectra do not
-satisfy these criteria, the function will exit with a warning and
-indicate the faulty spectra. Either way, the function outputs a list of
-logical vectors (<code>TRUE</code> or <code>FALSE</code>) indicating
-whether each of the spectra are empty (<code>is_empty</code>), of an odd
-length (<code>is_outlier_length</code>) or not a profile spectra
+<p>Once the spectra are imported, the <a href="https://clavellab.github.io/maldipickr/reference/check_spectra.html" class="external-link"><code>check_spectra()</code></a>
+function can easily assess whether all the spectra in the list are not
+empty, of the same length and correspond to profile data. If some
+spectra do not satisfy these criteria, the function will exit with a
+warning and indicate the faulty spectra. Either way, the function
+outputs a list of logical vectors (<code>TRUE</code> or
+<code>FALSE</code>) indicating whether each of the spectra are empty
+(<code>is_empty</code>), of an odd length
+(<code>is_outlier_length</code>) or not a profile spectra
 (<code>is_not_regular</code>).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span>
-<span><span class="va">directory_for_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span>
+<span><span class="va">directory_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"toy-species-spectra"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># Import the six spectra</span></span>
-<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_for_biotyper_spectra</span><span class="op">)</span></span>
+<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_biotyper_spectra</span><span class="op">)</span></span>
 <span><span class="co"># Display the list of checks, with FALSE where no anomaly is detected</span></span>
 <span><span class="fu"><a href="../reference/check_spectra.html">check_spectra</a></span><span class="op">(</span><span class="va">spectra_list</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $is_empty</span></span>

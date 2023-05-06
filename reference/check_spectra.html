@@ -73,13 +73,20 @@
 
 <p>A list of logical vectors of length <code>spectra_list</code> indicating if the spectra are empty (<code>is_empty</code>), of an odd length (<code>is_outlier_length</code>) or not a profile spectra (<code>is_not_regular</code>).</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><a href="process_spectra.html">process_spectra</a></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span></span>
-<span class="r-in"><span><span class="va">directory_for_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">directory_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"toy-species-spectra"</span>,</span></span>
+<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Import the six spectra</span></span></span>
-<span class="r-in"><span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_for_biotyper_spectra</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_biotyper_spectra</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Display the list of checks, with FALSE where no anomaly is detected</span></span></span>
 <span class="r-in"><span><span class="fu">check_spectra</span><span class="op">(</span><span class="va">spectra_list</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_empty</span>

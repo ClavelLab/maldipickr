@@ -95,19 +95,23 @@
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Strejcek, Michal, Tereza Smrhova, Petra Junkova, and Ondrej Uhlik. “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” <em>Frontiers in Microbiology</em> 9 (2018). <a href="https://doi.org/10.3389/fmicb.2018.01294" class="external-link">https://doi.org/10.3389/fmicb.2018.01294</a>.</p>
+    <p>Strejcek M, Smrhova T, Junkova P &amp; Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” <em>Frontiers in Microbiology</em> 9 <a href="doi:10.3389/fmicb.2018.01294">doi:10.3389/fmicb.2018.01294</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="import_biotyper_spectra.html">import_biotyper_spectra</a></p></div>
+    <div class="dont-index"><p><a href="import_biotyper_spectra.html">import_biotyper_spectra</a> and <a href="check_spectra.html">check_spectra</a> for the inputs and <a href="merge_processed_spectra.html">merge_processed_spectra</a> for further analysis.</p>
+<p><a href="import_biotyper_spectra.html">import_biotyper_spectra</a></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span></span>
-<span class="r-in"><span><span class="va">directory_for_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">directory_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"toy-species-spectra"</span>,</span></span>
+<span class="r-in"><span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Import the six spectra</span></span></span>
-<span class="r-in"><span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_for_biotyper_spectra</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_biotyper_spectra</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Transform the spectra signals according to Strejcek et al. (2018)</span></span></span>
 <span class="r-in"><span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu">process_spectra</span><span class="op">(</span><span class="va">spectra_list</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Overview of the list architecture that is returned</span></span></span>

@@ -102,7 +102,7 @@ to be used as a criteria.</p></dd>
 
 
 <dt>hard_mask_column</dt>
-<dd><p>Column name in the <code>cluster_df</code> or <code>metadata_df</code> tibble indicating whether the spectra, ** and the clusters to which they belong** should be discarded (<code>TRUE</code>) or not (<code>FALSE</code>) before the picking decision.</p></dd>
+<dd><p>Column name in the <code>cluster_df</code> or <code>metadata_df</code> tibble indicating whether the spectra, <strong>and the clusters to which they belong</strong> should be discarded (<code>TRUE</code>) or not (<code>FALSE</code>) before the picking decision.</p></dd>
 
 
 <dt>soft_mask_column</dt>
@@ -128,6 +128,10 @@ is provided.</p></dd>
 column named <code>to_pick</code> to indicate whether the colony associated to the spectra
 should be picked. If <code>metadata_df</code> is provided, then additional columns from
 this tibble are added to the returned tibble.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><a href="similarity_to_clusters.html">similarity_to_clusters</a>, <a href="set_reference_spectra.html">set_reference_spectra</a>. For a useful utility to soft-mask specific spectra: <a href="is_well_on_edge.html">is_well_on_edge</a>.</p></div>
     </div>
 
     <div class="section level2">

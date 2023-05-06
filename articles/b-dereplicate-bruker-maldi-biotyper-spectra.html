@@ -103,7 +103,7 @@ al.</em> (2018)</a> proposed such a method by processing the spectra and
 suggest similarity thresholds between spectra above which spectra, and
 therefore the measured bacterial colonies, can be considered identical
 at a given taxonomic rank. Their processing procedure is implemented in
-the <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>maldipickr</code></a>
+the <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>{maldipickr}</code></a>
 package and illustrated in the following vignette.</p>
 <p>In addition, we provide functions to enable the dereplication of
 different batches of Bruker MALDI Biotyper runs and combine the results,
@@ -135,14 +135,17 @@ mass range.</li>
 </ol>
 <p>The full procedure is illustrated in the example below. While in this
 case, all the resulting processed spectra, peaks and final spectra
-metadata are stored in-memory, the <code>process_spectra</code> function
-enables storing these files locally for scalable high-throughput
-analyses.</p>
+metadata are stored in-memory, the <a href="https://clavellab.github.io/maldipickr/reference/process_spectra.html" class="external-link"><code>process_spectra()</code></a>
+function enables storing these files locally for scalable
+high-throughput analyses.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span>
-<span><span class="va">directory_for_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span>
+<span><span class="va">directory_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"toy-species-spectra"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># Import the six spectra</span></span>
-<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_for_biotyper_spectra</span><span class="op">)</span></span>
+<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_biotyper_spectra</span><span class="op">)</span></span>
 <span><span class="co"># Transform the spectra signals according to Strejcek et al. (2018)</span></span>
 <span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/process_spectra.html">process_spectra</a></span><span class="op">(</span><span class="va">spectra_list</span><span class="op">)</span></span>
 <span><span class="co"># Overview of the list architecture that is returned</span></span>
@@ -179,19 +182,23 @@ analyses.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3_F9   5.40    25</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="merge-multiples-processed-spectra">Merge multiples processed spectra<a class="anchor" aria-label="anchor" href="#merge-multiples-processed-spectra"></a>
+<h2 id="merge-multiple-processed-spectra">Merge multiple processed spectra<a class="anchor" aria-label="anchor" href="#merge-multiple-processed-spectra"></a>
 </h2>
 <p>During high-throughput analyses, multiples runs of Bruker MALDI
 Biotyper are expected resulting in several batches of spectra to be
 processed and compared. While their processing is natively independent,
-and could natively be run in parallell, the integration of the batches
+and could natively be run in parallel, the integration of the batches
 for their comparison needs an additional step.</p>
-<p>The <code>merge_processed_spectra</code> function aggregates the
-processed spectra and bins together the detected peaks, with a tolerance
-of 2e-09 ppm. This binning step results in a <span class="math inline">\(n\times p\)</span> feature matrix (or intensity
-matrix), with <span class="math inline">\(n\)</span> rows for <span class="math inline">\(n\)</span> processed spectra (peakless spectra are
-discarded) and <span class="math inline">\(p\)</span> columns for the
-<span class="math inline">\(p\)</span> peaks masses.</p>
+<p>The <a href="https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html" class="external-link"><code>merge_processed_spectra()</code></a>
+function aggregates the processed spectra and bins together the detected
+peaks, with a tolerance of <span class="math inline">\(0.002\)</span>
+between the average peak values in the bin (see <a href="https://rdrr.io/cran/MALDIquant/man/binPeaks-functions.html" class="external-link"><code>MALDIquant::binPeaks</code></a>),
+which translate to a tolerance of 2000 ppm. This binning step results in
+a <span class="math inline">\(n\times p\)</span> feature matrix (or
+intensity matrix), with <span class="math inline">\(n\)</span> rows for
+<span class="math inline">\(n\)</span> processed spectra (peakless
+spectra are discarded) and <span class="math inline">\(p\)</span>
+columns for the <span class="math inline">\(p\)</span> peaks masses.</p>
 <p>By default, as in the Strejeck et al. (2018) procedure, the intensity
 values for spectra with missing peaks are interpolated from the
 processed spectra signal. The current function enables the analyst to
@@ -200,9 +207,12 @@ decide whether to interpolate the values or leave missing peaks as
 value.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span>
-<span><span class="va">directory_for_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span>
+<span><span class="va">directory_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"toy-species-spectra"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># Import the six spectra</span></span>
-<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_for_biotyper_spectra</span><span class="op">)</span></span>
+<span><span class="va">spectra_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="va">directory_biotyper_spectra</span><span class="op">)</span></span>
 <span><span class="co"># Transform the spectra signals according to Strejcek et al. (2018)</span></span>
 <span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/process_spectra.html">process_spectra</a></span><span class="op">(</span><span class="va">spectra_list</span><span class="op">)</span></span>
 <span><span class="co"># Merge the spectra to produce the feature matrix</span></span>
@@ -212,11 +222,22 @@ value.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1]  6 35</span></span>
 <span><span class="co"># Notice the difference when the interpolation is turned off</span></span>
-<span><span class="va">fm_no_interpolation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_processed_spectra.html">merge_processed_spectra</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">processed</span><span class="op">)</span>, interpolate_missing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">fm_no_interpolation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_processed_spectra.html">merge_processed_spectra</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">processed</span><span class="op">)</span>,</span>
+<span>  interpolate_missing <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">fm</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># 0</span></span>
 <span><span class="co">#&gt; [1] 0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">fm_no_interpolation</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># 68</span></span>
-<span><span class="co">#&gt; [1] 68</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 68</span></span>
+<span></span>
+<span><span class="co"># Multiple runs can be aggregated using list()</span></span>
+<span><span class="co"># Merge the spectra to produce the feature matrix</span></span>
+<span><span class="va">fm_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_processed_spectra.html">merge_processed_spectra</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">processed</span>, <span class="va">processed</span>, <span class="va">processed</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># The feature matrix has 3×6=18 spectra as rows and</span></span>
+<span><span class="co">#  35 peaks as columns</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fm_all</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 18 35</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="compute-a-similarity-matrix-between-all-processed-spectra-not-included">Compute a similarity matrix between all processed spectra (not
@@ -226,22 +247,29 @@ included)<a class="anchor" aria-label="anchor" href="#compute-a-similarity-matri
 use a distance metric to evaluate how close the spectra are to one
 another. <a href="https://doi.org/10.3389/fmicb.2018.01294" class="external-link">Strejcek
 <em>et al.</em> (2018)</a> recommend the <em>cosine</em> metric to
-compare the spectra and they use the fast implementation in the
-<code>coop</code> package.</p>
+compare the spectra and they use the fast implementation in the <a href="https://cran.r-project.org/package=coop" class="external-link"><code>{coop}</code></a>
+package.</p>
 <p>While we do not provide specific functions to generate the similarity
 matrix, we illustrate below how it can be easily computed. Note that the
-feature matrix from <code>merge_processed_spectra</code> has spectra as
-rows and peaks values as columns. So to get a similarity matrix between
-spectra, the feature matrix must be transposed before cosine
-computation.</p>
-<pre><code><span></span>
-<span><span class="co"># Install the coop package</span></span>
-<span></span>
-<span><span class="co"># install.packages("coop")</span></span>
-<span></span>
-<span><span class="co"># Compute the similarity matrix on the transposed feature matrix</span></span>
-<span></span>
-<span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">coop</span><span class="fu">::</span><span class="fu">cosine</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span> <span class="op">)</span></span></code></pre>
+feature matrix from <a href="https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html" class="external-link"><code>merge_processed_spectra()</code></a>
+has spectra as rows and peaks values as columns. So to get a similarity
+matrix between spectra, the feature matrix must be transposed before
+cosine computation.</p>
+<pre><code>
+# A. Compute the similarity matrix on the transposed feature matrix
+
+#   using Pearson correlation coefficient
+
+sim_matrix &lt;- stats::cor( t(fm), method = "pearson)
+
+
+# B.1 Install the coop package
+
+# install.packages("coop")
+
+# B.2 Compute the similarity matrix on the transposed feature matrix
+
+sim_matrix &lt;- coop::cosine( t(fm) )</code></pre>
 </div>
 <div class="section level2">
 <h2 id="delineate-clusters-from-a-similarity-matrix">Delineate clusters from a similarity matrix<a class="anchor" aria-label="anchor" href="#delineate-clusters-from-a-similarity-matrix"></a>
@@ -249,10 +277,11 @@ computation.</p>
 <p>When the similarity matrix is computed between all pairs of the
 studied spectra, the next step is to delineate clusters of spectra to
 dereplicate the measured bacterial colonies.</p>
-<p>The <code>similarity_to_clusters</code> is agnostic of the similarity
-metric used, whether it is the cosine metric or the Pearson product
-moment, provided that a numeric threshold relevant to the metric used is
-given.</p>
+<p>The <a href="https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html" class="external-link"><code>similarity_to_clusters()</code></a>)
+is agnostic of the similarity metric used, whether it is the cosine
+metric or the Pearson product moment, provided that a numeric threshold
+relevant to the metric used is given, and <em>above which</em> two
+spectra would be considered similar.</p>
 <p>Indeed, the matrix is transformed into a network without loops, where
 nodes are spectra and links exist between spectra only if the similarity
 between the spectra is <strong>above</strong> (or <strong>equal
@@ -308,15 +337,18 @@ reference spectrum can be assigned to each cluster.</p>
 the clusters using internal information. That is, representative spectra
 have, within their cluster, the highest median signal-to-noise ratio and
 then the highest number of detected peaks.</p>
-<p>The function <code>set_reference_spectra</code> does not change the
-order of the cluster table but merely add an additional column
-<code>is_reference</code> to indicate if the corresponding spectrum is
-representative of the cluster.</p>
+<p>The function <a href="https://clavellab.github.io/maldipickr/reference/set_reference_spectra.html" class="external-link"><code>set_reference_spectra()</code></a>
+does not change the order of the cluster table but merely adds an
+additional column <code>is_reference</code> to indicate whether the
+corresponding spectrum is representative of the cluster.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span>
 <span><span class="co"># Import the six spectra and</span></span>
 <span><span class="co"># Transform the spectra signals according to Strejcek et al. (2018)</span></span>
-<span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"toy-species-spectra"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>  <span class="st">"toy-species-spectra"</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/process_spectra.html">process_spectra</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -348,7 +380,10 @@ representative of the cluster.</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># Delineate clusters based on a 0.92 threshold applied</span></span>
 <span><span class="co">#  to the similarity matrix</span></span>
-<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity_to_clusters.html">similarity_to_clusters</a></span><span class="op">(</span><span class="va">cosine_similarity</span>, threshold <span class="op">=</span> <span class="fl">0.92</span><span class="op">)</span></span>
+<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity_to_clusters.html">similarity_to_clusters</a></span><span class="op">(</span></span>
+<span>  <span class="va">cosine_similarity</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="fl">0.92</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set reference spectra with the toy example</span></span>
 <span><span class="fu"><a href="../reference/set_reference_spectra.html">set_reference_spectra</a></span><span class="op">(</span><span class="va">clusters</span>, <span class="va">processed</span><span class="op">$</span><span class="va">metadata</span><span class="op">)</span></span>
@@ -370,7 +405,7 @@ named <a href="https://doi.org/10.1128/mSystems.00437-19" class="external-link">
 developed by Dumolin et al. (2019). The resulting dereplication step
 produces a comma separated table. The example below illustrates how to
 import this table into R to be consistent with the dereplication table
-generated within the <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>maldipickr</code></a>
+generated within the <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>{maldipickr}</code></a>
 package.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Reformat the output from SPeDE table</span></span>
@@ -396,21 +431,22 @@ thorough but also work-, time- and cost-savvy. One approach is to reduce
 the redundancy of the bacterial isolates by analyzing their MALDI-TOF
 spectra from the Bruker Biotyper. All the steps previously described in
 this vignette consisted of processing the spectra to be able to pick
-only non-redundant spectra, using the <code>pick_spectra</code>
+only non-redundant spectra, using the <a href="https://clavellab.github.io/maldipickr/reference/pick_spectra.html" class="external-link"><code>pick_spectra()</code></a>
 function.</p>
 <p>The function, as illustrated in the examples below, can pick spectra
 using different types of inputs:</p>
 <ul>
 <li>the reference spectra information that is present in the cluster
-table (after using <code>similarity_to_clusters</code> or
-<code>import_spede_clusters</code> functions; see example 1)</li>
+table (after using <a href="https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html" class="external-link"><code>similarity_to_clusters()</code></a>
+or <a href="https://clavellab.github.io/maldipickr/reference/import_spede_clusters.html" class="external-link"><code>import_spede_clusters()</code></a>
+functions; see example 1)</li>
 <li>an external metadata table containing a variable (e.g., optical
 density, fluorescence) to be maximized (default) or minimized per
 cluster (see example 2)</li>
 </ul>
 <p>Spectra, and clusters, can also be excluded from the cherry-picking
 decision, a procedure termed <em>masking</em> here. We distinguish two
-types of mask that are implemented in the <code>pick_spectra</code>
+types of mask that are implemented in the <a href="https://clavellab.github.io/maldipickr/reference/pick_spectra.html" class="external-link"><code>pick_spectra()</code></a>
 function:</p>
 <ul>
 <li>
