@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Pauvert"
+  given-names: "Charlie"
+  orcid: "https://orcid.org/0000-0001-9832-2507"
+- family-names: "Wylensek"
+  given-names: "David"
+  orcid: "https://orcid.org/0000-0002-8424-5712"
+- family-names: "Nüchtern"
+  given-names: "Selina"
+- family-names: "Clavel"
+  given-names: "Thomas"
+  orcid: "https://orcid.org/0000-0002-7229-5595"
+title: "maldipickr: Dereplicate And Cherry-pick Mass Spectrometry Spectra in R"
+version: 0.1.0
+date-released: 2023-05-06
+url: "https://github.com/ClavelLab/maldipickr"
