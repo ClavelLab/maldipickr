@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-This package conveniently wrap-up matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) data preprocessing steps, dereplication steps to cluster MALDI-TOF spectra and cherry-picking steps to select only representative spectra. This package relies heavily on the MALDIquant package and other tools to perform the actual work.
+Convenient wrapper functions for the analysis of matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (aka cherry-pick). The package covers the preprocessing and dereplication steps needed to cluster MALDI-TOF spectra before the final cherry-picking step. This package relies heavily on the 'MALDIquant' package albeit with a 'tidyverse' flavour.
 }
 \seealso{
 Useful links:
