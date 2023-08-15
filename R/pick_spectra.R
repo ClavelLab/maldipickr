@@ -198,16 +198,14 @@ pick_spectra <- function(
     #  e.g. fast in the fast vs slow growers comparison
     if (!is.null(hard_mask_column)) {
       clusters_to_keep <- cluster_df %>%
-        dplyr::group_by(.data$membership) %>%
-        # 2. Label the clusters as to be discarded if they contain:
-        #   spectra from the discard group
-        #   or spectra from both group (meaning the cluster was picked already)
-        dplyr::summarise(
-          "n" = dplyr::n_distinct(.data[[hard_mask_column]]),
-          "to_discard" = base::unique(.data[[hard_mask_column]]),
-          .groups = "keep"
-        ) %>%
-        dplyr::filter(n == 1 & !.data$to_discard) %>%
+        dplyr::select(tidyselect::all_of(c("membership", hard_mask_column))) %>%
+        # Internally, we will label the clusters to be kept,
+        #  meaning the clusters that:
+        #   do NOT contain spectra from the discard group
+        #   AND contain only spectra from one group (either all discard, or all keep)
+        dplyr::distinct() %>%
+        dplyr::add_count(.data$membership) %>%
+        dplyr::filter(n == 1 & !.data[[hard_mask_column]]) %>%
         dplyr::pull(.data$membership)
 
       # Remove the clusters where picking is forbidden
