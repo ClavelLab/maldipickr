@@ -30,7 +30,7 @@
 #'   import_biotyper_spectra() %>%
 #'   suppressMessages() %>%
 #'   process_spectra()
-#' 
+#'
 #' # Toy similarity matrix between the six example spectra of
 #' #  three species. The cosine metric is used and a value of
 #' #  zero indicates dissimilar spectra and a value of one
@@ -62,7 +62,7 @@
 #'   cosine_similarity,
 #'   threshold = 0.92
 #' )
-#' 
+#'
 #' # Set reference spectra with the toy example
 #' set_reference_spectra(clusters, processed$metadata)
 set_reference_spectra <- function(cluster_df, metadata_df) {

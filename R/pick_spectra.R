@@ -42,7 +42,7 @@
 #' # 1. By default and if no other metadata are provided,
 #' #   the function picks reference spectra for each clusters.
 #' pick_spectra(clusters)
-#' 
+#'
 #' # 2.1 Simulate OD600 values with uniform distribution
 #' #  for each of the colonies we measured with
 #' #  the Bruker MALDI Biotyper
@@ -52,11 +52,11 @@
 #'   name = name, OD600 = runif(n = nrow(clusters))
 #' )
 #' metadata
-#' 
+#'
 #' # 2.2 Pick the spectra based on the highest
 #' #   OD600 value per cluster
 #' pick_spectra(clusters, metadata, "OD600")
-#' 
+#'
 #' # 3.1 Say that the wells on the right side of the plate are
 #' #   used for negative controls and should not be picked.
 #' metadata <- metadata %>% dplyr::mutate(
@@ -66,13 +66,13 @@
 #'     well_number = well, plate_layout = 96, edges = "right"
 #'   )
 #' )
-#' 
+#'
 #' # 3.2 Pick the spectra after discarding (or soft masking)
 #' #   the spectra indicated by the `is_edge` column.
 #' pick_spectra(clusters, metadata, "OD600",
 #'   soft_mask_column = "is_edge"
 #' )
-#' 
+#'
 #' # 4.1 Say that some spectra were picked before
 #' #   (e.g., in the column F) in a previous experiment.
 #' # We do not want to pick clusters with those spectra

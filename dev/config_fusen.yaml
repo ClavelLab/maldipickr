@@ -16,6 +16,13 @@ dereplicate-spectra.Rmd:
   - tests/testthat/test-import_spede_clusters.R
   - tests/testthat/test-pick_spectra.R
   vignettes: vignettes/b-dereplicate-bruker-maldi-biotyper-spectra.Rmd
+  inflate:
+    flat_file: dev/dereplicate-spectra.Rmd
+    vignette_name: B-dereplicate-bruker-maldi-biotyper-spectra
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: ask
 flat_utils.Rmd:
   path: dev/flat_utils.Rmd
   state: active
@@ -42,3 +49,10 @@ import-data.Rmd:
   - tests/testthat/test-import_biotyper_spectra.R
   - tests/testthat/test-check_spectra.R
   vignettes: vignettes/a-import-data-from-bruker-maldi-biotyper.Rmd
+  inflate:
+    flat_file: dev/import-data.Rmd
+    vignette_name: A-import-data-from-bruker-maldi-biotyper
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: ask

@@ -36,7 +36,7 @@
 #' )
 #' sum(fm == 0) # 0
 #' sum(fm_no_interpolation == 0) # 68
-#' 
+#'
 #' # Multiple runs can be aggregated using list()
 #' # Merge the spectra to produce the feature matrix
 #' fm_all <- merge_processed_spectra(list(processed, processed, processed))
