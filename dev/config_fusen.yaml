@@ -35,6 +35,13 @@ flat_utils.Rmd:
   - tests/testthat/test-is_a_rds_list.R
   - tests/testthat/test-is_a_processed_spectra_list.R
   vignettes: []
+  inflate:
+    flat_file: dev/flat_utils.Rmd
+    vignette_name: .na
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: ask
 import-data.Rmd:
   path: dev/import-data.Rmd
   state: active
