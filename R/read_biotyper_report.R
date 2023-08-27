@@ -13,6 +13,7 @@
 #' the following seven columns are available in the tibble, _when using the `best_hits = TRUE` option:
 #' * `spot`: an integer indicating the spot number of the MALDI target (i.e., plate)
 #' * `sample_name`: the character string provided during the preparation of the MALDI target (i.e., plate)
+#' * `hit_rank`: an integer indicating the rank of the hit for the corresponding target and identification
 #' * `bruker_quality`: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"
 #' * `bruker_species`: the species name associated with the MALDI spectrum analyzed.
 #' * `bruker_taxid`: the NCBI Taxonomy Identifier of the species name in the column species
@@ -20,7 +21,7 @@
 #' * `bruker_log`: the log-score of the identification.
 #'
 #' When all hits are returned (with `best_hits = FALSE`), the two columns `spot` and `sample_name`
-#' remains unchanged, but the five columns prefixed by `bruker_` contains the hit number:
+#' remains unchanged, but the five columns prefixed by `bruker_` contains the hit rank:
 #'
 #' * `bruker_01_quality`
 #' * `bruker_01_species`
@@ -35,7 +36,8 @@
 #' * `bruker_10_log`
 #'
 #' @param path Path to the semi-colon separated table
-#' @param best_hits A logical indicating whether to return only the best hit
+#' @param best_hits A logical indicating whether to return only the best hits for each target analyzed
+#' @param long_format A logical indicating whether the table is in the long format (many rows) or wide format (many columns) when showing all the hits. This option has no effect when `best_hits = TRUE`.
 #'
 #' @return
 #' A tibble of 7 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
@@ -51,7 +53,7 @@
 #' report_tibble <- read_biotyper_report(biotyper)
 #' # Display the tibble
 #' report_tibble
-read_biotyper_report <- function(path, best_hits = TRUE) {
+read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
   # Prepare the columns names, because 10 hits are reported by default
   prep_names <- tidyr::expand_grid(
     "prefix" = "bruker",
@@ -74,6 +76,8 @@ read_biotyper_report <- function(path, best_hits = TRUE) {
 
   # Remove the spot for which no peaks were detected, and warn the user
   breport <- tibble::as_tibble(breport) %>%
+    # Empty sample_name are considered logical and this is undesirable
+    dplyr::mutate(sample_name = as.character(sample_name)) %>%
     dplyr::filter(.data$bruker_01_species != "no peaks found")
   if (sum(no_peak_lgl) > 0) {
     warning(
@@ -82,12 +86,66 @@ read_biotyper_report <- function(path, best_hits = TRUE) {
     )
   }
 
+  # Format the table in WIDE (many columns) or LONG format (many rows)
+  # By design, the table is wide.
+  # But the default tibble rendering is long
+  if ( (long_format & best_hits)  |
+       (long_format & !best_hits) |
+       (!long_format & best_hits)) {
+    # The tibble has different types meaning
+    # a naive approach with `pivot_longer()` directly would raise:
+    # Error in `pivot_longer()`:
+    # ! Can't combine `bruker_01_quality` <character> and `bruker_01_taxid` <integer>.
+
+    # Subset the table with only the character variables
+    report_chr <- breport %>%
+      dplyr::select(
+        c("spot", "sample_name") |
+          tidyselect::contains("bruker") & tidyselect::where(is.character)
+      ) %>%
+      tidyr::pivot_longer(
+        !c("spot", "sample_name"),
+        names_to = c("hit_rank", "type"),
+        names_pattern = "bruker_(.*)_(.*)"
+      ) %>%
+      tidyr::pivot_wider(names_from = type, values_from = value)
+
+    report_num <- breport %>%
+      dplyr::select(
+        c("spot", "sample_name") |
+          tidyselect::contains("bruker") & tidyselect::where(is.numeric)
+      ) %>%
+      tidyr::pivot_longer(
+        !c("spot", "sample_name"),
+        names_to = c("hit_rank", "type"),
+        names_pattern = "bruker_(.*)_(.*)"
+      ) %>%
+      tidyr::pivot_wider(names_from = type, values_from = value)
+
+
+    # Combine the two sub-tables and convert hit rank to integer for further filtering.
+    breport <- dplyr::full_join(
+      report_chr,
+      report_num,
+      by = c("spot", "sample_name", "hit_rank")
+    ) %>%
+      dplyr::mutate(hit_rank = strtoi(hit_rank, base = 10L)) %>%
+      dplyr::relocate(
+        c(
+          "spot", "sample_name", "hit_rank",
+          "quality", "species", "taxid", "hash", "log"
+        )
+      ) %>%
+      dplyr::rename_with(
+        ~ paste0("bruker_", .x),
+        !c("spot", "sample_name", "hit_rank")
+      )
+  }
+  # when all hits are used, pivot the wide table
+  # to have the spot sample_name hit_number and the rest of the column
   if (best_hits) {
     breport %>%
-      # Replaced .data$spot by "spot"
-      # src: https://tidyselect.r-lib.org/news/index.html#lifecycle-changes-1-2-0
-      dplyr::select("spot", "sample_name", tidyselect::starts_with("bruker_01")) %>%
-      dplyr::rename_with(~ gsub("_01", "", .x)) %>%
+      dplyr::filter(.data$hit_rank == 1) %>%
       return()
   } else {
     return(breport)

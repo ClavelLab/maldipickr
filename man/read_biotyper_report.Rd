@@ -4,12 +4,14 @@
 \alias{read_biotyper_report}
 \title{Importing Bruker MALDI Biotyper CSV report}
 \usage{
-read_biotyper_report(path, best_hits = TRUE)
+read_biotyper_report(path, best_hits = TRUE, long_format = TRUE)
 }
 \arguments{
 \item{path}{Path to the semi-colon separated table}
 
-\item{best_hits}{A logical indicating whether to return only the best hit}
+\item{best_hits}{A logical indicating whether to return only the best hits for each target analyzed}
+
+\item{long_format}{A logical indicating whether the table is in the long format (many rows) or wide format (many columns) when showing all the hits. This option has no effect when \code{best_hits = TRUE}.}
 }
 \value{
 A tibble of 7 columns (\code{best_hits = TRUE}) or 52 columns (\code{best_hits = FALSE}). See Details for the description of the columns.
@@ -26,6 +28,7 @@ the following seven columns are available in the tibble, _when using the \code{b
 \itemize{
 \item \code{spot}: an integer indicating the spot number of the MALDI target (i.e., plate)
 \item \code{sample_name}: the character string provided during the preparation of the MALDI target (i.e., plate)
+\item \code{hit_rank}: an integer indicating the rank of the hit for the corresponding target and identification
 \item \code{bruker_quality}: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"
 \item \code{bruker_species}: the species name associated with the MALDI spectrum analyzed.
 \item \code{bruker_taxid}: the NCBI Taxonomy Identifier of the species name in the column species
@@ -34,7 +37,7 @@ the following seven columns are available in the tibble, _when using the \code{b
 }
 
 When all hits are returned (with \code{best_hits = FALSE}), the two columns \code{spot} and \code{sample_name}
-remains unchanged, but the five columns prefixed by \code{bruker_} contains the hit number:
+remains unchanged, but the five columns prefixed by \code{bruker_} contains the hit rank:
 \itemize{
 \item \code{bruker_01_quality}
 \item \code{bruker_01_species}
