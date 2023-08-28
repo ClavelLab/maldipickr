@@ -160,9 +160,11 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
   # Format the table in WIDE (many columns) or LONG format (many rows)
   # By design, the table is wide.
   # But the default tibble rendering is long
+  # styler: off
   if ( (long_format & best_hits)  |
        (long_format & !best_hits) |
        (!long_format & best_hits)) {
+    # styler: on
     # The tibble has different types meaning
     # a naive approach with `pivot_longer()` directly would raise:
     # Error in `pivot_longer()`:
@@ -298,7 +300,7 @@ test_that("read_biotyper_report works properly with correct dataset and all hits
     ncol(read_biotyper_report(biotyper, best_hits = FALSE, long_format = FALSE)), 52
   )
 })
-test_that("read_biotyper_report with best_hists is the same whatever format",{
+test_that("read_biotyper_report with best_hits is the same whatever format", {
   expect_identical(
     read_biotyper_report(biotyper, best_hits = TRUE, long_format = TRUE),
     read_biotyper_report(biotyper, best_hits = TRUE, long_format = FALSE)
