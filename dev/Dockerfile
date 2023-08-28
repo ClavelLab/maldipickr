@@ -1,16 +1,16 @@
 # fusen container for maldipickr package development
-# 2023-03-08
-FROM rocker/tidyverse:4.2
+# 2023-08-28
+FROM rocker/tidyverse:4.3
 
 # Solving the libMagick++ library issue
 RUN apt-get update \
-    && apt-get -y install libmagick++-dev \
+    && apt-get -y install libmagick++-dev qpdf \
 	## Remove packages in '/var/cache/' and 'var/lib'
 	## to remove side-effects of apt-get update
 	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/* /var/cache/* /var/lib/*
 
-RUN install2.r --repos https://thinkr-open.r-universe.dev --repos https://cloud.r-project.org --error --skipinstalled fusen MALDIquant MALDIquantForeign tidyverse tidygraph coop markdown styler magick
+RUN install2.r --ncpus -1 --repos https://cloud.r-project.org --error --skipinstalled fusen MALDIquant MALDIquantForeign tidyverse tidygraph coop markdown styler magick knitr rmarkdown
 
 # Add configuration file for Rstudio
 RUN echo '{\
