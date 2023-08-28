@@ -24,7 +24,7 @@ an easy import in R. This function reads the report correctly as a tibble.
 \details{
 The headerless table contains identification information for each target processed by
 the Biotyper device and once processed by the \code{read_biotyper_report},
-the following seven columns are available in the tibble, _when using the \code{best_hits = TRUE} option:
+the following seven columns are available in the tibble, \emph{when using the \code{best_hits = TRUE} option}:
 \itemize{
 \item \code{spot}: an integer indicating the spot number of the MALDI target (i.e., plate)
 \item \code{sample_name}: the character string provided during the preparation of the MALDI target (i.e., plate)
@@ -36,8 +36,10 @@ the following seven columns are available in the tibble, _when using the \code{b
 \item \code{bruker_log}: the log-score of the identification.
 }
 
-When all hits are returned (with \code{best_hits = FALSE}), the two columns \code{spot} and \code{sample_name}
-remains unchanged, but the five columns prefixed by \code{bruker_} contains the hit rank:
+When all hits are returned (with \code{best_hits = FALSE}), the default output format is the long format (\code{long_format = TRUE}), meaning that the previous columns remain
+unchanged, but all hits are now returned, thus increasing the number of rows.
+
+When all hits are returned (with \code{best_hits = FALSE}) \emph{using the wide format} (\verb{long_format = FALSE), the two columns }spot\code{and}sample_name\verb{remains unchanged, but the five columns prefixed by}bruker_` contain the hit rank, \strong{creating a tibble of 52 columns}:
 \itemize{
 \item \code{bruker_01_quality}
 \item \code{bruker_01_species}
@@ -51,6 +53,9 @@ remains unchanged, but the five columns prefixed by \code{bruker_} contains the 
 \item \code{bruker_10_hash}
 \item \code{bruker_10_log}
 }
+}
+\note{
+A report that contains only spectra with no peaks found will return a tibble of 0 rows and a warning message.
 }
 \examples{
 # Get a example Bruker report

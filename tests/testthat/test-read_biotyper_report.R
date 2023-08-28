@@ -37,7 +37,7 @@ test_that("read_biotyper_report works properly with correct dataset and all hits
     ncol(read_biotyper_report(biotyper, best_hits = FALSE, long_format = FALSE)), 52
   )
 })
-test_that("read_biotyper_report with best_hists is the same whatever format",{
+test_that("read_biotyper_report with best_hits is the same whatever format", {
   expect_identical(
     read_biotyper_report(biotyper, best_hits = TRUE, long_format = TRUE),
     read_biotyper_report(biotyper, best_hits = TRUE, long_format = FALSE)

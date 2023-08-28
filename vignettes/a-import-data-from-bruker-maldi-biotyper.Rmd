@@ -54,10 +54,10 @@ The following vignette describe how to streamline the import of these two types 
 
 The Bruker MALDI Biotyper generates a report via the Compass software summarizing the identification of the microorganisms using its internal database.
 While the file is separated by semi-colons, it contains no headers.
-The report has many columns in a long format to describe the ten hits when identification is feasible, or only a few when no identification was possible.
+The report has many columns in a *wide* format to describe the ten hits when identification is feasible, or only a few when no identification was possible.
 All-in-all, this makes the table import into R and its manipulation relatively painful.
 
-Below is an example of import of a single Bruker MALDI Biotyper report into a [`{tibble}`](https://tibble.tidyverse.org) for use with the [`{tidyverse}`](https://tidyverse.tidyverse.org/) suite. By default, only the best hit of each colony is reported.
+Below is an example of an import of a single Bruker MALDI Biotyper report into a [`{tibble}`](https://tibble.tidyverse.org). By default, only the best hit of each colony is reported. All hits can be reported as well, in the *long* format (`long_format = TRUE`), for further explorations with the [`{tidyverse}`](https://tidyverse.tidyverse.org/) suite.
 
 <!--
 Create a chunk for the core of the function

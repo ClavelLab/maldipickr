@@ -10,7 +10,7 @@
 #' @details
 #' The headerless table contains identification information for each target processed by
 #' the Biotyper device and once processed by the `read_biotyper_report`,
-#' the following seven columns are available in the tibble, _when using the `best_hits = TRUE` option:
+#' the following seven columns are available in the tibble, _when using the `best_hits = TRUE` option_:
 #' * `spot`: an integer indicating the spot number of the MALDI target (i.e., plate)
 #' * `sample_name`: the character string provided during the preparation of the MALDI target (i.e., plate)
 #' * `hit_rank`: an integer indicating the rank of the hit for the corresponding target and identification
@@ -20,8 +20,11 @@
 #' * `bruker_hash`: a hash from an undocumented checksum function probably to encode the database entry.
 #' * `bruker_log`: the log-score of the identification.
 #'
-#' When all hits are returned (with `best_hits = FALSE`), the two columns `spot` and `sample_name`
-#' remains unchanged, but the five columns prefixed by `bruker_` contains the hit rank:
+#' When all hits are returned (with `best_hits = FALSE`), the default output format is the long format (`long_format = TRUE`), meaning that the previous columns remain
+#' unchanged, but all hits are now returned, thus increasing the number of rows.
+#'
+#' When all hits are returned (with `best_hits = FALSE`) _using the wide format_ (`long_format = FALSE), the two columns `spot` and `sample_name`
+#' remains unchanged, but the five columns prefixed by `bruker_` contain the hit rank, **creating a tibble of 52 columns**:
 #'
 #' * `bruker_01_quality`
 #' * `bruker_01_species`
@@ -34,6 +37,8 @@
 #' * `bruker_10_taxid`
 #' * `bruker_10_hash`
 #' * `bruker_10_log`
+#'
+#' @note A report that contains only spectra with no peaks found will return a tibble of 0 rows and a warning message.
 #'
 #' @param path Path to the semi-colon separated table
 #' @param best_hits A logical indicating whether to return only the best hits for each target analyzed
@@ -86,12 +91,21 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
     )
   }
 
+  # Fix issue with empty tibble that could not run the LONG/WIDE procedure
+  # Otherwise exit with
+  # Error in `dplyr::relocate()`:
+  # Can't subset columns that don't exist (quality for instance)
+  if (nrow(breport) == 0) {
+    return(breport)
+  }
   # Format the table in WIDE (many columns) or LONG format (many rows)
   # By design, the table is wide.
   # But the default tibble rendering is long
+  # styler: off
   if ( (long_format & best_hits)  |
        (long_format & !best_hits) |
        (!long_format & best_hits)) {
+    # styler: on
     # The tibble has different types meaning
     # a naive approach with `pivot_longer()` directly would raise:
     # Error in `pivot_longer()`:
