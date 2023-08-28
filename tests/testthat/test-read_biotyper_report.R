@@ -44,10 +44,10 @@ test_that("read_biotyper_report with best_hits is the same whatever format", {
   )
 })
 test_that("read_biotyper_report is empty when no peaks are found", {
-  expect_equal(
-    nrow(read_biotyper_report(biotyper_empty)), 0
-  )
   expect_warning(
-    read_biotyper_report(biotyper_empty), "Remove"
+    out <- read_biotyper_report(biotyper_empty), "Remove"
+  )
+  expect_equal(
+    nrow(out), 0
   )
 })

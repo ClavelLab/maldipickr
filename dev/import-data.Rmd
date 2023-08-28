@@ -141,7 +141,7 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
   # Remove the spot for which no peaks were detected, and warn the user
   breport <- tibble::as_tibble(breport) %>%
     # Empty sample_name are considered logical and this is undesirable
-    dplyr::mutate(sample_name = as.character(sample_name)) %>%
+    dplyr::mutate("sample_name" = as.character(.data$sample_name)) %>%
     dplyr::filter(.data$bruker_01_species != "no peaks found")
   if (sum(no_peak_lgl) > 0) {
     warning(
@@ -181,19 +181,19 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
         names_to = c("hit_rank", "type"),
         names_pattern = "bruker_(.*)_(.*)"
       ) %>%
-      tidyr::pivot_wider(names_from = type, values_from = value)
+      tidyr::pivot_wider(names_from = "type", values_from = "value")
 
     report_num <- breport %>%
       dplyr::select(
-        c("spot", "sample_name") |
+        tidyselect::all_of(c("spot", "sample_name")) |
           tidyselect::contains("bruker") & tidyselect::where(is.numeric)
       ) %>%
       tidyr::pivot_longer(
-        !c("spot", "sample_name"),
+        !tidyselect::all_of(c("spot", "sample_name")),
         names_to = c("hit_rank", "type"),
         names_pattern = "bruker_(.*)_(.*)"
       ) %>%
-      tidyr::pivot_wider(names_from = type, values_from = value)
+      tidyr::pivot_wider(names_from = "type", values_from = "value")
 
 
     # Combine the two sub-tables and convert hit rank to integer for further filtering.
@@ -202,7 +202,7 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
       report_num,
       by = c("spot", "sample_name", "hit_rank")
     ) %>%
-      dplyr::mutate(hit_rank = strtoi(hit_rank, base = 10L)) %>%
+      dplyr::mutate("hit_rank" = strtoi(.data$hit_rank, base = 10L)) %>%
       dplyr::relocate(
         c(
           "spot", "sample_name", "hit_rank",
