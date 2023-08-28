@@ -24,8 +24,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/a-import-data-from-bruker-maldi-biotyper.html">Import data from Bruker MALDI Biotyper</a>
-    <a class="dropdown-item" href="../articles/b-dereplicate-bruker-maldi-biotyper-spectra.html">Dereplicate Bruker MALDI Biotyper spectra</a>
+    <a class="dropdown-item" href="../articles/a-import-data-from-bruker-maldi-biotyper.html">A-import-data-from-bruker-maldi-biotyper</a>
+    <a class="dropdown-item" href="../articles/b-dereplicate-bruker-maldi-biotyper-spectra.html">B-dereplicate-bruker-maldi-biotyper-spectra</a>
   </div>
 </li>
 <li class="nav-item">
@@ -108,19 +108,20 @@
 <span class="r-in"><span>  <span class="co"># Additional metadata below are passed to dplyr::mutate</span></span></span>
 <span class="r-in"><span>  growth_temperature <span class="op">=</span> <span class="fl">37.0</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   name  spot  sample_name bruker_quality bruker_species bruker_taxid bruker_hash</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> firs… targ… <span style="color: #BB0000;">NA</span>          -              not reliable …           <span style="color: #BB0000;">NA</span> ccf89f2e-9…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> firs… targ… <span style="color: #BB0000;">NA</span>          +++            Escherichia c…          562 5da4606c-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> firs… targ… <span style="color: #BB0000;">NA</span>          +++            Kosakonia cow…       <span style="text-decoration: underline;">208</span>223 ccff08b5-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> seco… targ… <span style="color: #BB0000;">NA</span>          -              not reliable …           <span style="color: #BB0000;">NA</span> ccf89f2e-9…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> seco… targ… <span style="color: #BB0000;">NA</span>          +++            Escherichia c…          562 5da4606c-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> seco… targ… <span style="color: #BB0000;">NA</span>          +++            Kosakonia cow…       <span style="text-decoration: underline;">208</span>223 ccff08b5-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> thir… targ… <span style="color: #BB0000;">NA</span>          -              not reliable …           <span style="color: #BB0000;">NA</span> ccf89f2e-9…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> thir… targ… <span style="color: #BB0000;">NA</span>          +++            Escherichia c…          562 5da4606c-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> thir… targ… <span style="color: #BB0000;">NA</span>          +++            Kosakonia cow…       <span style="text-decoration: underline;">208</span>223 ccff08b5-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: bruker_log &lt;dbl&gt;, growth_temperature &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name     spot  sample_name hit_rank bruker_quality bruker_species bruker_taxid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> first_t… targ… <span style="color: #BB0000;">NA</span>                 1 -              not reliable …           <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> first_t… targ… <span style="color: #BB0000;">NA</span>                 1 +++            Escherichia c…          562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> first_t… targ… <span style="color: #BB0000;">NA</span>                 1 +++            Kosakonia cow…       <span style="text-decoration: underline;">208</span>223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> second_… targ… <span style="color: #BB0000;">NA</span>                 1 -              not reliable …           <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> second_… targ… <span style="color: #BB0000;">NA</span>                 1 +++            Escherichia c…          562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> second_… targ… <span style="color: #BB0000;">NA</span>                 1 +++            Kosakonia cow…       <span style="text-decoration: underline;">208</span>223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> third_t… targ… <span style="color: #BB0000;">NA</span>                 1 -              not reliable …           <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> third_t… targ… <span style="color: #BB0000;">NA</span>                 1 +++            Escherichia c…          562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> third_t… targ… <span style="color: #BB0000;">NA</span>                 1 +++            Kosakonia cow…       <span style="text-decoration: underline;">208</span>223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: bruker_hash &lt;chr&gt;, bruker_log &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   growth_temperature &lt;dbl&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -28,8 +28,8 @@ an easy import in R. This function reads the report correctly as a tibble."><met
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/a-import-data-from-bruker-maldi-biotyper.html">Import data from Bruker MALDI Biotyper</a>
-    <a class="dropdown-item" href="../articles/b-dereplicate-bruker-maldi-biotyper-spectra.html">Dereplicate Bruker MALDI Biotyper spectra</a>
+    <a class="dropdown-item" href="../articles/a-import-data-from-bruker-maldi-biotyper.html">A-import-data-from-bruker-maldi-biotyper</a>
+    <a class="dropdown-item" href="../articles/b-dereplicate-bruker-maldi-biotyper-spectra.html">B-dereplicate-bruker-maldi-biotyper-spectra</a>
   </div>
 </li>
 <li class="nav-item">
@@ -64,7 +64,7 @@ an easy import in R. This function reads the report correctly as a tibble.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_biotyper_report</span><span class="op">(</span><span class="va">path</span>, best_hits <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_biotyper_report</span><span class="op">(</span><span class="va">path</span>, best_hits <span class="op">=</span> <span class="cn">TRUE</span>, long_format <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,7 +74,11 @@ an easy import in R. This function reads the report correctly as a tibble.</p>
 
 
 <dt>best_hits</dt>
-<dd><p>A logical indicating whether to return only the best hit</p></dd>
+<dd><p>A logical indicating whether to return only the best hits for each target analyzed</p></dd>
+
+
+<dt>long_format</dt>
+<dd><p>A logical indicating whether the table is in the long format (many rows) or wide format (many columns) when showing all the hits. This option has no effect when <code>best_hits = TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -87,15 +91,17 @@ an easy import in R. This function reads the report correctly as a tibble.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The headerless table contains identification information for each target processed by
 the Biotyper device and once processed by the <code>read_biotyper_report</code>,
-the following seven columns are available in the tibble, _when using the <code>best_hits = TRUE</code> option:</p><ul><li><p><code>spot</code>: an integer indicating the spot number of the MALDI target (i.e., plate)</p></li>
+the following seven columns are available in the tibble, <em>when using the <code>best_hits = TRUE</code> option</em>:</p><ul><li><p><code>spot</code>: an integer indicating the spot number of the MALDI target (i.e., plate)</p></li>
 <li><p><code>sample_name</code>: the character string provided during the preparation of the MALDI target (i.e., plate)</p></li>
+<li><p><code>hit_rank</code>: an integer indicating the rank of the hit for the corresponding target and identification</p></li>
 <li><p><code>bruker_quality</code>: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"</p></li>
 <li><p><code>bruker_species</code>: the species name associated with the MALDI spectrum analyzed.</p></li>
 <li><p><code>bruker_taxid</code>: the NCBI Taxonomy Identifier of the species name in the column species</p></li>
 <li><p><code>bruker_hash</code>: a hash from an undocumented checksum function probably to encode the database entry.</p></li>
 <li><p><code>bruker_log</code>: the log-score of the identification.</p></li>
-</ul><p>When all hits are returned (with <code>best_hits = FALSE</code>), the two columns <code>spot</code> and <code>sample_name</code>
-remains unchanged, but the five columns prefixed by <code>bruker_</code> contains the hit number:</p><ul><li><p><code>bruker_01_quality</code></p></li>
+</ul><p>When all hits are returned (with <code>best_hits = FALSE</code>), the default output format is the long format (<code>long_format = TRUE</code>), meaning that the previous columns remain
+unchanged, but all hits are now returned, thus increasing the number of rows.</p>
+<p>When all hits are returned (with <code>best_hits = FALSE</code>) <em>using the wide format</em> (<code>long_format = FALSE), the two columns </code>spot<code>and</code>sample_name<code>remains unchanged, but the five columns prefixed by</code>bruker_` contain the hit rank, <strong>creating a tibble of 52 columns</strong>:</p><ul><li><p><code>bruker_01_quality</code></p></li>
 <li><p><code>bruker_01_species</code></p></li>
 <li><p><code>bruker_01_taxid</code></p></li>
 <li><p><code>bruker_01_hash</code></p></li>
@@ -107,6 +113,10 @@ remains unchanged, but the five columns prefixed by <code>bruker_</code> contain
 <li><p><code>bruker_10_hash</code></p></li>
 <li><p><code>bruker_10_log</code></p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>A report that contains only spectra with no peaks found will return a tibble of 0 rows and a warning message.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="read_many_biotyper_reports.html">read_many_biotyper_reports</a></p></div>
@@ -120,13 +130,13 @@ remains unchanged, but the five columns prefixed by <code>bruker_</code> contain
 <span class="r-in"><span><span class="va">report_tibble</span> <span class="op">&lt;-</span> <span class="fu">read_biotyper_report</span><span class="op">(</span><span class="va">biotyper</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Display the tibble</span></span></span>
 <span class="r-in"><span><span class="va">report_tibble</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   spot    sample_name bruker_quality bruker_species     bruker_taxid bruker_hash</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> targetA <span style="color: #BB0000;">NA</span>          -              not reliable iden…           <span style="color: #BB0000;">NA</span> ccf89f2e-9…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> targetB <span style="color: #BB0000;">NA</span>          +++            Escherichia coli            562 5da4606c-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> targetC <span style="color: #BB0000;">NA</span>          +++            Kosakonia cowanii        <span style="text-decoration: underline;">208</span>223 ccff08b5-7…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: bruker_log &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   spot    sample_name hit_rank bruker_quality bruker_species        bruker_taxid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> targetA <span style="color: #BB0000;">NA</span>                 1 -              not reliable identif…           <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> targetB <span style="color: #BB0000;">NA</span>                 1 +++            Escherichia coli               562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> targetC <span style="color: #BB0000;">NA</span>                 1 +++            Kosakonia cowanii           <span style="text-decoration: underline;">208</span>223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: bruker_hash &lt;chr&gt;, bruker_log &lt;dbl&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
