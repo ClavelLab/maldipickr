@@ -499,12 +499,6 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
       from = acqus_files[do_symbolic_links],
       to = acqu_files[do_symbolic_links]
     )
-    if (any(!links_status)) {
-      stop(
-        "Symbolic links could not be created for the files:",
-        acqus_files[!links_status]
-      )
-    }
   }
   # MALDIquantForeign::importBrukerFlex depends on
   # readMzXmlData (>= 2.7) which itself needs R >= 4.2.0
@@ -551,13 +545,27 @@ spectra_list
   
 ```{r tests-import_biotyper_spectra}
 directory_biotyper_spectra <- system.file("toy-species-spectra", package = "maldipickr")
-spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
+directory_biotyper_spectra_with_acqus <- system.file("with-acqus", package = "maldipickr")
 test_that("import_biotyper_spectra works", {
+  expect_no_error(
+    spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
+  )
   expect_length(
     spectra_list, 6
   )
   expect_type(
     spectra_list, "list"
+  )
+})
+test_that("import_biotyper_spectra works with symlinks",{
+  expect_no_error(
+    spectra_with_acqus <- import_biotyper_spectra(directory_biotyper_spectra_with_acqus)
+  )
+  expect_length(
+    spectra_with_acqus, 1
+  )
+  expect_type(
+    spectra_with_acqus, "list"
   )
 })
 test_that("import_biotyper_spectra fails", {

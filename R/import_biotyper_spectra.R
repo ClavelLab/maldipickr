@@ -48,12 +48,6 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
       from = acqus_files[do_symbolic_links],
       to = acqu_files[do_symbolic_links]
     )
-    if (any(!links_status)) {
-      stop(
-        "Symbolic links could not be created for the files:",
-        acqus_files[!links_status]
-      )
-    }
   }
   # MALDIquantForeign::importBrukerFlex depends on
   # readMzXmlData (>= 2.7) which itself needs R >= 4.2.0
