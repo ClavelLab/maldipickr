@@ -155,15 +155,11 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
   # Error in `dplyr::relocate()`:
   # Can't subset columns that don't exist (quality for instance)
   if (nrow(breport) == 0) {
-    tbl_colnames <- c(
-      "spot", "sample_name", "hit_rank",
-      "bruker_quality", "bruker_species",
-      "bruker_taxid", "bruker_hash",
-      "bruker_log"
-    )
-    tibble::as_tibble(
-      base::matrix(nrow = 0, ncol = base::length(tbl_colnames)),
-      .name_repair = ~tbl_colnames
+    tibble::tibble(
+      "spot" = character(), "sample_name" = character(), "hit_rank" = integer(),
+      "bruker_quality" = character(), "bruker_species" = character(),
+      "bruker_taxid" = numeric(), "bruker_hash" = character(),
+      "bruker_log" = numeric()
     ) %>% return()
   } else {
     # Format the table in WIDE (many columns) or LONG format (many rows)
