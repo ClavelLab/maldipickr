@@ -14,17 +14,19 @@
 #' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
 #'
-#' @details The matrix is transformed into a network without loops,
+#' @details The matrix is essentially a network
 #'  where nodes are spectra and links exist between spectra only if the similarity
 #'  between the spectra is above the threshold.
 #'
-#'  The original idea comes from a [StackOverflow answer by the user
+#'  The original idea to find the cluster members comes from a [StackOverflow answer by the user
 #'  ekstroem](https://stackoverflow.com/a/57613463). However, here the
 #'  implementation differs in two way:
 #'
 #'  1. It relies on the connected components of the network instead of the fast greedy
 #'   modularity algorithm.
-#'  2. It uses [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
+#'  2. It uses base R functions to reduce the dependencies
+#'
+#' @note A previous version of the package implemented the original solution using [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
 #'  to stay within the tibble and tidyverse for consistency.
 #'
 #' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For further analyses: [set_reference_spectra].
@@ -71,27 +73,27 @@ similarity_to_clusters <- function(sim_matrix, threshold) {
   if (any(rownames(sim_matrix) != colnames(sim_matrix))) {
     stop("The similarity matrix has no identical names.")
   }
-  if (!is.numeric(threshold)) {
-    stop("The threshold provided is not a numeric.")
-  }
-  # No loops
-  diag(sim_matrix) <- 0
+
   # Spectra as nodes are connected only if similarity is above the threshold
-  sim_matrix[sim_matrix < threshold] <- 0
-  # Delineate clusters
-  igraph::graph_from_adjacency_matrix(sim_matrix,
-    mode = "directed",
-    weighted = TRUE,
-    diag = FALSE
-  ) %>%
-    tidygraph::as_tbl_graph() %>%
-    tidygraph::activate("nodes") %>% # Working on the nodes not the edges
-    dplyr::mutate( # Gather connected components
-      "membership" = tidygraph::group_components()
-    ) %>%
+  #
+  name_gtr_eq_threshold <- function(vec, threshold) {
+    if (!is.numeric(threshold)) {
+      stop("The threshold provided is not a numeric.")
+    }
+    # Names of vec were checked above with the full matrix
+    base::names(vec)[vec >= threshold]
+  }
+
+  # Delineate clusters by creating a vector of membership (including self)
+  # The vector is then rendered unique using factors and converted into integer id
+  memberships <- apply(sim_matrix, 1, name_gtr_eq_threshold, threshold = threshold)
+
+  sapply(memberships, function(nm) paste(nm, collapse = "|")) %>%
+    base::as.factor() %>%
+    tibble::enframe(value = "membership") %>%
     dplyr::group_by(.data$membership) %>%
-    tibble::as_tibble() %>% # to be able to export only the nodes tibble
     dplyr::mutate(
+      "membership" = base::as.integer(.data$membership),
       "cluster_size" = dplyr::n()
     ) %>%
     dplyr::ungroup() %>%

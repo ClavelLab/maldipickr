@@ -145,8 +145,8 @@ When the similarity matrix is computed between all pairs of the studied spectra,
 
 The [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html)) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
 
-Indeed, the matrix is transformed into a network without loops, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
-This representation allows to infer the clusters. A table summarises for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
+Indeed, the matrix is essentially an adjacency network, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
+This representation allows to infer the clusters easily. A table summarises for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
 
 
 

@@ -25,18 +25,21 @@ or Pearson product moment), infer the species clusters based on a
 threshold \strong{above} (or \strong{equal to}) which spectra are considered alike.
 }
 \details{
-The matrix is transformed into a network without loops,
+The matrix is essentially a network
 where nodes are spectra and links exist between spectra only if the similarity
 between the spectra is above the threshold.
 
-The original idea comes from a \href{https://stackoverflow.com/a/57613463}{StackOverflow answer by the user ekstroem}. However, here the
+The original idea to find the cluster members comes from a \href{https://stackoverflow.com/a/57613463}{StackOverflow answer by the user ekstroem}. However, here the
 implementation differs in two way:
 \enumerate{
 \item It relies on the connected components of the network instead of the fast greedy
 modularity algorithm.
-\item It uses \link[tidygraph:tidygraph-package]{tidygraph::tidygraph-package} instead of \link[igraph:aaa-igraph-package]{igraph::igraph-package}
-to stay within the tibble and tidyverse for consistency.
+\item It uses base R functions to reduce the dependencies
 }
+}
+\note{
+A previous version of the package implemented the original solution using \link[tidygraph:tidygraph-package]{tidygraph::tidygraph-package} instead of \link[igraph:aaa-igraph-package]{igraph::igraph-package}
+to stay within the tibble and tidyverse for consistency.
 }
 \examples{
 # Toy similarity matrix between the six example spectra of
