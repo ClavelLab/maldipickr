@@ -15,10 +15,10 @@ dereplicate-spectra.Rmd:
   - tests/testthat/test-set_reference_spectra.R
   - tests/testthat/test-import_spede_clusters.R
   - tests/testthat/test-pick_spectra.R
-  vignettes: vignettes/b-dereplicate-bruker-maldi-biotyper-spectra.Rmd
+  vignettes: vignettes/dereplicate-bruker-maldi-biotyper-spectra.Rmd
   inflate:
     flat_file: dev/dereplicate-spectra.Rmd
-    vignette_name: B-dereplicate-bruker-maldi-biotyper-spectra
+    vignette_name: Dereplicate Bruker MALDI Biotyper spectra
     open_vignette: true
     check: true
     document: true
@@ -55,11 +55,19 @@ import-data.Rmd:
   - tests/testthat/test-read_many_biotyper_reports.R
   - tests/testthat/test-import_biotyper_spectra.R
   - tests/testthat/test-check_spectra.R
-  vignettes: vignettes/a-import-data-from-bruker-maldi-biotyper.Rmd
+  vignettes: vignettes/import-data-from-bruker-maldi-biotyper.Rmd
   inflate:
     flat_file: dev/import-data.Rmd
-    vignette_name: A-import-data-from-bruker-maldi-biotyper
+    vignette_name: Import data from Bruker MALDI Biotyper
     open_vignette: true
     check: true
     document: true
     overwrite: ask
+keep:
+  path: keep
+  state: active
+  R:
+  - R/maldipickr-package.R
+  - R/utils-pipe.R
+  tests: []
+  vignettes: []

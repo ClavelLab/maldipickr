@@ -1,8 +1,8 @@
 ---
-title: "B-dereplicate-bruker-maldi-biotyper-spectra"
+title: "Dereplicate Bruker MALDI Biotyper spectra"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{b-dereplicate-bruker-maldi-biotyper-spectra}
+  %\VignetteIndexEntry{dereplicate-bruker-maldi-biotyper-spectra}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

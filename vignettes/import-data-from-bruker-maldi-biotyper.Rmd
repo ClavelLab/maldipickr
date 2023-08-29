@@ -1,8 +1,8 @@
 ---
-title: "A-import-data-from-bruker-maldi-biotyper"
+title: "Import data from Bruker MALDI Biotyper"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{a-import-data-from-bruker-maldi-biotyper}
+  %\VignetteIndexEntry{import-data-from-bruker-maldi-biotyper}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
