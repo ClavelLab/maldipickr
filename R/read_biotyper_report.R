@@ -96,72 +96,84 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
   # Error in `dplyr::relocate()`:
   # Can't subset columns that don't exist (quality for instance)
   if (nrow(breport) == 0) {
-    return(breport)
-  }
-  # Format the table in WIDE (many columns) or LONG format (many rows)
-  # By design, the table is wide.
-  # But the default tibble rendering is long
-  # styler: off
+    tbl_colnames <- c(
+      "spot", "sample_name", "hit_rank",
+      "bruker_quality", "bruker_species",
+      "bruker_taxid", "bruker_hash",
+      "bruker_log"
+    )
+    tibble::as_tibble(
+      base::matrix(nrow = 0, ncol = base::length(tbl_colnames)),
+      .name_repair = ~tbl_colnames
+    ) %>% return()
+  } else {
+    # Format the table in WIDE (many columns) or LONG format (many rows)
+    # By design, the table is wide.
+    # But the default tibble rendering is long
+
+    # styler: off
   if ( (long_format & best_hits)  |
        (long_format & !best_hits) |
        (!long_format & best_hits)) {
-    # styler: on
-    # The tibble has different types meaning
-    # a naive approach with `pivot_longer()` directly would raise:
-    # Error in `pivot_longer()`:
-    # ! Can't combine `bruker_01_quality` <character> and `bruker_01_taxid` <integer>.
-
-    # Subset the table with only the character variables
-    report_chr <- breport %>%
-      dplyr::select(
-        c("spot", "sample_name") |
-          tidyselect::contains("bruker") & tidyselect::where(is.character)
-      ) %>%
-      tidyr::pivot_longer(
-        !c("spot", "sample_name"),
-        names_to = c("hit_rank", "type"),
-        names_pattern = "bruker_(.*)_(.*)"
-      ) %>%
-      tidyr::pivot_wider(names_from = "type", values_from = "value")
-
-    report_num <- breport %>%
-      dplyr::select(
-        tidyselect::all_of(c("spot", "sample_name")) |
-          tidyselect::contains("bruker") & tidyselect::where(is.numeric)
-      ) %>%
-      tidyr::pivot_longer(
-        !tidyselect::all_of(c("spot", "sample_name")),
-        names_to = c("hit_rank", "type"),
-        names_pattern = "bruker_(.*)_(.*)"
-      ) %>%
-      tidyr::pivot_wider(names_from = "type", values_from = "value")
+      # styler: on
 
 
-    # Combine the two sub-tables and convert hit rank to integer for further filtering.
-    breport <- dplyr::full_join(
-      report_chr,
-      report_num,
-      by = c("spot", "sample_name", "hit_rank")
-    ) %>%
-      dplyr::mutate("hit_rank" = strtoi(.data$hit_rank, base = 10L)) %>%
-      dplyr::relocate(
-        c(
-          "spot", "sample_name", "hit_rank",
-          "quality", "species", "taxid", "hash", "log"
+      # The tibble has different types meaning
+      # a naive approach with `pivot_longer()` directly would raise:
+      # Error in `pivot_longer()`:
+      # ! Can't combine `bruker_01_quality` <character> and `bruker_01_taxid` <integer>.
+
+      # Subset the table with only the character variables
+      report_chr <- breport %>%
+        dplyr::select(
+          c("spot", "sample_name") |
+            tidyselect::contains("bruker") & tidyselect::where(is.character)
+        ) %>%
+        tidyr::pivot_longer(
+          !c("spot", "sample_name"),
+          names_to = c("hit_rank", "type"),
+          names_pattern = "bruker_(.*)_(.*)"
+        ) %>%
+        tidyr::pivot_wider(names_from = "type", values_from = "value")
+
+      report_num <- breport %>%
+        dplyr::select(
+          tidyselect::all_of(c("spot", "sample_name")) |
+            tidyselect::contains("bruker") & tidyselect::where(is.numeric)
+        ) %>%
+        tidyr::pivot_longer(
+          !tidyselect::all_of(c("spot", "sample_name")),
+          names_to = c("hit_rank", "type"),
+          names_pattern = "bruker_(.*)_(.*)"
+        ) %>%
+        tidyr::pivot_wider(names_from = "type", values_from = "value")
+
+      # Combine the two sub-tables and convert hit rank to integer for further filtering.
+      breport <- dplyr::full_join(
+        report_chr,
+        report_num,
+        by = c("spot", "sample_name", "hit_rank")
+      ) %>%
+        dplyr::mutate("hit_rank" = strtoi(.data$hit_rank, base = 10L)) %>%
+        dplyr::relocate(
+          c(
+            "spot", "sample_name", "hit_rank",
+            "quality", "species", "taxid", "hash", "log"
+          )
+        ) %>%
+        dplyr::rename_with(
+          ~ paste0("bruker_", .x),
+          !c("spot", "sample_name", "hit_rank")
         )
-      ) %>%
-      dplyr::rename_with(
-        ~ paste0("bruker_", .x),
-        !c("spot", "sample_name", "hit_rank")
-      )
-  }
-  # when all hits are used, pivot the wide table
-  # to have the spot sample_name hit_number and the rest of the column
-  if (best_hits) {
-    breport %>%
-      dplyr::filter(.data$hit_rank == 1) %>%
-      return()
-  } else {
-    return(breport)
+    }
+    # when all hits are used, pivot the wide table
+    # to have the spot sample_name hit_number and the rest of the column
+    if (best_hits) {
+      breport %>%
+        dplyr::filter(.data$hit_rank == 1) %>%
+        return()
+    } else {
+      return(breport)
+    }
   }
 }
