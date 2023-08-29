@@ -5,9 +5,9 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^data\.Rproj$
-^Dockerfile$
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^processed$
+^codecov\.yml$
