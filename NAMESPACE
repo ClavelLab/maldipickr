@@ -2,6 +2,7 @@
 
 export("%>%")
 export(check_spectra)
+export(identification_to_clusters)
 export(import_biotyper_spectra)
 export(import_spede_clusters)
 export(is_well_on_edge)

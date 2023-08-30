@@ -603,9 +603,9 @@ identification_to_clusters <- function(tibble_report) {
   tibble_report %>%
     dplyr::mutate(
       "membership" = dplyr::if_else(
-        bruker_species == "not reliable identification",
-        make.unique(bruker_species),
-        bruker_species
+        .data$bruker_species == "not reliable identification",
+        make.unique(.data$bruker_species),
+        .data$bruker_species
       ),
       "membership" = as.integer(as.factor(.data$membership))
     ) %>%
