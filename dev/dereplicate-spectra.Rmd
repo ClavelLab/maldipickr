@@ -386,7 +386,7 @@ This representation allows to infer the clusters easily. A table summarises for 
 #' or Pearson product moment), infer the species clusters based on a
 #' threshold **above** (or **equal to**) which spectra are considered alike.
 #'
-#' @param sim_matrix A *n*×*n* similarity matrix, with *n* the number of spectra. Columns should be named as the rows.
+#' @param sim_matrix A *n* × *n* similarity matrix, with *n* the number of spectra. Columns should be named as the rows.
 #' @param threshold A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.
 #'
 #' @return A tibble of *n* rows for each spectra and 3 columns:
@@ -537,13 +537,24 @@ To do so, we must use the Bruker MALDI Biotyper report from the Compass software
 
 
 ```{r function-identification_to_clusters}
-#' Title
+#' Delineate clusters from taxonomic identifications
 #'
-#' Description
+#' From the report of taxonomic identification produced by the Bruker MALDI Biotyper
+#' spectra sharing the same identification are labelled in the same cluster.
+#' Spectra with unknown identification (e.g., due to database completeness) are set in unique cluster.
 #'
-#' @param tibble_report
+#' @param tibble_report A tibble of *n* rows, with *n* the number of spectra,
+#' produced by [read_biotyper_report()] or [read_many_biotyper_reports()]. The long format and the best hits options are expected to be used in these functions to produce a compliant input tibble.
 #'
-#' @return
+#' @details As all unknown identification are considered unique clusters _within one input tibble_, it is important to consider whether the taxonomic identifications come from a single report or multiple reports, depending on the research question. A message is displayed to confirm from which type of reports the delineation was done.
+#'
+#' @return A tibble of *n* rows for each spectra and 3 columns:
+#' * `name`: the spectra names either from the `spot` column when the input is from [read_biotyper_report()] or from the `name` column when from [read_many_biotyper_reports()].
+#' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
+#' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
+#' * `bruker_species`: the species name associated with the taxonomic identification for the cluster _c_.
+#'
+#' @seealso [similarity_to_clusters]
 #'
 #' @export
 identification_to_clusters <- function(tibble_report) {
@@ -573,9 +584,9 @@ identification_to_clusters <- function(tibble_report) {
   } else {
     stop(
       "Unexpected format of Biotyper report.\n",
-      "Please use either:\n",
-      "`read_biotyper_report(long_format = TRUE)`\n",
-      "or `read_many_biotyper_reports()`"
+      "  Please ensure the report is imported in R correctly with either:\n",
+      "    - `read_biotyper_report(long_format = TRUE)`\n",
+      "    - `read_many_biotyper_reports()`"
     )
   }
 
@@ -584,7 +595,7 @@ identification_to_clusters <- function(tibble_report) {
   if (n_target_names != nrow(tibble_report)) {
     warning(
       "There is more than one spectrum identification per target!\n",
-      "Did you forget to use best_hits = TRUE or to filter the hits?"
+      "  Did you forget to use best_hits = TRUE or to filter the hits beforehand?"
     )
   }
 
@@ -621,8 +632,81 @@ identification_to_clusters(report_unknown)
 ```
   
 ```{r tests-identification_to_clusters}
-test_that("identification_to_clusters works", {
-  expect_true(inherits(identification_to_clusters, "function"))
+path_report <- system.file("biotyper_unknown.csv", package = "maldipickr")
+report_unknown <- read_biotyper_report(path_report)
+
+test_that("identification_to_clusters fails with path as input", {
+  expect_error(
+    identification_to_clusters(path_report),
+    "Unexpected format of Biotyper report."
+  )
+})
+test_that("identification_to_clusters works with correct single report tibble", {
+  expect_message(
+    out <- identification_to_clusters(report_unknown),
+    "Generating clusters from single report"
+  )
+  expect_equal(
+    nrow(out), 4
+  )
+  expect_equal(
+    out$membership,
+    c(2, 3, 1, 1)
+  )
+})
+
+test_that("identification_to_clusters fails modified single report tibble", {
+  expect_error(
+    identification_to_clusters(
+      report_unknown %>% dplyr::select(!c("spot"))
+    ),
+    "Unexpected format of Biotyper report."
+  )
+})
+
+report_unknown_no_bh <- read_biotyper_report(path_report, best_hits = FALSE)
+test_that("identification_to_clusters WARNS when multiple hits", {
+  expect_warning(
+    out <- identification_to_clusters(report_unknown_no_bh),
+    "There is more than one spectrum identification per target!\n",
+  )
+  expect_equal(
+    nrow(out), 40
+  )
+  expect_equal(
+    out$cluster_size,
+    c(
+      rep(1, times = 20),
+      5, 5, rep(1, times = 8),
+      5, 5, 5, rep(1, times = 7)
+    )
+  )
+})
+
+
+# Artificially generate multiple reports from one
+multiple_reports_unknown <- read_many_biotyper_reports(
+  rep(path_report, 3),
+  report_ids = LETTERS[1:3], best_hits = TRUE
+)
+test_that("identification_to_clusters works with correct multiple reports tibble", {
+  expect_message(
+    out <- identification_to_clusters(multiple_reports_unknown),
+    "Generating clusters from multiple reports"
+  )
+  expect_equal(
+    nrow(out), 12
+  )
+  expect_equal(
+    out$membership,
+    c(2, 3, 1, 1, 4, 5, 1, 1, 6, 7, 1, 1)
+  )
+})
+test_that("identification_to_clusters fails modified tibble for multiple reports", {
+  expect_error(
+    identification_to_clusters(multiple_reports_unknown %>% dplyr::rename("tax_id" = "bruker_species")),
+    "Unexpected format of Biotyper report."
+  )
 })
 ```
   
