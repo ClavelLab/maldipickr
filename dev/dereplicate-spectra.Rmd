@@ -596,7 +596,7 @@ identification_to_clusters <- function(tibble_report) {
         make.unique(bruker_species),
         bruker_species
       ),
-      "membership" = as.numeric(as.factor(.data$membership))
+      "membership" = as.integer(as.factor(.data$membership))
     ) %>%
     dplyr::group_by(.data$membership) %>%
     dplyr::mutate(
