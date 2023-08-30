@@ -2,6 +2,7 @@ dereplicate-spectra.Rmd:
   path: dev/dereplicate-spectra.Rmd
   state: active
   R:
+  - R/identification_to_clusters.R
   - R/import_spede_clusters.R
   - R/merge_processed_spectra.R
   - R/pick_spectra.R
@@ -12,6 +13,7 @@ dereplicate-spectra.Rmd:
   - tests/testthat/test-process_spectra.R
   - tests/testthat/test-merge_processed_spectra.R
   - tests/testthat/test-similarity_to_clusters.R
+  - tests/testthat/test-identification_to_clusters.R
   - tests/testthat/test-set_reference_spectra.R
   - tests/testthat/test-import_spede_clusters.R
   - tests/testthat/test-pick_spectra.R

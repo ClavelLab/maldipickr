@@ -663,8 +663,6 @@ test_that("check_spectra warns with empty spectra", {
 # Execute in the console directly
 fusen::inflate(
   flat_file = "dev/import-data.Rmd",
-  vignette_name = c(
-    "Import data from Bruker MALDI Biotyper" = "A-import-data-from-bruker-maldi-biotyper"
-  )
+  vignette_name = "Import data from Bruker MALDI Biotyper"
 )
 ```

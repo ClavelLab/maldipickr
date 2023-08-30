@@ -13,7 +13,7 @@ test_that("import_biotyper_spectra works", {
     spectra_list, "list"
   )
 })
-test_that("import_biotyper_spectra works with symlinks",{
+test_that("import_biotyper_spectra works with symlinks", {
   expect_no_error(
     spectra_with_acqus <- import_biotyper_spectra(directory_biotyper_spectra_with_acqus)
   )

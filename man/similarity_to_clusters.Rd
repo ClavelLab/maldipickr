@@ -7,7 +7,7 @@
 similarity_to_clusters(sim_matrix, threshold)
 }
 \arguments{
-\item{sim_matrix}{A \emph{n}×\emph{n} similarity matrix, with \emph{n} the number of spectra. Columns should be named as the rows.}
+\item{sim_matrix}{A \emph{n} × \emph{n} similarity matrix, with \emph{n} the number of spectra. Columns should be named as the rows.}
 
 \item{threshold}{A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.}
 }
@@ -72,5 +72,5 @@ cosine_similarity <- matrix(
 similarity_to_clusters(cosine_similarity, threshold = 0.92)
 }
 \seealso{
-For similarity metrics: \href{https://rdrr.io/cran/coop/man/cosine.html}{\code{coop::cosine}}, \link[stats:cor]{stats::cor}, \href{https://rdrr.io/cran/Hmisc/man/rcorr.html}{\code{Hmisc::rcorr}}. For further analyses: \link{set_reference_spectra}.
+For similarity metrics: \href{https://rdrr.io/cran/coop/man/cosine.html}{\code{coop::cosine}}, \link[stats:cor]{stats::cor}, \href{https://rdrr.io/cran/Hmisc/man/rcorr.html}{\code{Hmisc::rcorr}}. For using taxonomic identifications for clusters : \link{identification_to_clusters}. For further analyses: \link{set_reference_spectra}.
 }

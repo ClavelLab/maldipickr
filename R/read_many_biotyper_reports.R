@@ -42,11 +42,6 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
     tidyr::unnest("value") %>%
     dplyr::mutate(
       "name" = paste(gsub("-", "_", .data$name), .data$spot, sep = "_"),
-      "bruker_species" = if_else(
-        .data$bruker_species == "not reliable identification",
-        paste(.data$bruker_species, .data$name), # make the unmatched species unique for later counts
-        .data$bruker_species
-      ),
       ...
     ) %>%
     return()

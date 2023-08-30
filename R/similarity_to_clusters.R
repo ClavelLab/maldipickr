@@ -6,7 +6,7 @@
 #' or Pearson product moment), infer the species clusters based on a
 #' threshold **above** (or **equal to**) which spectra are considered alike.
 #'
-#' @param sim_matrix A *n*×*n* similarity matrix, with *n* the number of spectra. Columns should be named as the rows.
+#' @param sim_matrix A *n* × *n* similarity matrix, with *n* the number of spectra. Columns should be named as the rows.
 #' @param threshold A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.
 #'
 #' @return A tibble of *n* rows for each spectra and 3 columns:
@@ -29,7 +29,7 @@
 #' @note A previous version of the package implemented the original solution using [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
 #'  to stay within the tibble and tidyverse for consistency.
 #'
-#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For further analyses: [set_reference_spectra].
+#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [identification_to_clusters]. For further analyses: [set_reference_spectra].
 #' @export
 #' @examples
 #' # Toy similarity matrix between the six example spectra of

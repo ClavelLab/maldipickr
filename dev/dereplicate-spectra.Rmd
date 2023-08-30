@@ -409,7 +409,7 @@ This representation allows to infer the clusters easily. A table summarises for 
 #' @note A previous version of the package implemented the original solution using [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
 #'  to stay within the tibble and tidyverse for consistency.
 #'
-#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For further analyses: [set_reference_spectra].
+#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [identification_to_clusters]. For further analyses: [set_reference_spectra].
 #' @export
 similarity_to_clusters <- function(sim_matrix, threshold) {
   if (!is.matrix(sim_matrix)) {
@@ -1342,8 +1342,6 @@ test_that("pick_spectra fails without metadata and column", {
 # Execute in the console directly
 fusen::inflate(
   flat_file = "dev/dereplicate-spectra.Rmd",
-  vignette_name = c(
-    "Dereplicate Bruker MALDI Biotyper spectra" = "B-dereplicate-bruker-maldi-biotyper-spectra"
-  )
+  vignette_name = "Dereplicate Bruker MALDI Biotyper spectra"
 )
 ```
