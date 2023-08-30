@@ -16,11 +16,14 @@ All commands that you use to use when developing packages...
 fusen::fill_description(
   pkg = here::here(),
   fields = list(
-    Title = "Dereplicate and cherry-pick mass spectrometry spectra",
+    Title = "Dereplicate and Cherry-Pick Mass Spectrometry Spectra",
     Description = "Convenient wrapper functions for the analysis of matrix-assisted laser
-        desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (aka cherry-pick). The package covers the preprocessing and dereplication steps needed to cluster MALDI-TOF spectra before the final cherry-picking step. This package relies heavily on the 'MALDIquant' package albeit with a 'tidyverse' flavour.",
+        desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (also called cherry-pick). The package covers the preprocessing and dereplication steps needed to cluster MALDI-TOF spectra before the final cherry-picking step. It enables the easy exclusion of spectra and/or clusters to accommodate complex cherry-picking strategies. Alternatively, cherry-picking using taxonomic identification MALDI-TOF data is made easy with functions to import inconsistently formatted reports.",
     `Authors@R` = c(
-      person("Charlie", "Pauvert", email = "cpauvert@users.noreply.github.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9832-2507"))
+      person("Charlie", "Pauvert", email = "cpauvert@ukaachen.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9832-2507")),
+      person("David", "Wylensek", role = c("ctb"), comment = c(ORCID = "0000-0002-8424-5712")),
+      person("Selina", "Nüchtern", role = c("ctb")),
+      person("Thomas", "Clavel", role = c("ctb","fnd"), comment = c(ORCID = "0000-0002-7229-5595"))
     )
   )
 )
