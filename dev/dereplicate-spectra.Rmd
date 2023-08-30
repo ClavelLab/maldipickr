@@ -367,11 +367,13 @@ sim_matrix <- stats::cor( t(fm), method = "pearson)
 sim_matrix <- coop::cosine( t(fm) )
 ```
 
-# Delineate clusters from a similarity matrix
+# Delineate clusters
+
+## From a similarity matrix
 
 When the similarity matrix is computed between all pairs of the studied spectra, the next step is to delineate clusters of spectra to dereplicate the measured bacterial colonies.
 
-The [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html)) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
+The [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
 
 Indeed, the matrix is essentially an adjacency network, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
 This representation allows to infer the clusters easily. A table summarises for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
@@ -527,6 +529,103 @@ test_that("similarity_to_clusters fails with wrong input", {
   )
 })
 ```
+
+## From taxonomic identifications
+
+An alternative to the similarity matrix approach from the previous section is to rely on the taxonomic identification of the spectra to delineate clusters.
+To do so, we must use the Bruker MALDI Biotyper report from the Compass software that summarize the identification of the microorganisms using its internal database. Once the report or reports are imported (in R using [`read_biotyper_report()`](https://clavellab.github.io/maldipickr/reference/read_biotyper_report.html)), the function [`identification_to_clusters()`](https://clavellab.github.io/maldipickr/reference/identification_to_clusters.html) will group spectra based on their identification.
+
+
+```{r function-identification_to_clusters}
+#' Title
+#'
+#' Description
+#'
+#' @param tibble_report
+#'
+#' @return
+#'
+#' @export
+identification_to_clusters <- function(tibble_report) {
+  # check correct names and number of columns
+  single_report_cols <- c(
+    "spot", "sample_name",
+    "hit_rank", "bruker_quality",
+    "bruker_species", "bruker_taxid",
+    "bruker_hash", "bruker_log"
+  )
+  many_reports_cols <- c("name", single_report_cols)
+  if (
+    identical(
+      base::colnames(tibble_report),
+      single_report_cols
+    )
+  ) {
+    message("Generating clusters from single report")
+    tibble_report <- dplyr::rename(tibble_report, "name" = "spot")
+  } else if (
+    identical(
+      base::colnames(tibble_report),
+      many_reports_cols
+    )
+  ) {
+    message("Generating clusters from multiple reports")
+  } else {
+    stop(
+      "Unexpected format of Biotyper report.\n",
+      "Please use either:\n",
+      "`read_biotyper_report(long_format = TRUE)`\n",
+      "or `read_many_biotyper_reports()`"
+    )
+  }
+
+  # Checking that best_hits = TRUE was used
+  n_target_names <- dplyr::pull(tibble_report, "name") %>% dplyr::n_distinct()
+  if (n_target_names != nrow(tibble_report)) {
+    warning(
+      "There is more than one spectrum identification per target!\n",
+      "Did you forget to use best_hits = TRUE or to filter the hits?"
+    )
+  }
+
+  # Make unknown identification unique
+  tibble_report %>%
+    dplyr::mutate(
+      "membership" = dplyr::if_else(
+        bruker_species == "not reliable identification",
+        make.unique(bruker_species),
+        bruker_species
+      ),
+      "membership" = as.numeric(as.factor(.data$membership))
+    ) %>%
+    dplyr::group_by(.data$membership) %>%
+    dplyr::mutate(
+      "cluster_size" = dplyr::n()
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(
+      c(
+        "name", "membership",
+        "cluster_size", "bruker_species"
+      )
+    ) %>%
+    return()
+}
+```
+  
+```{r example-identification_to_clusters}
+report_unknown <- read_biotyper_report(
+  system.file("biotyper_unknown.csv", package = "maldipickr")
+)
+identification_to_clusters(report_unknown)
+```
+  
+```{r tests-identification_to_clusters}
+test_that("identification_to_clusters works", {
+  expect_true(inherits(identification_to_clusters, "function"))
+})
+```
+  
 
 # Set a reference spectrum for each cluster
 
