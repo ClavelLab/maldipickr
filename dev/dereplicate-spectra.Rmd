@@ -1,5 +1,5 @@
 ---
-title: "02-dereplicate-bruker-maldi-biotyper-spectra"
+title: "Dereplicate Bruker MALDI Biotyper spectra"
 output: html_document
 editor_options: 
   chunk_output_type: console

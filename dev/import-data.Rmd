@@ -1,5 +1,5 @@
 ---
-title: "01-import-data-from-bruker-maldi-biotyper"
+title: "Import data from Bruker MALDI Biotyper"
 output: html_document
 editor_options: 
   chunk_output_type: console
