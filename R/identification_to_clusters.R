@@ -15,7 +15,6 @@
 #' * `name`: the spectra names either from the `spot` column when the input is from [read_biotyper_report()] or from the `name` column when from [read_many_biotyper_reports()].
 #' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
-#' * `bruker_species`: the species name associated with the taxonomic identification for the cluster _c_.
 #'
 #' @seealso [similarity_to_clusters]
 #'
@@ -34,21 +33,16 @@ identification_to_clusters <- function(tibble_report) {
     "bruker_hash", "bruker_log"
   )
   many_reports_cols <- c("name", single_report_cols)
-  if (
-    identical(
+  if (identical(
       base::colnames(tibble_report),
-      single_report_cols
-    )
-  ) {
+      single_report_cols)) {
     message("Generating clusters from single report")
-    tibble_report <- dplyr::rename(tibble_report, "name" = "spot")
-  } else if (
-    identical(
+    id_column <- single_report_cols[1]
+  } else if (identical(
       base::colnames(tibble_report),
-      many_reports_cols
-    )
-  ) {
+      many_reports_cols)) {
     message("Generating clusters from multiple reports")
+    id_column <- many_reports_cols[1]
   } else {
     stop(
       "Unexpected format of Biotyper report.\n",
@@ -59,7 +53,7 @@ identification_to_clusters <- function(tibble_report) {
   }
 
   # Checking that best_hits = TRUE was used
-  n_target_names <- dplyr::pull(tibble_report, "name") %>% dplyr::n_distinct()
+  n_target_names <- dplyr::pull(tibble_report, {{ id_column }}) %>% dplyr::n_distinct()
   if (n_target_names != nrow(tibble_report)) {
     warning(
       "There is more than one spectrum identification per target!\n",
@@ -84,8 +78,7 @@ identification_to_clusters <- function(tibble_report) {
     dplyr::ungroup() %>%
     dplyr::select(
       c(
-        "name", "membership",
-        "cluster_size", "bruker_species"
+        {{ id_column }}, "membership", "cluster_size"
       )
     ) %>%
     return()
