@@ -68,7 +68,6 @@ The full procedure is illustrated in the example below. While in this case, all 
 #'
 #' @references Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <doi:10.3389/fmicb.2018.01294>.
 #'
-#' @seealso [import_biotyper_spectra]
 #' @note The original R code on which this function is based is accessible at: <https://github.com/strejcem/MALDIvs16S>
 #' @examples
 process_spectra <- function(spectra_list, rds_prefix = NULL) {
@@ -1013,7 +1012,7 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' should be picked. If `metadata_df` is provided, then additional columns from
 #' this tibble are added to the returned tibble.
 #'
-#' @seealso [similarity_to_clusters], [set_reference_spectra]. For a useful utility to soft-mask specific spectra: [is_well_on_edge].
+#' @seealso [similarity_to_clusters], [set_reference_spectra]. For a useful utility function to soft-mask specific spectra: [is_well_on_edge].
 #'
 #' @export
 pick_spectra <- function(

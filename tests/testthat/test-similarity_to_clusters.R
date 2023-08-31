@@ -44,3 +44,50 @@ test_that("similarity_to_clusters fails with wrong input", {
     "not a numeric"
   )
 })
+
+processed <- system.file("toy-species-spectra", package = "maldipickr") %>%
+  import_biotyper_spectra() %>%
+  suppressMessages() %>%
+  process_spectra()
+cosine_similarity <- matrix(
+  c(
+    1, 0.79, 0.77, 0.99, 0.98, 0.98,
+    0.79, 1, 0.98, 0.79, 0.8, 0.8,
+    0.77, 0.98, 1, 0.77, 0.77, 0.77,
+    0.99, 0.79, 0.77, 1, 1, 0.99,
+    0.98, 0.8, 0.77, 1, 1, 1,
+    0.98, 0.8, 0.77, 0.99, 1, 1
+  ),
+  nrow = 6,
+  dimnames = list(
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    ),
+    c(
+      "species1_G2", "species2_E11", "species2_E12",
+      "species3_F7", "species3_F8", "species3_F9"
+    )
+  )
+)
+clusters <- similarity_to_clusters(cosine_similarity, threshold = 0.92)
+test_that("set_reference_spectra works", {
+  expect_equal(
+    set_reference_spectra(clusters, processed$metadata)$is_reference,
+    c(FALSE, FALSE, TRUE, FALSE, TRUE, FALSE)
+  )
+})
+test_that("set_reference_spectra fails with inadequate metadata", {
+  expect_error(
+    set_reference_spectra(clusters, processed$metadata[1:2, ]),
+    "The tibbles do not have the same number of rows!"
+  )
+  expect_error(
+    set_reference_spectra(clusters[, -2], processed$metadata),
+    "lacks one of the following columns"
+  )
+  expect_error(
+    set_reference_spectra(clusters, processed$metadata[, -2]),
+    "lacks one of the following columns"
+  )
+})

@@ -60,6 +60,4 @@ Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS ve
 }
 \seealso{
 \link{import_biotyper_spectra} and \link{check_spectra} for the inputs and \link{merge_processed_spectra} for further analysis.
-
-\link{import_biotyper_spectra}
 }

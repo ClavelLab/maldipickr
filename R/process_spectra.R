@@ -27,7 +27,6 @@
 #'
 #' @references Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <doi:10.3389/fmicb.2018.01294>.
 #'
-#' @seealso [import_biotyper_spectra]
 #' @note The original R code on which this function is based is accessible at: <https://github.com/strejcem/MALDIvs16S>
 #' @examples
 #' # Get an example directory of six Bruker MALDI Biotyper spectra

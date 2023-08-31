@@ -105,5 +105,5 @@ pick_spectra(clusters, metadata, "OD600",
 )
 }
 \seealso{
-\link{similarity_to_clusters}, \link{set_reference_spectra}. For a useful utility to soft-mask specific spectra: \link{is_well_on_edge}.
+\link{similarity_to_clusters}, \link{set_reference_spectra}. For a useful utility function to soft-mask specific spectra: \link{is_well_on_edge}.
 }

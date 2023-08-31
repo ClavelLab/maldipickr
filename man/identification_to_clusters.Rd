@@ -16,7 +16,6 @@ A tibble of \emph{n} rows for each spectra and 3 columns:
 \item \code{name}: the spectra names either from the \code{spot} column when the input is from \code{\link[=read_biotyper_report]{read_biotyper_report()}} or from the \code{name} column when from \code{\link[=read_many_biotyper_reports]{read_many_biotyper_reports()}}.
 \item \code{membership}: integers stating the cluster number to which the spectra belong to. It starts from 1 to \emph{c}, the total number of clusters.
 \item \code{cluster_size}: integers indicating the total number of spectra in the corresponding cluster.
-\item \code{bruker_species}: the species name associated with the taxonomic identification for the cluster \emph{c}.
 }
 }
 \description{
