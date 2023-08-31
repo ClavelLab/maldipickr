@@ -59,7 +59,12 @@ clusters <- readRDS(
 )
 # 1. By default and if no other metadata are provided,
 #   the function picks reference spectra for each clusters.
-pick_spectra(clusters)
+#
+# N.B: The spectra `name` and `to_pick` columns are moved to the left
+# only for clarity using the `relocate()` function.
+#
+pick_spectra(clusters) \%>\%
+  dplyr::relocate(name, to_pick) # only for clarity
 
 # 2.1 Simulate OD600 values with uniform distribution
 #  for each of the colonies we measured with
@@ -73,7 +78,8 @@ metadata
 
 # 2.2 Pick the spectra based on the highest
 #   OD600 value per cluster
-pick_spectra(clusters, metadata, "OD600")
+pick_spectra(clusters, metadata, "OD600") \%>\%
+  dplyr::relocate(name, to_pick) # only for clarity
 
 # 3.1 Say that the wells on the right side of the plate are
 #   used for negative controls and should not be picked.
@@ -89,7 +95,8 @@ metadata <- metadata \%>\% dplyr::mutate(
 #   the spectra indicated by the `is_edge` column.
 pick_spectra(clusters, metadata, "OD600",
   soft_mask_column = "is_edge"
-)
+) \%>\%
+  dplyr::relocate(name, to_pick) # only for clarity
 
 # 4.1 Say that some spectra were picked before
 #   (e.g., in the column F) in a previous experiment.
@@ -102,7 +109,8 @@ metadata <- metadata \%>\% dplyr::mutate(
 #   labelled as `picked_before` (hard masking).
 pick_spectra(clusters, metadata, "OD600",
   hard_mask_column = "picked_before"
-)
+) \%>\%
+  dplyr::relocate(name, to_pick) # only for clarity
 }
 \seealso{
 \link{similarity_to_clusters}, \link{set_reference_spectra}. For a useful utility function to soft-mask specific spectra: \link{is_well_on_edge}.

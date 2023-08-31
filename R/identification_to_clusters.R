@@ -34,13 +34,15 @@ identification_to_clusters <- function(tibble_report) {
   )
   many_reports_cols <- c("name", single_report_cols)
   if (identical(
-      base::colnames(tibble_report),
-      single_report_cols)) {
+    base::colnames(tibble_report),
+    single_report_cols
+  )) {
     message("Generating clusters from single report")
     id_column <- single_report_cols[1]
   } else if (identical(
-      base::colnames(tibble_report),
-      many_reports_cols)) {
+    base::colnames(tibble_report),
+    many_reports_cols
+  )) {
     message("Generating clusters from multiple reports")
     id_column <- many_reports_cols[1]
   } else {
