@@ -28,8 +28,8 @@ threshold above (or equal to) which spectra are considered alike."><meta propert
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/a-import-data-from-bruker-maldi-biotyper.html">A-import-data-from-bruker-maldi-biotyper</a>
-    <a class="dropdown-item" href="../articles/b-dereplicate-bruker-maldi-biotyper-spectra.html">B-dereplicate-bruker-maldi-biotyper-spectra</a>
+    <a class="dropdown-item" href="../articles/dereplicate-bruker-maldi-biotyper-spectra.html">Dereplicate Bruker MALDI Biotyper spectra</a>
+    <a class="dropdown-item" href="../articles/import-data-from-bruker-maldi-biotyper.html">Import data from Bruker MALDI Biotyper</a>
   </div>
 </li>
 <li class="nav-item">
@@ -70,7 +70,7 @@ threshold <strong>above</strong> (or <strong>equal to</strong>) which spectra ar
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>sim_matrix</dt>
-<dd><p>A <em>n</em>×<em>n</em> similarity matrix, with <em>n</em> the number of spectra. Columns should be named as the rows.</p></dd>
+<dd><p>A <em>n</em> × <em>n</em> similarity matrix, with <em>n</em> the number of spectra. Columns should be named as the rows.</p></dd>
 
 
 <dt>threshold</dt>
@@ -87,18 +87,17 @@ threshold <strong>above</strong> (or <strong>equal to</strong>) which spectra ar
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The matrix is transformed into a network without loops,
+    <p>The matrix is essentially a network
 where nodes are spectra and links exist between spectra only if the similarity
 between the spectra is above the threshold.</p>
-<p>The original idea comes from a <a href="https://stackoverflow.com/a/57613463" class="external-link">StackOverflow answer by the user ekstroem</a>. However, here the
+<p>The original idea to find the cluster members comes from a <a href="https://stackoverflow.com/a/57613463" class="external-link">StackOverflow answer by the user ekstroem</a>. However, here the
 implementation differs in two way:</p><ol><li><p>It relies on the connected components of the network instead of the fast greedy
 modularity algorithm.</p></li>
-<li><p>It uses <a href="https://tidygraph.data-imaginist.com/reference/tidygraph-package.html" class="external-link">tidygraph::tidygraph-package</a> instead of igraph::igraph-package
-to stay within the tibble and tidyverse for consistency.</p></li>
+<li><p>It uses base R functions to reduce the dependencies</p></li>
 </ol></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>For similarity metrics: <a href="https://rdrr.io/cran/coop/man/cosine.html" class="external-link"><code>coop::cosine</code></a>, <a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::cor</a>, <a href="https://rdrr.io/cran/Hmisc/man/rcorr.html" class="external-link"><code>Hmisc::rcorr</code></a>. For further analyses: <a href="set_reference_spectra.html">set_reference_spectra</a>.</p></div>
+    <div class="dont-index"><p>For similarity metrics: <a href="https://rdrr.io/cran/coop/man/cosine.html" class="external-link"><code>coop::cosine</code></a>, <a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::cor</a>, <a href="https://rdrr.io/cran/Hmisc/man/rcorr.html" class="external-link"><code>Hmisc::rcorr</code></a>. For using taxonomic identifications for clusters : <a href="identification_to_clusters.html">identification_to_clusters</a>. For further analyses: <a href="set_reference_spectra.html">set_reference_spectra</a>.</p></div>
     </div>
 
     <div class="section level2">
@@ -147,7 +146,7 @@ to stay within the tibble and tidyverse for consistency.</p></li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Charlie Pauvert.</p>
+  <p></p><p>Developed by Charlie Pauvert, Thomas Clavel.</p>
 </div>
 
 <div class="pkgdown-footer-right">

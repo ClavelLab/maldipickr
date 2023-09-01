@@ -4,16 +4,13 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/CHANGELOG.html</loc>
-  </url>
-  <url>
     <loc>/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/a-import-data-from-bruker-maldi-biotyper.html</loc>
+    <loc>/articles/dereplicate-bruker-maldi-biotyper-spectra.html</loc>
   </url>
   <url>
-    <loc>/articles/b-dereplicate-bruker-maldi-biotyper-spectra.html</loc>
+    <loc>/articles/import-data-from-bruker-maldi-biotyper.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
@@ -29,6 +26,9 @@
   </url>
   <url>
     <loc>/reference/check_spectra.html</loc>
+  </url>
+  <url>
+    <loc>/reference/identification_to_clusters.html</loc>
   </url>
   <url>
     <loc>/reference/import_biotyper_spectra.html</loc>
