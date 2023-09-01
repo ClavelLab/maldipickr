@@ -10,7 +10,7 @@ RUN apt-get update \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /var/cache/* /var/lib/*
 
-RUN install2.r --ncpus -1 --repos https://cloud.r-project.org --error --skipinstalled fusen MALDIquant MALDIquantForeign tidyverse tidygraph coop markdown styler magick knitr rmarkdown
+RUN install2.r --ncpus -1 --repos https://cloud.r-project.org --error --skipinstalled fusen MALDIquant MALDIquantForeign tidyverse coop markdown styler magick knitr rmarkdown spelling
 
 # Add configuration file for Rstudio
 RUN echo '{\

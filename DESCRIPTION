@@ -35,7 +35,8 @@ Imports:
     tidyselect,
     tools,
     utils
-Suggests: 
+Suggests:
+    spelling, 
     knitr,
     rmarkdown,
     testthat
@@ -45,3 +46,4 @@ Config/fusen/version: 0.5.2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Language: en-US
