@@ -37,10 +37,6 @@ modularity algorithm.
 \item It uses base R functions to reduce the dependencies
 }
 }
-\note{
-A previous version of the package implemented the original solution using \link[tidygraph:tidygraph-package]{tidygraph::tidygraph-package} instead of \link[igraph:aaa-igraph-package]{igraph::igraph-package}
-to stay within the tibble and tidyverse for consistency.
-}
 \examples{
 # Toy similarity matrix between the six example spectra of
 #  three species. The cosine metric is used and a value of

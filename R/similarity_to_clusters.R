@@ -136,8 +136,6 @@ set_reference_spectra <- function(cluster_df, metadata_df) {
 #'   modularity algorithm.
 #'  2. It uses base R functions to reduce the dependencies
 #'
-#' @note A previous version of the package implemented the original solution using [tidygraph::tidygraph-package] instead of [igraph::igraph-package]
-#'  to stay within the tibble and tidyverse for consistency.
 #'
 #' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [identification_to_clusters]. For further analyses: [set_reference_spectra].
 #' @export

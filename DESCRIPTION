@@ -36,14 +36,14 @@ Imports:
     tools,
     utils
 Suggests:
-    spelling, 
     knitr,
     rmarkdown,
+    spelling,
     testthat
 VignetteBuilder: 
     knitr
 Config/fusen/version: 0.5.2
 Encoding: UTF-8
+Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Language: en-US
