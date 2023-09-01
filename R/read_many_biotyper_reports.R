@@ -11,7 +11,7 @@
 #'
 #' @seealso [read_biotyper_report]
 #'
-#' @note The report identifiers are sanitised to convert all dashes (`-`) as underscores (`_`).
+#' @note The report identifiers are sanitized to convert all dashes (`-`) as underscores (`_`).
 #'
 #' @export
 #'

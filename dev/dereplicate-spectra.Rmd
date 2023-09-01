@@ -34,7 +34,7 @@ From the imported raw data from the Bruker MALDI Biotyper, the processing of the
 2. Mass range trimming to 4-10 kDa as they were deemed most determinant by Strejcek et al. (2018)
 3. Signal smoothing using the Savitzky-Golay method and a half window size of 20
 4. Baseline correction with the SNIP procedure
-5. Normalisation by Total Ion Current
+5. Normalization by Total Ion Current
 6. Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
 7. Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 
@@ -50,7 +50,7 @@ The full procedure is illustrated in the example below. While in this case, all 
 #' 2. Mass range trimming to 4-10 kDa as they were deemed most determinant by Strejcek et al. (2018)
 #' 3. Signal smoothing using the Savitzky-Golay method and a half window size of 20
 #' 4. Baseline correction with the SNIP procedure
-#' 5. Normalisation by Total Ion Current
+#' 5. Normalization by Total Ion Current
 #' 6. Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
 #' 7. Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 #'
@@ -77,7 +77,7 @@ process_spectra <- function(spectra_list, rds_prefix = NULL) {
   # 2. Mass range trimming
   # 3. Signal smoothing
   # 4. Baseline Correction
-  # 5. Normalisation
+  # 5. Normalization
   spectra <- spectra_list %>%
     MALDIquant::transformIntensity("sqrt") %>%
     MALDIquant::trim(range = c(4000, 10000)) %>%
@@ -186,7 +186,7 @@ test_that("process_spectra warns on empty spectra", {
 During high-throughput analyses, multiples runs of Bruker MALDI Biotyper are expected resulting in several batches of spectra to be processed and compared.
 While their processing is natively independent, and could natively be run in parallel, the integration of the batches for their comparison needs an additional step.
 
-The [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) function aggregates the processed spectra and bins together the detected peaks, with a tolerance of $0.002$ between the average peak values in the bin (see [`MALDIquant::binPeaks`](https://rdrr.io/cran/MALDIquant/man/binPeaks-functions.html)), which translate to a tolerance of `r format(.002/10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peakless spectra are discarded) and $p$ columns for the $p$ peaks masses.
+The [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) function aggregates the processed spectra and bins together the detected peaks, with a tolerance of $0.002$ between the average peak values in the bin (see [`MALDIquant::binPeaks`](https://rdrr.io/cran/MALDIquant/man/binPeaks-functions.html)), which translate to a tolerance of `r format(.002/10^-6)` ppm. This binning step results in a $n\times p$ feature matrix (or intensity matrix), with $n$ rows for $n$ processed spectra (peak-less spectra are discarded) and $p$ columns for the $p$ peaks masses.
 
 By default, as in the Strejeck et al. (2018) procedure, the intensity values for spectra with missing peaks are interpolated from the processed spectra signal.
 The current function enables the analyst to decide whether to interpolate the values or leave missing peaks as `NA` which would then be converted to an null intensity value.
@@ -379,7 +379,7 @@ When the similarity matrix is computed between all pairs of the studied spectra,
 The [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
 
 Indeed, the matrix is essentially an adjacency network, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
-This representation allows to infer the clusters easily. A table summarises for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
+This representation allows to infer the clusters easily. A table summarizes for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
 
 
 ```{r function-similarity_to_clusters}
@@ -715,7 +715,7 @@ To do so, we must use the Bruker MALDI Biotyper report from the Compass software
 #' Delineate clusters from taxonomic identifications
 #'
 #' From the report of taxonomic identification produced by the Bruker MALDI Biotyper
-#' spectra sharing the same identification are labelled in the same cluster.
+#' spectra sharing the same identification are labeled in the same cluster.
 #' Spectra with unknown identification (e.g., due to database completeness) are set in unique cluster.
 #'
 #' @param tibble_report A tibble of *n* rows, with *n* the number of spectra,
@@ -989,7 +989,7 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' Cherry-pick Bruker MALDI Biotyper spectra
 #'
 #' Using the clusters information, and potential additional metadata as external
-#' criteria, spectra are labelled as to be picked for each cluster. Note that some
+#' criteria, spectra are labeled as to be picked for each cluster. Note that some
 #' spectra and therefore clusters can be explicitly removed (_masked_)
 #' from the picking decision if they have been previously picked
 #' or should be discarded, using logical columns in the metadata table.
@@ -1006,7 +1006,7 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' @param is_descending_order Optional logical indicating whether to sort the `criteria_column` from the highest-to-lowest value (`TRUE`) or lowest-to-highest (`FALSE`).
 #' @param is_sorted Optional logical to indicate that the `cluster_df` is
 #' already sorted by cluster based on (usually multiple) internal criteria to
-#' pick the first of each cluster. This flag is **overriden** if a `metadata_df`
+#' pick the first of each cluster. This flag is **overridden** if a `metadata_df`
 #' is provided.
 #'
 #' @return A tibble with as many rows as `cluster_df` with an additional logical
@@ -1256,7 +1256,7 @@ metadata <- metadata %>% dplyr::mutate(
   picked_before = grepl("_F", name)
 )
 # 4.2 Pick the spectra from clusters without spectra
-#   labelled as `picked_before` (hard masking).
+#   labeled as `picked_before` (hard masking).
 pick_spectra(clusters, metadata, "OD600",
   hard_mask_column = "picked_before"
 ) %>%

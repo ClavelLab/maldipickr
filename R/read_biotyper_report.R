@@ -3,12 +3,12 @@
 #' Importing Bruker MALDI Biotyper CSV report
 #'
 #'
-#' The headerless table exported by the Compass software in the Bruker MALDI
+#' The header-less table exported by the Compass software in the Bruker MALDI
 #' Biotyper device is separated by semi-colons and has empty columns which prevent
 #' an easy import in R. This function reads the report correctly as a tibble.
 #'
 #' @details
-#' The headerless table contains identification information for each target processed by
+#' The header-less table contains identification information for each target processed by
 #' the Biotyper device and once processed by the `read_biotyper_report`,
 #' the following seven columns are available in the tibble, _when using the `best_hits = TRUE` option_:
 #' * `spot`: an integer indicating the spot number of the MALDI target (i.e., plate)

@@ -32,7 +32,7 @@ to be used as a criteria.}
 
 \item{is_sorted}{Optional logical to indicate that the \code{cluster_df} is
 already sorted by cluster based on (usually multiple) internal criteria to
-pick the first of each cluster. This flag is \strong{overriden} if a \code{metadata_df}
+pick the first of each cluster. This flag is \strong{overridden} if a \code{metadata_df}
 is provided.}
 }
 \value{
@@ -43,7 +43,7 @@ this tibble are added to the returned tibble.
 }
 \description{
 Using the clusters information, and potential additional metadata as external
-criteria, spectra are labelled as to be picked for each cluster. Note that some
+criteria, spectra are labeled as to be picked for each cluster. Note that some
 spectra and therefore clusters can be explicitly removed (\emph{masked})
 from the picking decision if they have been previously picked
 or should be discarded, using logical columns in the metadata table.
@@ -106,7 +106,7 @@ metadata <- metadata \%>\% dplyr::mutate(
   picked_before = grepl("_F", name)
 )
 # 4.2 Pick the spectra from clusters without spectra
-#   labelled as `picked_before` (hard masking).
+#   labeled as `picked_before` (hard masking).
 pick_spectra(clusters, metadata, "OD600",
   hard_mask_column = "picked_before"
 ) \%>\%

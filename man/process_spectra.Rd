@@ -29,7 +29,7 @@ Based on the original implementation, the function performs the following tasks:
 \item Mass range trimming to 4-10 kDa as they were deemed most determinant by Strejcek et al. (2018)
 \item Signal smoothing using the Savitzky-Golay method and a half window size of 20
 \item Baseline correction with the SNIP procedure
-\item Normalisation by Total Ion Current
+\item Normalization by Total Ion Current
 \item Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
 \item Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 }

@@ -3,7 +3,7 @@
 #' Delineate clusters from taxonomic identifications
 #'
 #' From the report of taxonomic identification produced by the Bruker MALDI Biotyper
-#' spectra sharing the same identification are labelled in the same cluster.
+#' spectra sharing the same identification are labeled in the same cluster.
 #' Spectra with unknown identification (e.g., due to database completeness) are set in unique cluster.
 #'
 #' @param tibble_report A tibble of *n* rows, with *n* the number of spectra,

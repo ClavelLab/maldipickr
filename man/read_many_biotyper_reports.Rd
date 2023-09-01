@@ -22,7 +22,7 @@ A tibble just like the \code{\link[=read_biotyper_report]{read_biotyper_report()
 Importing a list of Bruker MALDI Biotyper CSV reports
 }
 \note{
-The report identifiers are sanitised to convert all dashes (\code{-}) as underscores (\verb{_}).
+The report identifiers are sanitized to convert all dashes (\code{-}) as underscores (\verb{_}).
 }
 \examples{
 # List of Bruker MALDI Biotyper reports

@@ -4,11 +4,11 @@
 \name{maldipickr-package}
 \alias{maldipickr}
 \alias{maldipickr-package}
-\title{maldipickr: Dereplicate And Cherry-pick Mass Spectrometry Spectra}
+\title{maldipickr: Dereplicate And Cherry-Pick Mass Spectrometry Spectra}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Convenient wrapper functions for the analysis of matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (aka cherry-pick). The package covers the preprocessing and dereplication steps needed to cluster MALDI-TOF spectra before the final cherry-picking step. This package relies heavily on the 'MALDIquant' package albeit with a 'tidyverse' flavour.
+Convenient wrapper functions for the analysis of matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (also called cherry-pick). The package covers the preprocessing and dereplication steps needed to cluster MALDI-TOF spectra before the final cherry-picking step. It enables the easy exclusion of spectra and/or clusters to accommodate complex cherry-picking strategies. Alternatively, cherry-picking using taxonomic identification MALDI-TOF data is made easy with functions to import inconsistently formatted reports.
 }
 \seealso{
 Useful links:
@@ -19,7 +19,14 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Charlie Pauvert \email{cpauvert@users.noreply.github.com} (\href{https://orcid.org/0000-0001-9832-2507}{ORCID})
+\strong{Maintainer}: Charlie Pauvert \email{cpauvert@ukaachen.de} (\href{https://orcid.org/0000-0001-9832-2507}{ORCID})
+
+Other contributors:
+\itemize{
+  \item David Wylensek (\href{https://orcid.org/0000-0002-8424-5712}{ORCID}) [contributor]
+  \item Selina Nüchtern [contributor]
+  \item Thomas Clavel (\href{https://orcid.org/0000-0002-7229-5595}{ORCID}) [contributor, funder]
+}
 
 }
 \keyword{internal}

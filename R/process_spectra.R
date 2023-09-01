@@ -9,7 +9,7 @@
 #' 2. Mass range trimming to 4-10 kDa as they were deemed most determinant by Strejcek et al. (2018)
 #' 3. Signal smoothing using the Savitzky-Golay method and a half window size of 20
 #' 4. Baseline correction with the SNIP procedure
-#' 5. Normalisation by Total Ion Current
+#' 5. Normalization by Total Ion Current
 #' 6. Peak detection using the SuperSmoother procedure and with a signal-to-noise ratio above 3
 #' 7. Peak filtering. This step has been added to discard peaks with a negative signal-to-noise ratio probably due to being on the edge of the mass range.
 #'
@@ -52,7 +52,7 @@ process_spectra <- function(spectra_list, rds_prefix = NULL) {
   # 2. Mass range trimming
   # 3. Signal smoothing
   # 4. Baseline Correction
-  # 5. Normalisation
+  # 5. Normalization
   spectra <- spectra_list %>%
     MALDIquant::transformIntensity("sqrt") %>%
     MALDIquant::trim(range = c(4000, 10000)) %>%

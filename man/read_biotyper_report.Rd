@@ -17,12 +17,12 @@ read_biotyper_report(path, best_hits = TRUE, long_format = TRUE)
 A tibble of 7 columns (\code{best_hits = TRUE}) or 52 columns (\code{best_hits = FALSE}). See Details for the description of the columns.
 }
 \description{
-The headerless table exported by the Compass software in the Bruker MALDI
+The header-less table exported by the Compass software in the Bruker MALDI
 Biotyper device is separated by semi-colons and has empty columns which prevent
 an easy import in R. This function reads the report correctly as a tibble.
 }
 \details{
-The headerless table contains identification information for each target processed by
+The header-less table contains identification information for each target processed by
 the Biotyper device and once processed by the \code{read_biotyper_report},
 the following seven columns are available in the tibble, \emph{when using the \code{best_hits = TRUE} option}:
 \itemize{

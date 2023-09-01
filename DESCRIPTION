@@ -1,24 +1,25 @@
 Package: maldipickr
 Title: Dereplicate And Cherry-Pick Mass Spectrometry Spectra
 Version: 0.1.0
-Authors@R: c(person(given = "Charlie",
-         family = "Pauvert",
-         role = c("aut", "cre"),
-         email = "cpauvert@ukaachen.de",
-         comment = c(ORCID = "0000-0001-9832-2507")),
-  person(given = "David",
-         family = "Wylensek",
-         role = "ctb",
-         comment = c(ORCID = "0000-0002-8424-5712")),
-  person(given = "Selina",
-         family = "Nüchtern",
-         role = "ctb"),
-  person(given = "Thomas",
-         family = "Clavel",
-         role = c("ctb", "fnd"),
-         comment = c(ORCID = "0000-0002-7229-5595")))
-Description: Convenient wrapper functions for the analysis of matrix-assisted laser
-        desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (also called cherry-pick). The package covers the preprocessing and dereplication steps needed to cluster MALDI-TOF spectra before the final cherry-picking step. It enables the easy exclusion of spectra and/or clusters to accommodate complex cherry-picking strategies. Alternatively, cherry-picking using taxonomic identification MALDI-TOF data is made easy with functions to import inconsistently formatted reports.
+Authors@R: c(
+    person("Charlie", "Pauvert", , "cpauvert@ukaachen.de", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9832-2507")),
+    person("David", "Wylensek", role = "ctb",
+           comment = c(ORCID = "0000-0002-8424-5712")),
+    person("Selina", "Nüchtern", role = "ctb"),
+    person("Thomas", "Clavel", role = c("ctb", "fnd"),
+           comment = c(ORCID = "0000-0002-7229-5595"))
+  )
+Description: Convenient wrapper functions for the analysis of
+    matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF)
+    spectra data in order to select only representative spectra (also
+    called cherry-pick). The package covers the preprocessing and
+    dereplication steps needed to cluster MALDI-TOF spectra before the
+    final cherry-picking step. It enables the easy exclusion of spectra
+    and/or clusters to accommodate complex cherry-picking strategies.
+    Alternatively, cherry-picking using taxonomic identification MALDI-TOF
+    data is made easy with functions to import inconsistently formatted
+    reports.
 License: GPL (>= 3)
 URL: https://github.com/ClavelLab/maldipickr
 BugReports: https://github.com/ClavelLab/maldipickr/issues

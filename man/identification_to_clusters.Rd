@@ -20,7 +20,7 @@ A tibble of \emph{n} rows for each spectra and 3 columns:
 }
 \description{
 From the report of taxonomic identification produced by the Bruker MALDI Biotyper
-spectra sharing the same identification are labelled in the same cluster.
+spectra sharing the same identification are labeled in the same cluster.
 Spectra with unknown identification (e.g., due to database completeness) are set in unique cluster.
 }
 \details{

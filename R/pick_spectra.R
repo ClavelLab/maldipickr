@@ -3,7 +3,7 @@
 #' Cherry-pick Bruker MALDI Biotyper spectra
 #'
 #' Using the clusters information, and potential additional metadata as external
-#' criteria, spectra are labelled as to be picked for each cluster. Note that some
+#' criteria, spectra are labeled as to be picked for each cluster. Note that some
 #' spectra and therefore clusters can be explicitly removed (_masked_)
 #' from the picking decision if they have been previously picked
 #' or should be discarded, using logical columns in the metadata table.
@@ -20,7 +20,7 @@
 #' @param is_descending_order Optional logical indicating whether to sort the `criteria_column` from the highest-to-lowest value (`TRUE`) or lowest-to-highest (`FALSE`).
 #' @param is_sorted Optional logical to indicate that the `cluster_df` is
 #' already sorted by cluster based on (usually multiple) internal criteria to
-#' pick the first of each cluster. This flag is **overriden** if a `metadata_df`
+#' pick the first of each cluster. This flag is **overridden** if a `metadata_df`
 #' is provided.
 #'
 #' @return A tibble with as many rows as `cluster_df` with an additional logical
@@ -88,7 +88,7 @@
 #'   picked_before = grepl("_F", name)
 #' )
 #' # 4.2 Pick the spectra from clusters without spectra
-#' #   labelled as `picked_before` (hard masking).
+#' #   labeled as `picked_before` (hard masking).
 #' pick_spectra(clusters, metadata, "OD600",
 #'   hard_mask_column = "picked_before"
 #' ) %>%
