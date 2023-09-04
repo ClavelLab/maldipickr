@@ -91,7 +91,7 @@ an easy import in R. This function reads the report correctly as a tibble.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The header-less table contains identification information for each target processed by
 the Biotyper device and once processed by the <code>read_biotyper_report</code>,
-the following seven columns are available in the tibble, <em>when using the <code>best_hits = TRUE</code> option</em>:</p><ul><li><p><code>spot</code>: an integer indicating the spot number of the MALDI target (i.e., plate)</p></li>
+the following seven columns are available in the tibble, <em>when using the <code>best_hits = TRUE</code> option</em>:</p><ul><li><p><code>name</code>: a character indicating the name of the spot of the MALDI target (i.e., plate)</p></li>
 <li><p><code>sample_name</code>: the character string provided during the preparation of the MALDI target (i.e., plate)</p></li>
 <li><p><code>hit_rank</code>: an integer indicating the rank of the hit for the corresponding target and identification</p></li>
 <li><p><code>bruker_quality</code>: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"</p></li>
@@ -101,7 +101,7 @@ the following seven columns are available in the tibble, <em>when using the <cod
 <li><p><code>bruker_log</code>: the log-score of the identification.</p></li>
 </ul><p>When all hits are returned (with <code>best_hits = FALSE</code>), the default output format is the long format (<code>long_format = TRUE</code>), meaning that the previous columns remain
 unchanged, but all hits are now returned, thus increasing the number of rows.</p>
-<p>When all hits are returned (with <code>best_hits = FALSE</code>) <em>using the wide format</em> (<code>long_format = FALSE), the two columns </code>spot<code>and</code>sample_name<code>remains unchanged, but the five columns prefixed by</code>bruker_` contain the hit rank, <strong>creating a tibble of 52 columns</strong>:</p><ul><li><p><code>bruker_01_quality</code></p></li>
+<p>When all hits are returned (with <code>best_hits = FALSE</code>) <em>using the wide format</em> (<code>long_format = FALSE), the two columns </code>name<code>and</code>sample_name<code>remains unchanged, but the five columns prefixed by</code>bruker_` contain the hit rank, <strong>creating a tibble of 52 columns</strong>:</p><ul><li><p><code>bruker_01_quality</code></p></li>
 <li><p><code>bruker_01_species</code></p></li>
 <li><p><code>bruker_01_taxid</code></p></li>
 <li><p><code>bruker_01_hash</code></p></li>
@@ -131,7 +131,7 @@ unchanged, but all hits are now returned, thus increasing the number of rows.</p
 <span class="r-in"><span><span class="co"># Display the tibble</span></span></span>
 <span class="r-in"><span><span class="va">report_tibble</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   spot    sample_name hit_rank bruker_quality bruker_species        bruker_taxid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name    sample_name hit_rank bruker_quality bruker_species        bruker_taxid</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> targetA <span style="color: #BB0000;">NA</span>                 1 -              not reliable identif…           <span style="color: #BB0000;">NA</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> targetB <span style="color: #BB0000;">NA</span>                 1 +++            Escherichia coli               562</span>

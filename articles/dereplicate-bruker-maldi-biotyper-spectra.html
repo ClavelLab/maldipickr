@@ -262,13 +262,13 @@ cosine computation.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A. Compute the similarity matrix on the transposed feature matrix</span></span>
 <span><span class="co">#   using Pearson correlation coefficient</span></span>
-<span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
+<span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># B.1 Install the coop package</span></span>
 <span><span class="co"># install.packages("coop")</span></span>
 <span></span>
 <span><span class="co"># B.2 Compute the similarity matrix on the transposed feature matrix</span></span>
-<span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">coop</span><span class="fu">::</span><span class="fu">cosine</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">coop</span><span class="fu">::</span><span class="fu">cosine</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -422,7 +422,7 @@ will group spectra based on their identification.</p>
 <span><span class="fu"><a href="../reference/identification_to_clusters.html">identification_to_clusters</a></span><span class="op">(</span><span class="va">report_unknown</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Generating clusters from single report</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
-<span><span class="co">#&gt;   spot              membership cluster_size</span></span>
+<span><span class="co">#&gt;   name              membership cluster_size</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> unknown_isolate_1          2            1</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> unknown_isolate_2          3            1</span></span>

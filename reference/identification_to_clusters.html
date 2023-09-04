@@ -78,7 +78,7 @@ produced by <code><a href="read_biotyper_report.html">read_biotyper_report()</a>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A tibble of <em>n</em> rows for each spectra and 3 columns:</p><ul><li><p><code>name</code>: the spectra names either from the <code>spot</code> column when the input is from <code><a href="read_biotyper_report.html">read_biotyper_report()</a></code> or from the <code>name</code> column when from <code><a href="read_many_biotyper_reports.html">read_many_biotyper_reports()</a></code>.</p></li>
+<p>A tibble of <em>n</em> rows for each spectra and 3 columns:</p><ul><li><p><code>name</code>: the spectra names from the <code>name</code> column from the output of either <code><a href="read_biotyper_report.html">read_biotyper_report()</a></code> or <code><a href="read_many_biotyper_reports.html">read_many_biotyper_reports()</a></code>.</p></li>
 <li><p><code>membership</code>: integers stating the cluster number to which the spectra belong to. It starts from 1 to <em>c</em>, the total number of clusters.</p></li>
 <li><p><code>cluster_size</code>: integers indicating the total number of spectra in the corresponding cluster.</p></li>
 </ul></div>
@@ -99,7 +99,7 @@ produced by <code><a href="read_biotyper_report.html">read_biotyper_report()</a>
 <span class="r-in"><span><span class="fu">identification_to_clusters</span><span class="op">(</span><span class="va">report_unknown</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Generating clusters from single report</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   spot              membership cluster_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name              membership cluster_size</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> unknown_isolate_1          2            1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> unknown_isolate_2          3            1</span>
