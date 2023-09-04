@@ -258,21 +258,16 @@ feature matrix from <a href="https://clavellab.github.io/maldipickr/reference/me
 has spectra as rows and peaks values as columns. So to get a similarity
 matrix between spectra, the feature matrix must be transposed before
 cosine computation.</p>
-<pre><code>
-# A. Compute the similarity matrix on the transposed feature matrix
-
-#   using Pearson correlation coefficient
-
-sim_matrix &lt;- stats::cor( t(fm), method = "pearson)
-
-
-# B.1 Install the coop package
-
-# install.packages("coop")
-
-# B.2 Compute the similarity matrix on the transposed feature matrix
-
-sim_matrix &lt;- coop::cosine( t(fm) )</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># A. Compute the similarity matrix on the transposed feature matrix</span></span>
+<span><span class="co">#   using Pearson correlation coefficient</span></span>
+<span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># B.1 Install the coop package</span></span>
+<span><span class="co"># install.packages("coop")</span></span>
+<span></span>
+<span><span class="co"># B.2 Compute the similarity matrix on the transposed feature matrix</span></span>
+<span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">coop</span><span class="fu">::</span><span class="fu">cosine</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
