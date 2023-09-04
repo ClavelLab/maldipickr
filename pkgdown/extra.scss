@@ -1,0 +1,4 @@
+/* for litera theme, inherit global font not a hard-set one */
+p {
+  font-family:var(--bs-body-font-family);
+}
