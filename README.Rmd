@@ -85,4 +85,4 @@ The hexagonal logo was created by Charlie Pauvert and uses the [Hack](https://so
 * Gibb S & Strimmer K (2012). "MALDIquant: a versatile R package for the
   analysis of mass spectrometry data". *Bioinformatics* 28, 2270-2271. <https://doi.org/10.1093/bioinformatics/bts447>.
 * Rochette S (2023). "fusen: Build a Package from Rmarkdown Files". <https://thinkr-open.github.io/fusen/>, <https://github.com/Thinkr-open/fusen>.
-* Strejcek M, Smrhova T, Junkova P & Uhlik O (2012). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.
+* Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.

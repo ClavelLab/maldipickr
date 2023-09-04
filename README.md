@@ -109,7 +109,7 @@ generated at <https://coolors.co>.
 - Rochette S (2023). “fusen: Build a Package from Rmarkdown Files”.
   <https://thinkr-open.github.io/fusen/>,
   <https://github.com/Thinkr-open/fusen>.
-- Strejcek M, Smrhova T, Junkova P & Uhlik O (2012). “Whole-Cell
+- Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell
   MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and
   Dereplication of Recurrent Bacterial Isolates.” *Frontiers in
   Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.
