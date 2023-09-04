@@ -12,10 +12,17 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![codecov](https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://codecov.io/github/ClavelLab/maldipickr)
 <!-- badges: end -->
 
-The goal of [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) is
-to provide documented and tested R functions to dereplicate
-matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF)
-data and cherry-pick representative spectra of microbial isolates.
+- Are you using the MALDI-TOF[^1] Biotyper to identify bacterial
+  isolates? **Yes**
+- Do you want to select representative isolates for further experiments?
+  **Yes**
+- Do you need fast and automated selection decisions that you can
+  retrace? **Yes**
+
+↪ *The [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package
+is right for your needs!* The documented and tested R functions will
+help you dereplicate MALDI-TOF data and cherry-pick representative
+spectra of microbial isolates.
 
 ## Quickstart: cherry-pick bacterial isolates
 
@@ -113,3 +120,6 @@ generated at <https://coolors.co>.
   MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and
   Dereplication of Recurrent Bacterial Isolates.” *Frontiers in
   Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.
+
+[^1]: Matrix-Assisted Laser Desorption/Ionization-Time-Of-Flight
+    (MALDI-TOF)

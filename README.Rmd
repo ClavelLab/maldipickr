@@ -21,7 +21,14 @@ knitr::opts_chunk$set(
 [![codecov](https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://codecov.io/github/ClavelLab/maldipickr)
 <!-- badges: end -->
 
-The goal of [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) is to provide documented and tested R functions to dereplicate matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) data and cherry-pick representative spectra of microbial isolates.
+* Are you using the MALDI-TOF[^maldi] Biotyper to identify bacterial isolates? **Yes**
+* Do you want to select representative isolates for further experiments? **Yes**
+* Do you need fast and automated selection decisions that you can retrace? **Yes**
+
+↪ *The [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package is right for your needs!*
+The documented and tested R functions will help you dereplicate MALDI-TOF
+data and cherry-pick representative spectra of microbial isolates.
+
 
 ## Quickstart: cherry-pick bacterial isolates
 
@@ -86,3 +93,6 @@ The hexagonal logo was created by Charlie Pauvert and uses the [Hack](https://so
   analysis of mass spectrometry data". *Bioinformatics* 28, 2270-2271. <https://doi.org/10.1093/bioinformatics/bts447>.
 * Rochette S (2023). "fusen: Build a Package from Rmarkdown Files". <https://thinkr-open.github.io/fusen/>, <https://github.com/Thinkr-open/fusen>.
 * Strejcek M, Smrhova T, Junkova P & Uhlik O (2018). “Whole-Cell MALDI-TOF MS versus 16S rRNA Gene Analysis for Identification and Dereplication of Recurrent Bacterial Isolates.” *Frontiers in Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.
+
+
+[^maldi]: Matrix-Assisted Laser Desorption/Ionization-Time-Of-Flight (MALDI-TOF)
