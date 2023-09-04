@@ -1,5 +1,8 @@
 template:
-  bootswatch: lux
+  bootswatch: litera
   bootstrap: 5
   bslib:
-    pkgdown-nav-height: 125px
+    base_font: "Atkinson Hyperlegible"
+    code_font: "Hack"
+    primary: "#cf5c36"
+  theme: "tango"
