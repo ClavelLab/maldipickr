@@ -126,13 +126,13 @@ So to get a similarity matrix between spectra, the feature matrix must be transp
 ```{r similarity, eval = FALSE}
 # A. Compute the similarity matrix on the transposed feature matrix
 #   using Pearson correlation coefficient
-sim_matrix <- stats::cor( t(fm), method = "pearson")
+sim_matrix <- stats::cor(t(fm), method = "pearson")
 
 # B.1 Install the coop package
 # install.packages("coop")
 
 # B.2 Compute the similarity matrix on the transposed feature matrix
-sim_matrix <- coop::cosine( t(fm) )
+sim_matrix <- coop::cosine(t(fm))
 ```
 
 # Delineate clusters of spectra
