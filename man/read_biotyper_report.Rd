@@ -26,7 +26,7 @@ The header-less table contains identification information for each target proces
 the Biotyper device and once processed by the \code{read_biotyper_report},
 the following seven columns are available in the tibble, \emph{when using the \code{best_hits = TRUE} option}:
 \itemize{
-\item \code{spot}: an integer indicating the spot number of the MALDI target (i.e., plate)
+\item \code{name}: a character indicating the name of the spot of the MALDI target (i.e., plate)
 \item \code{sample_name}: the character string provided during the preparation of the MALDI target (i.e., plate)
 \item \code{hit_rank}: an integer indicating the rank of the hit for the corresponding target and identification
 \item \code{bruker_quality}: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"
@@ -39,7 +39,7 @@ the following seven columns are available in the tibble, \emph{when using the \c
 When all hits are returned (with \code{best_hits = FALSE}), the default output format is the long format (\code{long_format = TRUE}), meaning that the previous columns remain
 unchanged, but all hits are now returned, thus increasing the number of rows.
 
-When all hits are returned (with \code{best_hits = FALSE}) \emph{using the wide format} (\verb{long_format = FALSE), the two columns }spot\code{and}sample_name\verb{remains unchanged, but the five columns prefixed by}bruker_` contain the hit rank, \strong{creating a tibble of 52 columns}:
+When all hits are returned (with \code{best_hits = FALSE}) \emph{using the wide format} (\verb{long_format = FALSE), the two columns }name\code{and}sample_name\verb{remains unchanged, but the five columns prefixed by}bruker_` contain the hit rank, \strong{creating a tibble of 52 columns}:
 \itemize{
 \item \code{bruker_01_quality}
 \item \code{bruker_01_species}

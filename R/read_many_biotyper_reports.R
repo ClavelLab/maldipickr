@@ -7,7 +7,7 @@
 #' @param best_hits A logical indicating whether to return only the best hit in the [read_biotyper_report()] function.
 #' @param ... Name-value pairs to be passed on to [dplyr::mutate()]
 #'
-#' @return A tibble just like the [read_biotyper_report()] function except for an additional column `name` with the `report_ids` used as a prefix of the `spot` name.
+#' @return A tibble just like the one returned by the [read_biotyper_report()] function, except that the name of the spot of the MALDI target (i.e., plate) is registered to the `original_name` column (instead of the `name` column), and the column `name` consist in the provided `report_ids` used as a prefix of the `original_name` column.
 #'
 #' @seealso [read_biotyper_report]
 #'
@@ -30,10 +30,14 @@
 #' )
 read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = TRUE, ...) {
   # Import the Bruker Biotyper reports as a named list
+  # Having name as first column always is to enable
+  #  taxonomic identification cherry-picking
   breports <- lapply(
     path_to_reports,
-    read_biotyper_report,
-    best_hits
+    function(path) {
+      read_biotyper_report(path, best_hits) %>%
+        dplyr::rename("original_name" = "name")
+    }
   )
   names(breports) <- report_ids
   # Conversion of a named list of dataframe to the dataframe with the name as
@@ -41,7 +45,7 @@ read_many_biotyper_reports <- function(path_to_reports, report_ids, best_hits = 
   tibble::enframe(breports) %>%
     tidyr::unnest("value") %>%
     dplyr::mutate(
-      "name" = paste(gsub("-", "_", .data$name), .data$spot, sep = "_"),
+      "name" = paste(gsub("-", "_", .data$name), .data$original_name, sep = "_"),
       ...
     ) %>%
     return()

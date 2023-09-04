@@ -16,7 +16,7 @@ read_many_biotyper_reports(path_to_reports, report_ids, best_hits = TRUE, ...)
 \item{...}{Name-value pairs to be passed on to \code{\link[dplyr:mutate]{dplyr::mutate()}}}
 }
 \value{
-A tibble just like the \code{\link[=read_biotyper_report]{read_biotyper_report()}} function except for an additional column \code{name} with the \code{report_ids} used as a prefix of the \code{spot} name.
+A tibble just like the one returned by the \code{\link[=read_biotyper_report]{read_biotyper_report()}} function, except that the name of the spot of the MALDI target (i.e., plate) is registered to the \code{original_name} column (instead of the \code{name} column), and the column \code{name} consist in the provided \code{report_ids} used as a prefix of the \code{original_name} column.
 }
 \description{
 Importing a list of Bruker MALDI Biotyper CSV reports

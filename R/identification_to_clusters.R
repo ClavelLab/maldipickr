@@ -12,7 +12,7 @@
 #' @details As all unknown identification are considered unique clusters _within one input tibble_, it is important to consider whether the taxonomic identifications come from a single report or multiple reports, depending on the research question. A message is displayed to confirm from which type of reports the delineation was done.
 #'
 #' @return A tibble of *n* rows for each spectra and 3 columns:
-#' * `name`: the spectra names either from the `spot` column when the input is from [read_biotyper_report()] or from the `name` column when from [read_many_biotyper_reports()].
+#' * `name`: the spectra names from the `name` column from the output of either [read_biotyper_report()] or [read_many_biotyper_reports()].
 #' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
 #'
@@ -27,12 +27,15 @@
 identification_to_clusters <- function(tibble_report) {
   # check correct names and number of columns
   single_report_cols <- c(
-    "spot", "sample_name",
+    "name", "sample_name",
     "hit_rank", "bruker_quality",
     "bruker_species", "bruker_taxid",
     "bruker_hash", "bruker_log"
   )
-  many_reports_cols <- c("name", single_report_cols)
+  many_reports_cols <- c(
+    "name",
+    gsub("^name$", "original_name", single_report_cols)
+  )
   if (identical(
     base::colnames(tibble_report),
     single_report_cols

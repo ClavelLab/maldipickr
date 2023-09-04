@@ -11,7 +11,7 @@
 #' The header-less table contains identification information for each target processed by
 #' the Biotyper device and once processed by the `read_biotyper_report`,
 #' the following seven columns are available in the tibble, _when using the `best_hits = TRUE` option_:
-#' * `spot`: an integer indicating the spot number of the MALDI target (i.e., plate)
+#' * `name`: a character indicating the name of the spot of the MALDI target (i.e., plate)
 #' * `sample_name`: the character string provided during the preparation of the MALDI target (i.e., plate)
 #' * `hit_rank`: an integer indicating the rank of the hit for the corresponding target and identification
 #' * `bruker_quality`: a character encoding the quality of the identification with potentially multiple "+" symbol or only one "-"
@@ -23,7 +23,7 @@
 #' When all hits are returned (with `best_hits = FALSE`), the default output format is the long format (`long_format = TRUE`), meaning that the previous columns remain
 #' unchanged, but all hits are now returned, thus increasing the number of rows.
 #'
-#' When all hits are returned (with `best_hits = FALSE`) _using the wide format_ (`long_format = FALSE), the two columns `spot` and `sample_name`
+#' When all hits are returned (with `best_hits = FALSE`) _using the wide format_ (`long_format = FALSE), the two columns `name` and `sample_name`
 #' remains unchanged, but the five columns prefixed by `bruker_` contain the hit rank, **creating a tibble of 52 columns**:
 #'
 #' * `bruker_01_quality`
@@ -71,15 +71,17 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
 
   # Read in the report, usually warnings about problems and
   #  inconsistent number of columns are triggered
+  # Having name as first column always is to enable
+  #  taxonomic identification cherry-picking
   breport <- utils::read.delim(
     path,
-    col.names = c("spot", "sample_name", prep_names$col_names),
+    col.names = c("name", "sample_name", prep_names$col_names),
     sep = ";", header = FALSE,
     na = c("NA", "E1", "E2", "") # Added E1 identification in taxid as NA
   )
   no_peak_lgl <- breport$bruker_01_species == "no peaks found"
 
-  # Remove the spot for which no peaks were detected, and warn the user
+  # Remove the spot name for which no peaks were detected, and warn the user
   breport <- tibble::as_tibble(breport) %>%
     # Empty sample_name are considered logical and this is undesirable
     dplyr::mutate("sample_name" = as.character(.data$sample_name)) %>%
@@ -97,7 +99,7 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
   # Can't subset columns that don't exist (quality for instance)
   if (nrow(breport) == 0) {
     tibble::tibble(
-      "spot" = character(), "sample_name" = character(), "hit_rank" = integer(),
+      "name" = character(), "sample_name" = character(), "hit_rank" = integer(),
       "bruker_quality" = character(), "bruker_species" = character(),
       "bruker_taxid" = numeric(), "bruker_hash" = character(),
       "bruker_log" = numeric()
@@ -122,11 +124,11 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
       # Subset the table with only the character variables
       report_chr <- breport %>%
         dplyr::select(
-          c("spot", "sample_name") |
+          c("name", "sample_name") |
             tidyselect::contains("bruker") & tidyselect::where(is.character)
         ) %>%
         tidyr::pivot_longer(
-          !c("spot", "sample_name"),
+          !c("name", "sample_name"),
           names_to = c("hit_rank", "type"),
           names_pattern = "bruker_(.*)_(.*)"
         ) %>%
@@ -134,11 +136,11 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
 
       report_num <- breport %>%
         dplyr::select(
-          tidyselect::all_of(c("spot", "sample_name")) |
+          tidyselect::all_of(c("name", "sample_name")) |
             tidyselect::contains("bruker") & tidyselect::where(is.numeric)
         ) %>%
         tidyr::pivot_longer(
-          !tidyselect::all_of(c("spot", "sample_name")),
+          !tidyselect::all_of(c("name", "sample_name")),
           names_to = c("hit_rank", "type"),
           names_pattern = "bruker_(.*)_(.*)"
         ) %>%
@@ -148,22 +150,22 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
       breport <- dplyr::full_join(
         report_chr,
         report_num,
-        by = c("spot", "sample_name", "hit_rank")
+        by = c("name", "sample_name", "hit_rank")
       ) %>%
         dplyr::mutate("hit_rank" = strtoi(.data$hit_rank, base = 10L)) %>%
         dplyr::relocate(
           c(
-            "spot", "sample_name", "hit_rank",
+            "name", "sample_name", "hit_rank",
             "quality", "species", "taxid", "hash", "log"
           )
         ) %>%
         dplyr::rename_with(
           ~ paste0("bruker_", .x),
-          !c("spot", "sample_name", "hit_rank")
+          !c("name", "sample_name", "hit_rank")
         )
     }
     # when all hits are used, pivot the wide table
-    # to have the spot sample_name hit_number and the rest of the column
+    # to have the name sample_name hit_number and the rest of the column
     if (best_hits) {
       breport %>%
         dplyr::filter(.data$hit_rank == 1) %>%

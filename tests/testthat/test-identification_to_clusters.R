@@ -26,7 +26,7 @@ test_that("identification_to_clusters works with correct single report tibble", 
 test_that("identification_to_clusters fails modified single report tibble", {
   expect_error(
     identification_to_clusters(
-      report_unknown %>% dplyr::select(!c("spot"))
+      report_unknown %>% dplyr::select(!c("name"))
     ),
     "Unexpected format of Biotyper report."
   )
