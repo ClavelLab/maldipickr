@@ -390,7 +390,7 @@ Indeed, the matrix is essentially an adjacency network, where nodes are spectra 
 This representation allows to infer the clusters easily. A table summarizes for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
 
 
-```{r function-delineate_with_similarity}
+```{r function-delineate_with_similarity, filename = "delineate_with_similarity"}
 #' Delineate clusters from a similarity matrix
 #'
 #' From a matrix of spectra similarity (e.g., with the cosine metric,
@@ -547,7 +547,7 @@ We choose to define high-quality spectra as representative spectra of the cluste
 
 The function [`set_reference_spectra()`](https://clavellab.github.io/maldipickr/reference/set_reference_spectra.html) does not change the order of the cluster table but merely adds an additional column `is_reference` to indicate whether the corresponding spectrum is representative of the cluster. 
     
-```{r function-set_reference_spectra}
+```{r function-set_reference_spectra, filename="set_reference_spectra"}
 #' Set a reference spectrum for each cluster
 #'
 #' Define a high-quality spectra as a representative

@@ -2,7 +2,6 @@
 
 processed <- system.file("toy-species-spectra", package = "maldipickr") %>%
   import_biotyper_spectra() %>%
-  suppressMessages() %>%
   process_spectra()
 cosine_similarity <- matrix(
   c(
@@ -25,7 +24,7 @@ cosine_similarity <- matrix(
     )
   )
 )
-clusters <- similarity_to_clusters(cosine_similarity, threshold = 0.92)
+clusters <- delineate_with_similarity(cosine_similarity, threshold = 0.92)
 test_that("set_reference_spectra works", {
   expect_equal(
     set_reference_spectra(clusters, processed$metadata)$is_reference,

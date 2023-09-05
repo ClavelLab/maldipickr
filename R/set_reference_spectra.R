@@ -7,7 +7,7 @@
 #' and the number of detected peaks
 #'
 #'
-#' @param cluster_df A tibble of *n* rows for each spectra produced by [similarity_to_clusters] function with at least the following columns:
+#' @param cluster_df A tibble of *n* rows for each spectra produced by [delineate_with_similarity] function with at least the following columns:
 #' * `name`: the rownames of the similarity matrix indicating the spectra names
 #' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
@@ -16,7 +16,7 @@
 #'
 #' @return A merged tibble in the same order as `cluster_df` with both the columns of `cluster_df` and `metadata_df`, as well as a logical column `is_reference` indicating if the spectrum is the reference spectra of the cluster.
 #'
-#' @seealso [similarity_to_clusters], [pick_spectra]
+#' @seealso [delineate_with_similarity], [pick_spectra]
 #'
 #' @export
 #' @examples
@@ -28,7 +28,6 @@
 #'   package = "maldipickr"
 #' ) %>%
 #'   import_biotyper_spectra() %>%
-#'   suppressMessages() %>%
 #'   process_spectra()
 #'
 #' # Toy similarity matrix between the six example spectra of
@@ -58,7 +57,7 @@
 #' )
 #' # Delineate clusters based on a 0.92 threshold applied
 #' #  to the similarity matrix
-#' clusters <- similarity_to_clusters(
+#' clusters <- delineate_with_similarity(
 #'   cosine_similarity,
 #'   threshold = 0.92
 #' )
