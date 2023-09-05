@@ -283,7 +283,7 @@ cosine computation.</p>
 <p>When the similarity matrix is computed between all pairs of the
 studied spectra, the next step is to delineate clusters of spectra to
 dereplicate the measured bacterial colonies.</p>
-<p>The <a href="https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html" class="external-link"><code>similarity_to_clusters()</code></a>
+<p>The <a href="https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html" class="external-link"><code>delineate_with_similarity()</code></a>
 is agnostic of the similarity metric used, whether it is the cosine
 metric or the Pearson product moment, provided that a numeric threshold
 relevant to the metric used is given, and <em>above which</em> two
@@ -323,7 +323,7 @@ total number of spectra in the cluster.</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># Delineate clusters based on a 0.92 threshold applied</span></span>
 <span><span class="co">#  to the similarity matrix</span></span>
-<span><span class="fu"><a href="../reference/similarity_to_clusters.html">similarity_to_clusters</a></span><span class="op">(</span><span class="va">cosine_similarity</span>, threshold <span class="op">=</span> <span class="fl">0.92</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/delineate_with_similarity.html">delineate_with_similarity</a></span><span class="op">(</span><span class="va">cosine_similarity</span>, threshold <span class="op">=</span> <span class="fl">0.92</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">#&gt;   name         membership cluster_size</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
@@ -356,7 +356,6 @@ corresponding spectrum is representative of the cluster.</p>
 <span>  package <span class="op">=</span> <span class="st">"maldipickr"</span></span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/import_biotyper_spectra.html">import_biotyper_spectra</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/process_spectra.html">process_spectra</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Toy similarity matrix between the six example spectra of</span></span>
@@ -386,7 +385,7 @@ corresponding spectrum is representative of the cluster.</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># Delineate clusters based on a 0.92 threshold applied</span></span>
 <span><span class="co">#  to the similarity matrix</span></span>
-<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/similarity_to_clusters.html">similarity_to_clusters</a></span><span class="op">(</span></span>
+<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delineate_with_similarity.html">delineate_with_similarity</a></span><span class="op">(</span></span>
 <span>  <span class="va">cosine_similarity</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">0.92</span></span>
 <span><span class="op">)</span></span>
@@ -413,13 +412,13 @@ delineate clusters. To do so, we must use the Bruker MALDI Biotyper
 report from the Compass software that summarize the identification of
 the microorganisms using its internal database. Once the report or
 reports are imported (in R using <a href="https://clavellab.github.io/maldipickr/reference/read_biotyper_report.html" class="external-link"><code>read_biotyper_report()</code></a>),
-the function <a href="https://clavellab.github.io/maldipickr/reference/identification_to_clusters.html" class="external-link"><code>identification_to_clusters()</code></a>
-will group spectra based on their identification.</p>
+the function <a href="https://clavellab.github.io/maldipickr/reference/delineate_with_identification.html" class="external-link"><code>delineate_with_identification()</code></a>
+will group spectra based on their identifications.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">report_unknown</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_biotyper_report.html">read_biotyper_report</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"biotyper_unknown.csv"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/identification_to_clusters.html">identification_to_clusters</a></span><span class="op">(</span><span class="va">report_unknown</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/delineate_with_identification.html">delineate_with_identification</a></span><span class="op">(</span><span class="va">report_unknown</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Generating clusters from single report</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">#&gt;   name              membership cluster_size</span></span>
@@ -435,7 +434,7 @@ Biotyper report.</p>
 <p>Therefore, users interested in cherry-picking spectra using taxonomic
 identifications should use the <a href="https://clavellab.github.io/maldipickr/reference/pick_spectra.html" class="external-link"><code>pick_spectra()</code></a>
 function described below with the combination of the input and output
-tables of the <a href="https://clavellab.github.io/maldipickr/reference/identification_to_clusters.html" class="external-link"><code>identification_to_clusters()</code></a>
+tables of the <a href="https://clavellab.github.io/maldipickr/reference/delineate_with_identification.html" class="external-link"><code>delineate_with_identification()</code></a>
 function to pick for instance spectra with the highest log score (using
 <code>criteria_column = "bruker_log"</code>).</p>
 </div>
@@ -480,7 +479,7 @@ function.</p>
 using different types of inputs:</p>
 <ul>
 <li>the reference spectra information that is present in the cluster
-table (after using <a href="https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html" class="external-link"><code>similarity_to_clusters()</code></a>
+table (after using <a href="https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html" class="external-link"><code>delineate_with_similarity()</code></a>
 or <a href="https://clavellab.github.io/maldipickr/reference/import_spede_clusters.html" class="external-link"><code>import_spede_clusters()</code></a>
 functions; see example 1)</li>
 <li>an external metadata table containing a variable (e.g., optical
@@ -512,7 +511,7 @@ spectra should be picked (<code>TRUE</code>) or not picked
 (<code>FALSE</code>).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 0. Load a toy example of a tibble of clusters created by</span></span>
-<span><span class="co">#   the `similarity_to_clusters` function.</span></span>
+<span><span class="co">#   the `delineate_with_similarity` function.</span></span>
 <span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"clusters_tibble.RDS"</span>,</span>
 <span>    package <span class="op">=</span> <span class="st">"maldipickr"</span></span>

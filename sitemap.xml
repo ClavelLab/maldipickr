@@ -28,7 +28,10 @@
     <loc>/reference/check_spectra.html</loc>
   </url>
   <url>
-    <loc>/reference/identification_to_clusters.html</loc>
+    <loc>/reference/delineate_with_identification.html</loc>
+  </url>
+  <url>
+    <loc>/reference/delineate_with_similarity.html</loc>
   </url>
   <url>
     <loc>/reference/import_biotyper_spectra.html</loc>
@@ -65,8 +68,5 @@
   </url>
   <url>
     <loc>/reference/set_reference_spectra.html</loc>
-  </url>
-  <url>
-    <loc>/reference/similarity_to_clusters.html</loc>
   </url>
 </urlset>
