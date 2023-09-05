@@ -9,7 +9,7 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://codecov.io/github/ClavelLab/maldipickr)
+[![codecov](https://app.codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://app.codecov.io/github/ClavelLab/maldipickr)
 <!-- badges: end -->
 
 - Are you using the MALDI-TOF[^1] Biotyper to identify bacterial
@@ -140,12 +140,13 @@ built from a suite of Rmarkdown files using the
 ### Disclaimer
 
 The developers of this package are part of the [Clavel
-Lab](https://www.clavel.ukaachen.de) and are not affiliated with the
-company Bruker, therefore this package is independent of the company and
-is distributed under the [GPL-3.0 License](LICENSE.md).
+Lab](https://www.ukaachen.de/kliniken-institute/institut-fuer-medizinische-mikrobiologie/forschung/ag-clavel/)
+and are not affiliated with the company Bruker, therefore this package
+is independent of the company and is distributed under the [GPL-3.0
+License](LICENSE.md).
 
 The hexagonal logo was created by Charlie Pauvert and uses the
-[Hack](https://sourcefoundry.org/hack) font and a color palette
+[Hack](https://sourcefoundry.org/hack/) font and a color palette
 generated at <https://coolors.co>.
 
 ## References

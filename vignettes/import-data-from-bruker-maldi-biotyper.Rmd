@@ -141,7 +141,7 @@ read_many_biotyper_reports(
 # Importing spectra from the Bruker MALDI Biotyper device
 
 Other than the identification reports, the Bruker MALDI Biotyper device outputs the raw data used for the identification (if not the database) in the form of mass spectra.
-Thankfully, the [`{MALDIquant}`](https://strimmerlab.github.io/software/maldiquant) and [`{readBrukerFlexData}`](https://cran.r-project.org/package=readBrukerFlexData) packages help users import and manipulate these data in R.
+Thankfully, the [`{MALDIquant}`](https://strimmerlab.github.io/software/maldiquant/) and [`{readBrukerFlexData}`](https://cran.r-project.org/package=readBrukerFlexData) packages help users import and manipulate these data in R.
 
 
 
