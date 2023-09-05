@@ -54,7 +54,7 @@
     
     <a class="navbar-brand me-2" href="index.html">maldipickr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,11 @@
 <div class="section level2">
 <h2 id="quickstart">Quickstart<a class="anchor" aria-label="anchor" href="#quickstart"></a>
 </h2>
-<p>How to <strong>cherry-pick bacterial isolates</strong> with MALDI BioTyper.</p>
+<p>How to <strong>cherry-pick bacterial isolates</strong> with MALDI BioTyper:</p>
+<ul>
+<li><a href="#using-spectra-data">using spectra data</a></li>
+<li><a href="#using-taxonomic-identification-report">using taxonomic identification report</a></li>
+</ul>
 <div class="section level3">
 <h3 id="using-spectra-data">Using spectra data<a class="anchor" aria-label="anchor" href="#using-spectra-data"></a>
 </h3>
@@ -134,8 +138,7 @@
 <span><span class="va">processed</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/merge_processed_spectra.html">merge_processed_spectra</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">coop</span><span class="fu">::</span><span class="fu">cosine</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">coop</span><span class="fu">::</span><span class="fu">tcosine</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/delineate_with_similarity.html">delineate_with_similarity</a></span><span class="op">(</span>threshold <span class="op">=</span> <span class="fl">0.92</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/set_reference_spectra.html">set_reference_spectra</a></span><span class="op">(</span><span class="va">processed</span><span class="op">$</span><span class="va">metadata</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/pick_spectra.html">pick_spectra</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
@@ -174,7 +177,7 @@
 <span><span class="co">#   and cherry-pick one representative spectra.</span></span>
 <span><span class="co">#   The chosen ones are indicated by `to_pick` column</span></span>
 <span><span class="va">report_tbl</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">identification_to_clusters</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/delineate_with_identification.html">delineate_with_identification</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/pick_spectra.html">pick_spectra</a></span><span class="op">(</span><span class="va">report_tbl</span>, criteria_column <span class="op">=</span> <span class="st">"bruker_log"</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">to_pick</span>, <span class="va">bruker_species</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Generating clusters from single report</span></span>
@@ -192,10 +195,13 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>{maldipickr}</code></a> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p><a href="https://github.com/ClavelLab/maldipickr" class="external-link">maldipickr</a> was submitted to the CRAN for easy installation and awaits approval.</p>
+<p>In the meantime, to install the latest release, use the following:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ClavelLab/maldipickr"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ClavelLab/maldipickr@v1.0.0"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>For the development version, use the following:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ClavelLab/maldipickr"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -273,7 +279,7 @@
 <ul class="list-unstyled">
 <li><a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed."></a></li>
 <li><a href="https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://app.codecov.io/github/ClavelLab/maldipickr" class="external-link"><img src="https://app.codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB" alt="codecov"></a></li>
+<li><a href="https://app.codecov.io/github/ClavelLab/maldipickr" class="external-link"><img src="https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB" alt="codecov"></a></li>
 </ul>
 </div>
 
