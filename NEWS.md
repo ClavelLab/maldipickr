@@ -1,3 +1,9 @@
+# maldipickr 1.0.1
+
+## Changed
+
+* Fix title to titleCase for CRAN
+
 # maldipickr 1.0.0
 
 ## Changed
