@@ -11,3 +11,5 @@
 ^pkgdown$
 ^processed$
 ^codecov\.yml$
+^doc$
+^Meta$
