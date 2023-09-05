@@ -30,9 +30,11 @@ The documented and tested R functions will help you dereplicate MALDI-TOF
 data and cherry-pick representative spectra of microbial isolates.
 
 
-## Quickstart: cherry-pick bacterial isolates
+## Quickstart
 
-### From MALDI BioTyper spectra data
+How to **cherry-pick bacterial isolates** with MALDI BioTyper.
+
+### Using spectra data
 
 ```{r quickstart_spectra}
 library(maldipickr)
@@ -57,6 +59,29 @@ processed %>%
   pick_spectra() %>%
   dplyr::relocate(name, to_pick)
 ```
+
+
+### Using taxonomic identification report
+
+```{r quickstart_report, eval=TRUE}
+library(maldipickr)
+# Import Biotyper CSV report
+#  and glimpse at the table
+report_tbl <- read_biotyper_report(
+  system.file("biotyper_unknown.csv", package = "maldipickr")
+)
+report_tbl %>%
+  dplyr::select(name, bruker_species, bruker_log)
+
+# Delineate clusters from the identifications
+#   and cherry-pick one representative spectra.
+#   The chosen ones are indicated by `to_pick` column
+report_tbl %>%
+  identification_to_clusters() %>%
+  pick_spectra(report_tbl, criteria_column = "bruker_log") %>%
+  dplyr::relocate(name, to_pick, bruker_species)
+```
+
 
 ## Installation
 

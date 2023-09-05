@@ -24,9 +24,11 @@ is right for your needs!* The documented and tested R functions will
 help you dereplicate MALDI-TOF data and cherry-pick representative
 spectra of microbial isolates.
 
-## Quickstart: cherry-pick bacterial isolates
+## Quickstart
 
-### From MALDI BioTyper spectra data
+How to **cherry-pick bacterial isolates** with MALDI BioTyper.
+
+### Using spectra data
 
 ``` r
 library(maldipickr)
@@ -59,6 +61,44 @@ processed %>%
 #> 4 species3_F7  FALSE            1            4  4.89    26 FALSE       
 #> 5 species3_F8  TRUE             1            4  5.56    25 TRUE        
 #> 6 species3_F9  FALSE            1            4  5.40    25 FALSE
+```
+
+### Using taxonomic identification report
+
+``` r
+library(maldipickr)
+# Import Biotyper CSV report
+#  and glimpse at the table
+report_tbl <- read_biotyper_report(
+  system.file("biotyper_unknown.csv", package = "maldipickr")
+)
+report_tbl %>%
+  dplyr::select(name, bruker_species, bruker_log)
+#> # A tibble: 4 × 3
+#>   name              bruker_species               bruker_log
+#>   <chr>             <chr>                             <dbl>
+#> 1 unknown_isolate_1 not reliable identification        1.33
+#> 2 unknown_isolate_2 not reliable identification        1.4 
+#> 3 unknown_isolate_3 Faecalibacterium prausnitzii       1.96
+#> 4 unknown_isolate_4 Faecalibacterium prausnitzii       2.07
+
+# Delineate clusters from the identifications
+#   and cherry-pick one representative spectra.
+#   The chosen ones are indicated by `to_pick` column
+report_tbl %>%
+  identification_to_clusters() %>%
+  pick_spectra(report_tbl, criteria_column = "bruker_log") %>%
+  dplyr::relocate(name, to_pick, bruker_species)
+#> Generating clusters from single report
+#> # A tibble: 4 × 11
+#>   name       to_pick bruker_species membership cluster_size sample_name hit_rank
+#>   <chr>      <lgl>   <chr>               <int>        <int> <chr>          <int>
+#> 1 unknown_i… TRUE    not reliable …          2            1 <NA>               1
+#> 2 unknown_i… TRUE    not reliable …          3            1 <NA>               1
+#> 3 unknown_i… FALSE   Faecalibacter…          1            2 <NA>               1
+#> 4 unknown_i… TRUE    Faecalibacter…          1            2 <NA>               1
+#> # ℹ 4 more variables: bruker_quality <chr>, bruker_taxid <dbl>,
+#> #   bruker_hash <chr>, bruker_log <dbl>
 ```
 
 ## Installation
