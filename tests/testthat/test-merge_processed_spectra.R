@@ -19,16 +19,24 @@ test_that("merge_processed_spectra fails with the wrong input", {
     "is not a list or it is an empty list."
   )
 })
+
 test_that("merge_processed_spectra fails with only empty peaks", {
-  expect_error(
-    list(
+  expect_warning(
+    empty_peaks <- list(
       createMassSpectrum(
         mass = 4500:5000,
         intensity = rep(0, 501),
         metaData = list(fullName = "foo")
       )
-    ) %>% process_spectra() %>%
-      list() %>% merge_processed_spectra(),
-    "no list of MALDIquant::MassPeaks objects!"
+    ) %>% process_spectra(),
+    "MassSpectrum object is empty!"
+  )
+  expect_warning(
+    expect_error(
+      list(empty_peaks) %>%
+        merge_processed_spectra(),
+      "no list of MALDIquant::MassPeaks objects!"
+    ),
+    "No peaks were detected in the following spectra, so they will be removed"
   )
 })
