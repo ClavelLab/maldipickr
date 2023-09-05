@@ -16,7 +16,7 @@ pick_spectra(
 }
 \arguments{
 \item{cluster_df}{A tibble with clusters information
-from the \link{similarity_to_clusters} or the \link{import_spede_clusters} function.}
+from the \link{delineate_with_similarity} or the \link{import_spede_clusters} function.}
 
 \item{metadata_df}{Optional tibble with relevant metadata to guide the
 picking process (e.g., OD600).}
@@ -51,7 +51,7 @@ If no metadata are provided, the reference spectra of each cluster will be picke
 }
 \examples{
 # 0. Load a toy example of a tibble of clusters created by
-#   the `similarity_to_clusters` function.
+#   the `delineate_with_similarity` function.
 clusters <- readRDS(
   system.file("clusters_tibble.RDS",
     package = "maldipickr"
@@ -113,5 +113,5 @@ pick_spectra(clusters, metadata, "OD600",
   dplyr::relocate(name, to_pick) # only for clarity
 }
 \seealso{
-\link{similarity_to_clusters}, \link{set_reference_spectra}. For a useful utility function to soft-mask specific spectra: \link{is_well_on_edge}.
+\link{delineate_with_similarity}, \link{set_reference_spectra}. For a useful utility function to soft-mask specific spectra: \link{is_well_on_edge}.
 }

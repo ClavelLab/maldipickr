@@ -48,7 +48,7 @@ processed %>%
   merge_processed_spectra() %>%
   t() %>%
   coop::cosine() %>%
-  similarity_to_clusters(threshold = 0.92) %>%
+  delineate_with_similarity(threshold = 0.92) %>%
   set_reference_spectra(processed$metadata) %>%
   pick_spectra() %>%
   dplyr::relocate(name, to_pick)

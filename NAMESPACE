@@ -2,6 +2,8 @@
 
 export("%>%")
 export(check_spectra)
+export(delineate_with_identification)
+export(delineate_with_similarity)
 export(identification_to_clusters)
 export(import_biotyper_spectra)
 export(import_spede_clusters)

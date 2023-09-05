@@ -69,7 +69,11 @@ keep:
   path: keep
   state: active
   R:
+  - R/delineate_with_identification.R
+  - R/delineate_with_similarity.R
   - R/maldipickr-package.R
   - R/utils-pipe.R
-  tests: []
+  tests:
+  - tests/testthat/test-delineate_with_identification.R
+  - tests/testthat/test-delineate_with_similarity.R
   vignettes: []

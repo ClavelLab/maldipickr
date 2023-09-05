@@ -10,7 +10,7 @@
 #' If no metadata are provided, the reference spectra of each cluster will be picked.
 #'
 #' @param cluster_df A tibble with clusters information
-#' from the [similarity_to_clusters] or the [import_spede_clusters] function.
+#' from the [delineate_with_similarity] or the [import_spede_clusters] function.
 #' @param metadata_df Optional tibble with relevant metadata to guide the
 #' picking process (e.g., OD600).
 #' @param criteria_column Optional character indicating the column in `metadata_df`
@@ -28,12 +28,12 @@
 #' should be picked. If `metadata_df` is provided, then additional columns from
 #' this tibble are added to the returned tibble.
 #'
-#' @seealso [similarity_to_clusters], [set_reference_spectra]. For a useful utility function to soft-mask specific spectra: [is_well_on_edge].
+#' @seealso [delineate_with_similarity], [set_reference_spectra]. For a useful utility function to soft-mask specific spectra: [is_well_on_edge].
 #'
 #' @export
 #' @examples
 #' # 0. Load a toy example of a tibble of clusters created by
-#' #   the `similarity_to_clusters` function.
+#' #   the `delineate_with_similarity` function.
 #' clusters <- readRDS(
 #'   system.file("clusters_tibble.RDS",
 #'     package = "maldipickr"

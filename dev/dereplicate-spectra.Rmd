@@ -384,13 +384,13 @@ sim_matrix <- coop::cosine(t(fm))
 
 When the similarity matrix is computed between all pairs of the studied spectra, the next step is to delineate clusters of spectra to dereplicate the measured bacterial colonies.
 
-The [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
+The [`delineate_with_similarity()`](https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
 
 Indeed, the matrix is essentially an adjacency network, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
 This representation allows to infer the clusters easily. A table summarizes for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
 
 
-```{r function-similarity_to_clusters}
+```{r function-delineate_with_similarity}
 #' Delineate clusters from a similarity matrix
 #'
 #' From a matrix of spectra similarity (e.g., with the cosine metric,
@@ -418,9 +418,9 @@ This representation allows to infer the clusters easily. A table summarizes for 
 #'  2. It uses base R functions to reduce the dependencies
 #'
 #'
-#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [identification_to_clusters]. For further analyses: [set_reference_spectra].
+#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [delineate_with_identification]. For further analyses: [set_reference_spectra].
 #' @export
-similarity_to_clusters <- function(sim_matrix, threshold) {
+delineate_with_similarity <- function(sim_matrix, threshold) {
   if (!is.matrix(sim_matrix)) {
     stop("The similarity matrix is not a matrix.")
   }
@@ -461,7 +461,7 @@ similarity_to_clusters <- function(sim_matrix, threshold) {
 }
 ```
   
-```{r examples-similarity_to_clusters}
+```{r examples-delineate_with_similarity}
 # Toy similarity matrix between the six example spectra of
 #  three species. The cosine metric is used and a value of
 #  zero indicates dissimilar spectra and a value of one
@@ -489,10 +489,10 @@ cosine_similarity <- matrix(
 )
 # Delineate clusters based on a 0.92 threshold applied
 #  to the similarity matrix
-similarity_to_clusters(cosine_similarity, threshold = 0.92)
+delineate_with_similarity(cosine_similarity, threshold = 0.92)
 ```
   
-```{r tests-similarity_to_clusters}
+```{r tests-delineate_with_similarity}
 cosine_similarity <- matrix(
   c(
     1, 0.79, 0.77, 0.99, 0.98, 0.98,
@@ -514,26 +514,26 @@ cosine_similarity <- matrix(
     )
   )
 )
-test_that("similarity_to_clusters works", {
+test_that("delineate_with_similarity works", {
   expect_equal(
-    nrow(similarity_to_clusters(cosine_similarity, 0.92)), 6
+    nrow(delineate_with_similarity(cosine_similarity, 0.92)), 6
   )
   expect_equal(
-    similarity_to_clusters(cosine_similarity, 0.92)$membership,
+    delineate_with_similarity(cosine_similarity, 0.92)$membership,
     c(1, 2, 2, 1, 1, 1)
   )
 })
-test_that("similarity_to_clusters fails with wrong input", {
+test_that("delineate_with_similarity fails with wrong input", {
   expect_error(
-    similarity_to_clusters(cosine_similarity[, -1], 0.92),
+    delineate_with_similarity(cosine_similarity[, -1], 0.92),
     "not square"
   )
   expect_error(
-    similarity_to_clusters(unname(cosine_similarity), 0.92),
+    delineate_with_similarity(unname(cosine_similarity), 0.92),
     "no rownames or colnames."
   )
   expect_error(
-    similarity_to_clusters(cosine_similarity, TRUE),
+    delineate_with_similarity(cosine_similarity, TRUE),
     "not a numeric"
   )
 })
@@ -555,7 +555,7 @@ The function [`set_reference_spectra()`](https://clavellab.github.io/maldipickr/
 #' and the number of detected peaks
 #'
 #'
-#' @param cluster_df A tibble of *n* rows for each spectra produced by [similarity_to_clusters] function with at least the following columns:
+#' @param cluster_df A tibble of *n* rows for each spectra produced by [delineate_with_similarity] function with at least the following columns:
 #' * `name`: the rownames of the similarity matrix indicating the spectra names
 #' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
@@ -564,7 +564,7 @@ The function [`set_reference_spectra()`](https://clavellab.github.io/maldipickr/
 #'
 #' @return A merged tibble in the same order as `cluster_df` with both the columns of `cluster_df` and `metadata_df`, as well as a logical column `is_reference` indicating if the spectrum is the reference spectra of the cluster.
 #'
-#' @seealso [similarity_to_clusters], [pick_spectra]
+#' @seealso [delineate_with_similarity], [pick_spectra]
 #'
 #' @export
 set_reference_spectra <- function(cluster_df, metadata_df) {
@@ -652,7 +652,7 @@ cosine_similarity <- matrix(
 )
 # Delineate clusters based on a 0.92 threshold applied
 #  to the similarity matrix
-clusters <- similarity_to_clusters(
+clusters <- delineate_with_similarity(
   cosine_similarity,
   threshold = 0.92
 )
@@ -687,7 +687,7 @@ cosine_similarity <- matrix(
     )
   )
 )
-clusters <- similarity_to_clusters(cosine_similarity, threshold = 0.92)
+clusters <- delineate_with_similarity(cosine_similarity, threshold = 0.92)
 test_that("set_reference_spectra works", {
   expect_equal(
     set_reference_spectra(clusters, processed$metadata)$is_reference,
@@ -714,10 +714,10 @@ test_that("set_reference_spectra fails with inadequate metadata", {
 ## From taxonomic identifications
 
 An alternative to the similarity matrix approach from the previous section is to rely on the taxonomic identification of the spectra to delineate clusters.
-To do so, we must use the Bruker MALDI Biotyper report from the Compass software that summarize the identification of the microorganisms using its internal database. Once the report or reports are imported (in R using [`read_biotyper_report()`](https://clavellab.github.io/maldipickr/reference/read_biotyper_report.html)), the function [`identification_to_clusters()`](https://clavellab.github.io/maldipickr/reference/identification_to_clusters.html) will group spectra based on their identification.
+To do so, we must use the Bruker MALDI Biotyper report from the Compass software that summarize the identification of the microorganisms using its internal database. Once the report or reports are imported (in R using [`read_biotyper_report()`](https://clavellab.github.io/maldipickr/reference/read_biotyper_report.html)), the function [`delineate_with_identification()`](https://clavellab.github.io/maldipickr/reference/delineate_with_identification.html) will group spectra based on their identifications.
 
 
-```{r function-identification_to_clusters}
+```{r function-delineate_with_identification}
 #' Delineate clusters from taxonomic identifications
 #'
 #' From the report of taxonomic identification produced by the Bruker MALDI Biotyper
@@ -734,10 +734,10 @@ To do so, we must use the Bruker MALDI Biotyper report from the Compass software
 #' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
 #'
-#' @seealso [similarity_to_clusters]
+#' @seealso [delineate_with_similarity]
 #'
 #' @export
-identification_to_clusters <- function(tibble_report) {
+delineate_with_identification <- function(tibble_report) {
   # check correct names and number of columns
   single_report_cols <- c(
     "name", "sample_name",
@@ -803,26 +803,26 @@ identification_to_clusters <- function(tibble_report) {
 }
 ```
   
-```{r example-identification_to_clusters}
+```{r example-delineate_with_identification}
 report_unknown <- read_biotyper_report(
   system.file("biotyper_unknown.csv", package = "maldipickr")
 )
-identification_to_clusters(report_unknown)
+delineate_with_identification(report_unknown)
 ```
   
-```{r tests-identification_to_clusters}
+```{r tests-delineate_with_identification}
 path_report <- system.file("biotyper_unknown.csv", package = "maldipickr")
 report_unknown <- read_biotyper_report(path_report)
 
-test_that("identification_to_clusters fails with path as input", {
+test_that("delineate_with_identification fails with path as input", {
   expect_error(
-    identification_to_clusters(path_report),
+    delineate_with_identification(path_report),
     "Unexpected format of Biotyper report."
   )
 })
-test_that("identification_to_clusters works with correct single report tibble", {
+test_that("delineate_with_identification works with correct single report tibble", {
   expect_message(
-    out <- identification_to_clusters(report_unknown),
+    out <- delineate_with_identification(report_unknown),
     "Generating clusters from single report"
   )
   expect_equal(
@@ -834,9 +834,9 @@ test_that("identification_to_clusters works with correct single report tibble", 
   )
 })
 
-test_that("identification_to_clusters fails modified single report tibble", {
+test_that("delineate_with_identification fails modified single report tibble", {
   expect_error(
-    identification_to_clusters(
+    delineate_with_identification(
       report_unknown %>% dplyr::select(!c("name"))
     ),
     "Unexpected format of Biotyper report."
@@ -844,9 +844,9 @@ test_that("identification_to_clusters fails modified single report tibble", {
 })
 
 report_unknown_no_bh <- read_biotyper_report(path_report, best_hits = FALSE)
-test_that("identification_to_clusters WARNS when multiple hits", {
+test_that("delineate_with_identification WARNS when multiple hits", {
   expect_warning(
-    out <- identification_to_clusters(report_unknown_no_bh),
+    out <- delineate_with_identification(report_unknown_no_bh),
     "There is more than one spectrum identification per target!\n",
   )
   expect_equal(
@@ -868,9 +868,9 @@ multiple_reports_unknown <- read_many_biotyper_reports(
   rep(path_report, 3),
   report_ids = LETTERS[1:3], best_hits = TRUE
 )
-test_that("identification_to_clusters works with correct multiple reports tibble", {
+test_that("delineate_with_identification works with correct multiple reports tibble", {
   expect_message(
-    out <- identification_to_clusters(multiple_reports_unknown),
+    out <- delineate_with_identification(multiple_reports_unknown),
     "Generating clusters from multiple reports"
   )
   expect_equal(
@@ -881,9 +881,9 @@ test_that("identification_to_clusters works with correct multiple reports tibble
     c(2, 3, 1, 1, 4, 5, 1, 1, 6, 7, 1, 1)
   )
 })
-test_that("identification_to_clusters fails modified tibble for multiple reports", {
+test_that("delineate_with_identification fails modified tibble for multiple reports", {
   expect_error(
-    identification_to_clusters(multiple_reports_unknown %>% dplyr::rename("tax_id" = "bruker_species")),
+    delineate_with_identification(multiple_reports_unknown %>% dplyr::rename("tax_id" = "bruker_species")),
     "Unexpected format of Biotyper report."
   )
 })
@@ -891,7 +891,7 @@ test_that("identification_to_clusters fails modified tibble for multiple reports
   
 Clusters generated from taxonomic identifications can not use the function [`set_reference_spectra()`](https://clavellab.github.io/maldipickr/reference/set_reference_spectra.html) as the latter relies on peaks information that is not disclosed in the Biotyper report.
 
-Therefore, users interested in cherry-picking spectra using taxonomic identifications should use the [`pick_spectra()`](https://clavellab.github.io/maldipickr/reference/pick_spectra.html) function described below with the combination of the input and output tables of the [`identification_to_clusters()`](https://clavellab.github.io/maldipickr/reference/identification_to_clusters.html) function to pick for instance spectra with the highest log score (using `criteria_column = "bruker_log"`).
+Therefore, users interested in cherry-picking spectra using taxonomic identifications should use the [`pick_spectra()`](https://clavellab.github.io/maldipickr/reference/pick_spectra.html) function described below with the combination of the input and output tables of the [`delineate_with_identification()`](https://clavellab.github.io/maldipickr/reference/delineate_with_identification.html) function to pick for instance spectra with the highest log score (using `criteria_column = "bruker_log"`).
   
 ## Import clusters results generated by SPeDE
 
@@ -981,7 +981,7 @@ When isolating bacteria from an environment, experimenters want to be thorough b
 
 The function, as illustrated in the examples below, can pick spectra using different types of inputs:
 
-* the reference spectra information that is present in the cluster table (after using [`similarity_to_clusters()`](https://clavellab.github.io/maldipickr/reference/similarity_to_clusters.html) or [`import_spede_clusters()`](https://clavellab.github.io/maldipickr/reference/import_spede_clusters.html) functions; see example 1)
+* the reference spectra information that is present in the cluster table (after using [`delineate_with_similarity()`](https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html) or [`import_spede_clusters()`](https://clavellab.github.io/maldipickr/reference/import_spede_clusters.html) functions; see example 1)
 * an external metadata table containing a variable (e.g., optical density, fluorescence) to be maximized (default) or minimized per cluster (see example 2)
 
 Spectra, and clusters, can also be excluded from the cherry-picking decision, a procedure termed _masking_ here. We distinguish two types of mask that are implemented in the [`pick_spectra()`](https://clavellab.github.io/maldipickr/reference/pick_spectra.html) function:
@@ -1005,7 +1005,7 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' If no metadata are provided, the reference spectra of each cluster will be picked.
 #'
 #' @param cluster_df A tibble with clusters information
-#' from the [similarity_to_clusters] or the [import_spede_clusters] function.
+#' from the [delineate_with_similarity] or the [import_spede_clusters] function.
 #' @param metadata_df Optional tibble with relevant metadata to guide the
 #' picking process (e.g., OD600).
 #' @param criteria_column Optional character indicating the column in `metadata_df`
@@ -1023,7 +1023,7 @@ Ultimately, the function delivers a table with as many rows as the cluster table
 #' should be picked. If `metadata_df` is provided, then additional columns from
 #' this tibble are added to the returned tibble.
 #'
-#' @seealso [similarity_to_clusters], [set_reference_spectra]. For a useful utility function to soft-mask specific spectra: [is_well_on_edge].
+#' @seealso [delineate_with_similarity], [set_reference_spectra]. For a useful utility function to soft-mask specific spectra: [is_well_on_edge].
 #'
 #' @export
 pick_spectra <- function(
@@ -1210,7 +1210,7 @@ pick_spectra <- function(
   
 ```{r examples-pick_spectra}
 # 0. Load a toy example of a tibble of clusters created by
-#   the `similarity_to_clusters` function.
+#   the `delineate_with_similarity` function.
 clusters <- readRDS(
   system.file("clusters_tibble.RDS",
     package = "maldipickr"
