@@ -1,5 +1,5 @@
 Package: maldipickr
-Title: Dereplicate And Cherry-Pick Mass Spectrometry Spectra
+Title: Dereplicate and Cherry-Pick Mass Spectrometry Spectra
 Version: 1.0.0
 Authors@R: c(
     person("Charlie", "Pauvert", , "cpauvert@ukaachen.de", role = c("aut", "cre", "cph"),

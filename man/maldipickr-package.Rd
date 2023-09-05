@@ -4,7 +4,7 @@
 \name{maldipickr-package}
 \alias{maldipickr}
 \alias{maldipickr-package}
-\title{maldipickr: Dereplicate And Cherry-Pick Mass Spectrometry Spectra}
+\title{maldipickr: Dereplicate and Cherry-Pick Mass Spectrometry Spectra}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
