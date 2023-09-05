@@ -64,7 +64,7 @@ After inflating the template
 -  This function code will automatically be added in a new file in the "R/" directory
 -->
 
-```{r function_read_biotyper_report}
+```{r function-read_biotyper_report}
 #' Importing Bruker MALDI Biotyper CSV report
 #'
 #'
@@ -272,7 +272,7 @@ After inflating the template
 -  This test code will automatically be added in the "tests/testthat/" directory
 -->
 
-```{r tests_read_biotyper_report}
+```{r tests-read_biotyper_report}
 # test_that("my_median works properly and show error if needed", {
 #   expect_true(my_median(1:12) == 6.5)
 #   expect_error(my_median("text"))
