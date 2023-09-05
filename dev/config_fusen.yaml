@@ -17,6 +17,7 @@ dereplicate-spectra.Rmd:
   - tests/testthat/test-delineate_with_identification.R
   - tests/testthat/test-import_spede_clusters.R
   - tests/testthat/test-pick_spectra.R
+  - tests/testthat/test-set_reference_spectra.R
   vignettes: vignettes/dereplicate-bruker-maldi-biotyper-spectra.Rmd
   inflate:
     flat_file: dev/dereplicate-spectra.Rmd
@@ -69,11 +70,7 @@ keep:
   path: keep
   state: active
   R:
-  - R/delineate_with_identification.R
-  - R/delineate_with_similarity.R
   - R/maldipickr-package.R
   - R/utils-pipe.R
-  tests:
-  - tests/testthat/test-delineate_with_identification.R
-  - tests/testthat/test-delineate_with_similarity.R
+  tests: []
   vignettes: []
