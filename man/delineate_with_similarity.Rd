@@ -68,5 +68,5 @@ cosine_similarity <- matrix(
 delineate_with_similarity(cosine_similarity, threshold = 0.92)
 }
 \seealso{
-For similarity metrics: \href{https://rdrr.io/cran/coop/man/cosine.html}{\code{coop::cosine}}, \link[stats:cor]{stats::cor}, \href{https://rdrr.io/cran/Hmisc/man/rcorr.html}{\code{Hmisc::rcorr}}. For using taxonomic identifications for clusters : \link{delineate_with_identification}. For further analyses: \link{set_reference_spectra}.
+For similarity metrics: \href{https://rdrr.io/cran/coop/man/cosine.html}{\code{coop::tcosine}}, \link[stats:cor]{stats::cor}, \href{https://rdrr.io/cran/Hmisc/man/rcorr.html}{\code{Hmisc::rcorr}}. For using taxonomic identifications for clusters : \link{delineate_with_identification}. For further analyses: \link{set_reference_spectra}.
 }

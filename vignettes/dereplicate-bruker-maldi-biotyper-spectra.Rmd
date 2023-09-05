@@ -120,7 +120,7 @@ Once all the batches of spectra have been processed together, we can use a dista
 
 While we do not provide specific functions to generate the similarity matrix, we illustrate below how it can be easily computed.
 Note that the feature matrix from [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html) has spectra as rows and peaks values as columns.
-So to get a similarity matrix between spectra, the feature matrix must be transposed before cosine computation.
+So to get a similarity matrix between spectra, either the feature matrix must be transposed or a dedicated function must be used.
 
 
 ```{r similarity, eval = FALSE}
@@ -131,8 +131,8 @@ sim_matrix <- stats::cor(t(fm), method = "pearson")
 # B.1 Install the coop package
 # install.packages("coop")
 
-# B.2 Compute the similarity matrix on the transposed feature matrix
-sim_matrix <- coop::cosine(t(fm))
+# B.2 Compute the similarity matrix on the rows of the feature matrix
+sim_matrix <- coop::tcosine(fm)
 ```
 
 # Delineate clusters of spectra

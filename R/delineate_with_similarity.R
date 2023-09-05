@@ -27,7 +27,7 @@
 #'  2. It uses base R functions to reduce the dependencies
 #'
 #'
-#' @seealso For similarity metrics: [`coop::cosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [delineate_with_identification]. For further analyses: [set_reference_spectra].
+#' @seealso For similarity metrics: [`coop::tcosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [delineate_with_identification]. For further analyses: [set_reference_spectra].
 #' @export
 #' @examples
 #' # Toy similarity matrix between the six example spectra of

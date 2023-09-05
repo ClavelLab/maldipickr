@@ -50,8 +50,7 @@ processed <- spectra_dir %>%
 processed %>%
   list() %>%
   merge_processed_spectra() %>%
-  t() %>%
-  coop::cosine() %>%
+  coop::tcosine() %>%
   delineate_with_similarity(threshold = 0.92) %>%
   set_reference_spectra(processed$metadata) %>%
   pick_spectra() %>%
