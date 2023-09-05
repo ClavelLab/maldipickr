@@ -1,10 +1,13 @@
-citHeader("To cite maldipickr in publications use:")
-
-citEntry(
-  entry    = "Manual",
-  title    = "maldipickr: Dereplicate And Cherry-pick Mass Spectrometry Spectra in R",
-  author   = "Charlie Pauvert and David Wylensek and Selina Nüchtern and Thomas Clavel",
-  year     = 2023,
-  note     = "https://clavellab.github.io/maldipickr, https://github.com/ClavelLab/maldipickr",
-  textVersion = "Pauvert, C., Wylensek, D., Nüchtern, S., & Clavel, T. (2023). maldipickr: Dereplicate And Cherry-pick Mass Spectrometry Spectra in R (Version 0.1.0) [Computer software]. https://github.com/ClavelLab/maldipickr"
-)
+bibentry(bibtype = "Manual",
+         key = "pauvert_maldipickr_2023",
+         title = "maldipickr: Dereplicate And Cherry-pick Mass Spectrometry Spectra in R",
+         author = c(person(given = "Charlie",
+                           family = "Pauvert"),
+                    person(given = "David",
+                           family = "Wylensek"),
+                    person(given = "Selina",
+                           family = "Nüchtern"),
+                    person(given = "Thomas",
+                           family = "Clavel")),
+         year = "2023",
+         note = "https://clavellab.github.io/maldipickr, https://github.com/ClavelLab/maldipickr")
