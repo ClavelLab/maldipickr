@@ -528,6 +528,10 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
     to_remove <- sapply(biotyper_list, function(x) grepl(regex_to_catch, MALDIquant::metaData(x)$file))
     biotyper_list <- biotyper_list[!to_remove]
   }
+  # Clean up the symbolink links if any
+  if (any(do_symbolic_links)) {
+    file.remove(acqu_files[do_symbolic_links])
+  }
   return(biotyper_list)
 }
 ```
