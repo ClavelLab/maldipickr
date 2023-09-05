@@ -9,7 +9,7 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://app.codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://app.codecov.io/github/ClavelLab/maldipickr)
+[![codecov](https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://app.codecov.io/github/ClavelLab/maldipickr)
 <!-- badges: end -->
 
 - Are you using the MALDI-TOF[^1] Biotyper to identify bacterial
@@ -26,7 +26,11 @@ spectra of microbial isolates.
 
 ## Quickstart
 
-How to **cherry-pick bacterial isolates** with MALDI BioTyper.
+How to **cherry-pick bacterial isolates** with MALDI BioTyper:
+
+- [using spectra data](#using-spectra-data)
+- [using taxonomic identification
+  report](#using-taxonomic-identification-report)
 
 ### Using spectra data
 
@@ -86,7 +90,7 @@ report_tbl %>%
 #   and cherry-pick one representative spectra.
 #   The chosen ones are indicated by `to_pick` column
 report_tbl %>%
-  identification_to_clusters() %>%
+  delineate_with_identification() %>%
   pick_spectra(report_tbl, criteria_column = "bruker_log") %>%
   dplyr::relocate(name, to_pick, bruker_species)
 #> Generating clusters from single report
@@ -103,13 +107,19 @@ report_tbl %>%
 
 ## Installation
 
-You can install the development version of
-[`{maldipickr}`](https://github.com/ClavelLab/maldipickr) from
-[GitHub](https://github.com/) with:
+`{maldipickr}` was submitted to the CRAN for easy installation and
+awaits approval.
+
+In the meantime, to install the latest release, use the following:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("ClavelLab/maldipickr", build_vignettes = TRUE)
+remotes::install_github("ClavelLab/maldipickr@v1.0.0", build_vignettes = TRUE)
+```
+
+For the development version, use the following:
+
+``` r
+remotes::install_github("ClavelLab/maldipickr", build_vignettes = TRUE)
 ```
 
 ## Usage
