@@ -6,6 +6,7 @@ Bruker
 CMD
 Canck
 Carlier
+Changelog
 Cleenwerck
 Cnockaert
 Dawyndt
@@ -43,8 +44,10 @@ Uhlik
 Vandamme
 Verheyde
 Wieme
+acqu
 al
 bruker
+codebase
 codecov
 csv
 dereplicate
@@ -61,6 +64,7 @@ magrittr
 maldi
 modularity
 natively
+quickstart
 rRNA
 scalable
 spectrometry
