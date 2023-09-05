@@ -126,7 +126,6 @@ delineate_with_similarity <- function(sim_matrix, threshold) {
 #'   package = "maldipickr"
 #' ) %>%
 #'   import_biotyper_spectra() %>%
-#'   suppressMessages() %>%
 #'   process_spectra()
 #'
 #' # Toy similarity matrix between the six example spectra of

@@ -622,7 +622,6 @@ processed <- system.file(
   package = "maldipickr"
 ) %>%
   import_biotyper_spectra() %>%
-  suppressMessages() %>%
   process_spectra()
 
 # Toy similarity matrix between the six example spectra of
@@ -664,7 +663,6 @@ set_reference_spectra(clusters, processed$metadata)
 ```{r tests-set_reference_spectra}
 processed <- system.file("toy-species-spectra", package = "maldipickr") %>%
   import_biotyper_spectra() %>%
-  suppressMessages() %>%
   process_spectra()
 cosine_similarity <- matrix(
   c(

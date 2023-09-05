@@ -47,7 +47,6 @@ test_that("delineate_with_similarity fails with wrong input", {
 
 processed <- system.file("toy-species-spectra", package = "maldipickr") %>%
   import_biotyper_spectra() %>%
-  suppressMessages() %>%
   process_spectra()
 cosine_similarity <- matrix(
   c(
