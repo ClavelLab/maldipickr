@@ -19,13 +19,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Charlie Pauvert \email{cpauvert@ukaachen.de} (\href{https://orcid.org/0000-0001-9832-2507}{ORCID})
+\strong{Maintainer}: Charlie Pauvert \email{cpauvert@ukaachen.de} (\href{https://orcid.org/0000-0001-9832-2507}{ORCID}) [copyright holder]
 
 Other contributors:
 \itemize{
   \item David Wylensek (\href{https://orcid.org/0000-0002-8424-5712}{ORCID}) [contributor]
   \item Selina Nüchtern [contributor]
-  \item Thomas Clavel (\href{https://orcid.org/0000-0002-7229-5595}{ORCID}) [contributor, funder]
+  \item Thomas Clavel (\href{https://orcid.org/0000-0002-7229-5595}{ORCID}) [contributor, funder, copyright holder]
 }
 
 }

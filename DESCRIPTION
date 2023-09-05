@@ -2,12 +2,12 @@ Package: maldipickr
 Title: Dereplicate And Cherry-Pick Mass Spectrometry Spectra
 Version: 0.1.0
 Authors@R: c(
-    person("Charlie", "Pauvert", , "cpauvert@ukaachen.de", role = c("aut", "cre"),
+    person("Charlie", "Pauvert", , "cpauvert@ukaachen.de", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-9832-2507")),
     person("David", "Wylensek", role = "ctb",
            comment = c(ORCID = "0000-0002-8424-5712")),
     person("Selina", "Nüchtern", role = "ctb"),
-    person("Thomas", "Clavel", role = c("ctb", "fnd"),
+    person("Thomas", "Clavel", role = c("ctb", "fnd", "cph"),
            comment = c(ORCID = "0000-0002-7229-5595"))
   )
 Description: Convenient wrapper functions for the analysis of
