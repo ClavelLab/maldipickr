@@ -1,8 +1,14 @@
+# maldipickr 1.0.2
+
+## Changed
+
+* Fix the invalid file URIs in NEWS.md and README.md
+
 # maldipickr 1.0.1
 
 ## Changed
 
-* Fix title to titleCase for CRAN
+* Fix title to title case for CRAN
 
 # maldipickr 1.0.0
 
@@ -43,8 +49,8 @@
 
 ## Added
 
-* Add citation file for R ([`CITATION`](inst/CITATION)) and for GitHub ([`CITATION.cff`](CITATION.cff))
-* Add a [`CHANGELOG.md`](CHANGELOG.md) ([Common Changelog](https://common-changelog.org))
+* Add citation file for R ([`CITATION`](https://clavellab.github.io/maldipickr/authors.html#citation)) and for GitHub `CITATION.cff`
+* Add a `CHANGELOG.md` ([Common Changelog](https://common-changelog.org))
 
 ## Changed
 

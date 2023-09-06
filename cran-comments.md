@@ -1,3 +1,9 @@
+## Resubmission
+
+This is a resubmission. In this version I have:
+
+* fixed the invalid file URIs in NEWS.md and README.md
+
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note

@@ -152,7 +152,7 @@ The developers of this package are part of the [Clavel
 Lab](https://www.ukaachen.de/kliniken-institute/institut-fuer-medizinische-mikrobiologie/forschung/ag-clavel/)
 and are not affiliated with the company Bruker, therefore this package
 is independent of the company and is distributed under the [GPL-3.0
-License](LICENSE.md).
+License](https://clavellab.github.io/maldipickr/LICENSE.html).
 
 The hexagonal logo was created by Charlie Pauvert and uses the
 [Hack](https://sourcefoundry.org/hack/) font and a color palette
