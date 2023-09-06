@@ -92,7 +92,7 @@ report_tbl %>%
 In the meantime, to install the latest release, use the following:
 
 ```{r install_latest_release, eval = FALSE}
-remotes::install_github("ClavelLab/maldipickr@v1.0.0", build_vignettes = TRUE)
+remotes::install_github("ClavelLab/maldipickr@v1.1.0", build_vignettes = TRUE)
 ```
 
 

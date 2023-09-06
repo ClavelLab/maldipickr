@@ -81,13 +81,21 @@ delineate_with_similarity <- function(sim_matrix, threshold) {
     # Names of vec were checked above with the full matrix
     base::names(vec)[vec >= threshold]
   }
-
-  # Delineate clusters by creating a vector of membership (including self)
+  # Extract elements of lists from nested lists and ensure sorted uniqueness
+  gather_cluster_membership <- function(nested_list) {
+    base::unlist(nested_list, use.names = FALSE) %>%
+      base::unique() %>%
+      base::sort() %>%
+      paste(collapse = "|") %>%
+      base::as.factor() %>%
+      return()
+  }
+  # Delineate clusters by creating a vector of membership (including self) and friends-of-friends with recursive lists.
   # The vector is then rendered unique using factors and converted into integer id
   memberships <- apply(sim_matrix, 1, name_gtr_eq_threshold, threshold = threshold)
 
-  sapply(memberships, function(nm) paste(nm, collapse = "|")) %>%
-    base::as.factor() %>%
+  lapply(memberships, function(x) memberships[x]) %>%
+    sapply(gather_cluster_membership) %>%
     tibble::enframe(value = "membership") %>%
     dplyr::group_by(.data$membership) %>%
     dplyr::mutate(

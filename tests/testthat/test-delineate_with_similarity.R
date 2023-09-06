@@ -21,6 +21,23 @@ cosine_similarity <- matrix(
     )
   )
 )
+cosine_similarity_with_fof <- matrix(
+  c(
+    1, 0.994, 0.995, 0.995, 0.993, 0.994, 0.91, 0.996,
+    0.994, 1, 0.997, 0.995, 0.995, 0.994, 0.91, 0.995,
+    0.995, 0.997, 1, 0.995, 0.995, 0.997, 0.913, 0.997,
+    0.995, 0.995, 0.995, 1, 0.994, 0.993, 0.907, 0.998,
+    0.993, 0.995, 0.995, 0.994, 1, 0.995, 0.915, 0.994,
+    0.994, 0.994, 0.997, 0.993, 0.995, 1, 0.922, 0.996,
+    0.91, 0.91, 0.913, 0.907, 0.915, 0.922, 1, 0.907,
+    0.996, 0.995, 0.997, 0.998, 0.994, 0.996, 0.907, 1
+  ),
+  nrow = 8,
+  dimnames = list(
+    c("1_A", "2_B", "3_C", "4_D", "5_E", "6_F", "7_G", "8_H"),
+    c("1_A", "2_B", "3_C", "4_D", "5_E", "6_F", "7_G", "8_H")
+  )
+)
 test_that("delineate_with_similarity works", {
   expect_equal(
     nrow(delineate_with_similarity(cosine_similarity, 0.92)), 6
@@ -28,6 +45,12 @@ test_that("delineate_with_similarity works", {
   expect_equal(
     delineate_with_similarity(cosine_similarity, 0.92)$membership,
     c(1, 2, 2, 1, 1, 1)
+  )
+  expect_equal(
+    delineate_with_similarity(
+      cosine_similarity_with_fof, 0.92
+    )$membership,
+    rep(1, times = 8)
   )
 })
 test_that("delineate_with_similarity fails with wrong input", {

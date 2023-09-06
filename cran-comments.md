@@ -2,6 +2,7 @@
 
 This is a resubmission. In this version I have:
 
+* fixed an issue regarding the clusters composition that needed an urgent patch (Thanks for your understanding).
 * fixed the invalid file URIs in NEWS.md and README.md
 
 ## R CMD check results

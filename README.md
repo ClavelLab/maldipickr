@@ -112,7 +112,7 @@ awaits approval.
 In the meantime, to install the latest release, use the following:
 
 ``` r
-remotes::install_github("ClavelLab/maldipickr@v1.0.0", build_vignettes = TRUE)
+remotes::install_github("ClavelLab/maldipickr@v1.1.0", build_vignettes = TRUE)
 ```
 
 For the development version, use the following:
