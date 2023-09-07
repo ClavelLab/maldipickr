@@ -2,13 +2,13 @@
 
 ## Fixed
 
-* (HOTFIX) Fix `delineate_with_similarity()` that did not include friends-of-friends in clusters after removal of `{igraph}` in #18. Add a relevant similarity matrix to test it accordingly.
+* (URGENT) Fix `delineate_with_similarity()` that did not include friends-of-friends in clusters after removal of `{igraph}` in #18. Add a relevant similarity matrix to test it accordingly.
 
 # maldipickr 1.0.2
 
 ## Changed
 
-* Fix the invalid file URIs in NEWS.md and README.md
+* Fix the invalid file `URIs` in `NEWS.md` and `README.md`
 
 # maldipickr 1.0.1
 
