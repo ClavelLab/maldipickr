@@ -1,3 +1,9 @@
+# maldipickr 1.1.1
+
+## Fixed
+
+* Fix typos for CRAN re-submission: missing brackets in reference, and spelling errors.
+
 # maldipickr 1.1.0
 
 ## Fixed
