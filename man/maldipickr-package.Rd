@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Convenient wrapper functions for the analysis of matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (also called cherry-pick). The package covers the preprocessing and dereplication steps (based on Strejcek, Smrhova, Junkova and Uhlik 2018 \doi{10.3389/fmicb.2018.01294}) needed to cluster MALDI-TOF spectra before the final cherry-picking step. It enables the easy exclusion of spectra and/or clusters to accommodate complex cherry-picking strategies. Alternatively, cherry-picking using taxonomic identification MALDI-TOF data is made easy with functions to import inconsistently formatted reports.
+Convenient wrapper functions for the analysis of matrix-assisted laser desorption/ionization-time-of-flight (MALDI-TOF) spectra data in order to select only representative spectra (also called cherry-pick). The package covers the preprocessing and dereplication steps (based on Strejcek, Smrhova, Junkova and Uhlik (2018) \doi{10.3389/fmicb.2018.01294}) needed to cluster MALDI-TOF spectra before the final cherry-picking step. It enables the easy exclusion of spectra and/or clusters to accommodate complex cherry-picking strategies. Alternatively, cherry-picking using taxonomic identification MALDI-TOF data is made easy with functions to import inconsistently formatted reports.
 }
 \seealso{
 Useful links:

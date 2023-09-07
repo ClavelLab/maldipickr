@@ -15,7 +15,7 @@ Description: Convenient wrapper functions for the analysis of
     spectra data in order to select only representative spectra (also
     called cherry-pick). The package covers the preprocessing and
     dereplication steps (based on Strejcek, Smrhova, Junkova and Uhlik
-    2018 <doi:10.3389/fmicb.2018.01294>) needed to cluster MALDI-TOF
+    (2018) <doi:10.3389/fmicb.2018.01294>) needed to cluster MALDI-TOF
     spectra before the final cherry-picking step. It enables the easy
     exclusion of spectra and/or clusters to accommodate complex
     cherry-picking strategies. Alternatively, cherry-picking using
