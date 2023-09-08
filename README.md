@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/maldipickr)](https://CRAN.R-project.org/package=maldipickr)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -26,7 +28,7 @@ spectra of microbial isolates.
 
 ## Quickstart
 
-How to **cherry-pick bacterial isolates** with MALDI BioTyper:
+How to **cherry-pick bacterial isolates** with MALDI Biotyper:
 
 - [using spectra data](#using-spectra-data)
 - [using taxonomic identification
@@ -106,16 +108,17 @@ report_tbl %>%
 
 ## Installation
 
-`{maldipickr}` was submitted to the CRAN for easy installation and
-awaits approval.
+`{maldipickr}` is available on the
+[CRAN](https://cran.r-project.org/package=maldipickr) and on
+[Github](https://github.com/ClavelLab/maldipickr).
 
-In the meantime, to install the latest release, use the following:
+To install the latest CRAN release, use the following command in R:
 
 ``` r
-remotes::install_github("ClavelLab/maldipickr@v1.1.0", build_vignettes = TRUE)
+install.packages("maldipickr")
 ```
 
-For the development version, use the following:
+To install the development version, use the following command in R:
 
 ``` r
 remotes::install_github("ClavelLab/maldipickr", build_vignettes = TRUE)
