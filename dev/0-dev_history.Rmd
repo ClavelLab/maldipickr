@@ -133,6 +133,18 @@ devtools::build(vignettes = TRUE)
 fusen::init_share_on_github()
 ```
 
+# Depends on R version
+
+It is best practice to specify a minimum R version, as the one set by default is the one from the developer: <https://blog.r-hub.io/2022/09/12/r-dependency/>
+
+```{r}
+# dir.exists requires R 3.2.0
+# determined by lintr::lint_package(linters = backport_linter("3.2.0"))
+# TODO: assess maldipickr dependencies and R versions
+usethis::use_package("R", type = "Depends", min_version = "3.2.0")
+```
+
+
 # Manage dependencies
 
 ```{r dependencies, eval=FALSE}
