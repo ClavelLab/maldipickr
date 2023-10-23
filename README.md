@@ -110,7 +110,7 @@ report_tbl %>%
 
 `{maldipickr}` is available on the
 [CRAN](https://cran.r-project.org/package=maldipickr) and on
-[Github](https://github.com/ClavelLab/maldipickr).
+[GitHub](https://github.com/ClavelLab/maldipickr).
 
 To install the latest CRAN release, use the following command in R:
 
