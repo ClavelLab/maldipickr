@@ -94,18 +94,18 @@ process_spectra <- function(spectra_list, rds_prefix = NULL) {
     )
   # Added extra step to remove the peaks with
   # negative SNR due to being on the edge of the masses trimmed
-  peaks <- sapply(peaks, function(pk) {
+  peaks <- lapply(peaks, function(pk) {
     pk[MALDIquant::snr(pk) >= 3]
   })
 
   # Spectrum metadata table
   # Extract signal-to-noise ratios and peaks number
-  metadata <- as.data.frame(t(sapply(peaks, function(x) {
-    c(
-      "SNR" = stats::median(MALDIquant::snr(x)),
-      "peaks" = length(MALDIquant::snr(x))
-    )
-  })))
+  snr_list <- lapply(peaks, MALDIquant::snr)
+  metadata <- data.frame(
+    "SNR" = vapply(snr_list, stats::median, FUN.VALUE = numeric(1)),
+    "peaks" = lengths(snr_list)
+  )
+
 
   # Add the spectra identifiers to all objects
   rownames(metadata) <- names(spectra) <- names(peaks) <- sapply(spectra, function(x) {
