@@ -9,6 +9,9 @@ test_that("is_a_processed_spectra_list works", {
   expect_true(
     is_a_processed_spectra_list(list(foo))
   )
+  expect_true(
+    is_a_processed_spectra_list(list(foo, foo))
+  )
 })
 test_that("is_a_processed_spectra_list fails", {
   expect_error(

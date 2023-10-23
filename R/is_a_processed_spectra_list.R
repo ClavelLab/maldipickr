@@ -12,11 +12,11 @@
 #'   "peaks" = list(MALDIquant::createMassPeaks(1, 1)),
 #'   "metadata" = tibble::tibble(name = "foo")
 #' )
-#' is_a_processed_spectra_list(list(foo))
+#' is_a_processed_spectra_list(foo)
 is_a_processed_spectra_list <- function(process_spectra_list) {
   # List depth snippet from comment by https://stackoverflow.com/users/1201032/flodel
   # src: https://stackoverflow.com/a/13433689
-  depth <- function(this) ifelse(is.list(this), 1L + max(sapply(this, depth)), 0L)
+  depth <- function(this) ifelse(is.list(this), 1L + max(vapply(this, depth, FUN.VALUE = integer(1))), 0L)
 
   if (depth(process_spectra_list) != 3) {
     if (depth(process_spectra_list) == 2) {
@@ -36,10 +36,9 @@ is_a_processed_spectra_list <- function(process_spectra_list) {
       "produced by `maldipickr::process_spectra()` as expected."
     )
   }
-  object_names <- base::mapply(base::names, process_spectra_list) %>%
-    base::t() %>%
+  object_names <- Map(base::names, process_spectra_list) %>%
     base::unique() %>%
-    base::as.vector()
+    base::unlist()
   if (length(object_names) != 3 || any(object_names != c("spectra", "peaks", "metadata"))) {
     stop(
       "The list does not contain the three expected named objects ",
