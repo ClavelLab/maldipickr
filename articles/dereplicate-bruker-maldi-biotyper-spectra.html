@@ -177,7 +177,7 @@ high-throughput analyses.</p>
 <span><span class="va">processed</span><span class="op">$</span><span class="va">metadata</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">#&gt;   name           SNR peaks</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> species1_G2   5.09    21</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> species2_E11  5.54    22</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> species2_E12  5.63    23</span></span>
@@ -281,20 +281,22 @@ a dedicated function must be used.</p>
 <h4 id="similarity-to-clusters">Similarity to clusters<a class="anchor" aria-label="anchor" href="#similarity-to-clusters"></a>
 </h4>
 <p>When the similarity matrix is computed between all pairs of the
-studied spectra, the next step is to delineate clusters of spectra to
-dereplicate the measured bacterial colonies.</p>
+studied spectra, the next step is to delineate clusters of spectra in
+order to dereplicate the measured bacterial colonies, that is to find
+which are nearly identical colonies.</p>
 <p>The <a href="https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html" class="external-link"><code>delineate_with_similarity()</code></a>
-is agnostic of the similarity metric used, whether it is the cosine
-metric or the Pearson product moment, provided that a numeric threshold
-relevant to the metric used is given, and <em>above which</em> two
-spectra would be considered similar.</p>
-<p>Indeed, the matrix is essentially an adjacency network, where nodes
-are spectra and links exist between spectra only if the similarity
-between the spectra is <strong>above</strong> (or <strong>equal
-to</strong>) the threshold. This representation allows to infer the
-clusters easily. A table summarizes for each spectra, to which cluster
-number it was assigned to and the size of the cluster, which is the
-total number of spectra in the cluster.</p>
+is agnostic of the similarity metric used provided that the upper bound
+is one and that a numeric threshold relevant to the metric used is
+given. We recommend the cosine metric or the Pearson product moment.</p>
+<p>Hierarchical clustering will then group spectra in the same cluster
+only if the similarity between the spectra is <strong>above</strong> (or
+<strong>equal to</strong>) the provided threshold. The default and
+recommended method is the <em>complete linkage</em>, also known as the
+farthest neighbor, to ensure that the within-group minimum similarity of
+each cluster respects the threshold.</p>
+<p>Finally, a table summarizes for each spectra, to which cluster number
+it was assigned to and the size of the cluster, which is the total
+number of spectra in the cluster.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Toy similarity matrix between the six example spectra of</span></span>
 <span><span class="co">#  three species. The cosine metric is used and a value of</span></span>
@@ -394,7 +396,7 @@ corresponding spectrum is representative of the cluster.</p>
 <span><span class="fu"><a href="../reference/set_reference_spectra.html">set_reference_spectra</a></span><span class="op">(</span><span class="va">clusters</span>, <span class="va">processed</span><span class="op">$</span><span class="va">metadata</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
 <span><span class="co">#&gt;   name         membership cluster_size   SNR peaks is_reference</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> species1_G2           1            4  5.09    21 FALSE       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> species2_E11          2            2  5.54    22 FALSE       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> species2_E12          2            2  5.63    23 TRUE        </span></span>

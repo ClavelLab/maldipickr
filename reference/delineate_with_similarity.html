@@ -64,40 +64,38 @@ threshold <strong>above</strong> (or <strong>equal to</strong>) which spectra ar
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">delineate_with_similarity</span><span class="op">(</span><span class="va">sim_matrix</span>, <span class="va">threshold</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">delineate_with_similarity</span><span class="op">(</span><span class="va">sim_matrix</span>, <span class="va">threshold</span>, method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>sim_matrix</dt>
-<dd><p>A <em>n</em> × <em>n</em> similarity matrix, with <em>n</em> the number of spectra. Columns should be named as the rows.</p></dd>
+<dd><p>A \(n \times n\) similarity matrix, with \(n\) the number of spectra. Columns should be named as the rows.</p></dd>
 
 
 <dt>threshold</dt>
 <dd><p>A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.</p></dd>
+
+
+<dt>method</dt>
+<dd><p>The method of hierarchical clustering to use. The default and recommended method is "complete", but any methods from <a href="https://rdrr.io/r/stats/hclust.html" class="external-link">stats::hclust</a> are valid.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A tibble of <em>n</em> rows for each spectra and 3 columns:</p><ul><li><p><code>name</code>: the rownames of the similarity matrix indicating the spectra names</p></li>
-<li><p><code>membership</code>: integers stating the cluster number to which the spectra belong to. It starts from 1 to <em>c</em>, the total number of clusters.</p></li>
+<p>A tibble of \(n\) rows for each spectra and 3 columns:</p><ul><li><p><code>name</code>: the rownames of the similarity matrix indicating the spectra names</p></li>
+<li><p><code>membership</code>: integers stating the cluster number to which the spectra belong to. It starts from 1 to \(c\), the total number of clusters.</p></li>
 <li><p><code>cluster_size</code>: integers indicating the total number of spectra in the corresponding cluster.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The matrix is essentially a network
-where nodes are spectra and links exist between spectra only if the similarity
-between the spectra is above the threshold.</p>
-<p>The original idea to find the cluster members comes from a <a href="https://stackoverflow.com/a/57613463" class="external-link">StackOverflow answer by the user ekstroem</a>. However, here the
-implementation differs in two way:</p><ol><li><p>It relies on the connected components of the network instead of the fast greedy
-modularity algorithm.</p></li>
-<li><p>It uses base R functions to reduce the dependencies</p></li>
-</ol></div>
+    <p>The similarity matrix is converted to a distance matrix by subtracting the value one. This approach works for cosine similarity and positive correlations that have an upper bound of 1. Clusters are then delineated using hierarchical clustering. The default method of hierarchical clustering is the complete linkage (also known as farthest neighbor clustering) to ensure that the within-group minimum similarity of each cluster respects the threshold. See the Details section of <a href="https://rdrr.io/r/stats/hclust.html" class="external-link">stats::hclust</a> for others valid methods to use.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>For similarity metrics: <a href="https://rdrr.io/cran/coop/man/cosine.html" class="external-link"><code>coop::tcosine</code></a>, <a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::cor</a>, <a href="https://rdrr.io/cran/Hmisc/man/rcorr.html" class="external-link"><code>Hmisc::rcorr</code></a>. For using taxonomic identifications for clusters : <a href="delineate_with_identification.html">delineate_with_identification</a>. For further analyses: <a href="set_reference_spectra.html">set_reference_spectra</a>.</p></div>
+    <div class="dont-index"><p>For similarity metrics: <a href="https://rdrr.io/cran/coop/man/cosine.html" class="external-link"><code>coop::tcosine</code></a>, <a href="https://rdrr.io/r/stats/cor.html" class="external-link"><code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::cor</a></code></a>, <a href="https://rdrr.io/cran/Hmisc/man/rcorr.html" class="external-link"><code>Hmisc::rcorr</code></a>. For using taxonomic identifications for clusters : <a href="delineate_with_identification.html">delineate_with_identification</a>. For further analyses: <a href="set_reference_spectra.html">set_reference_spectra</a>.</p></div>
     </div>
 
     <div class="section level2">
