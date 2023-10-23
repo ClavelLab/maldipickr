@@ -25,19 +25,21 @@
 #' Reduce(any, check_spectra(spectra_list)) # Should be FALSE
 check_spectra <- function(spectra_list) {
   # Checking spectra are not empty
-  empty_spectra <- sapply(spectra_list, MALDIquant::isEmpty)
+  empty_spectra <- vapply(spectra_list, MALDIquant::isEmpty, FUN.VALUE = logical(1))
   # Checking spectra are the same length
   ## Getting the most common length
-  common_length <- sapply(spectra_list, length) %>%
+  common_length <- lengths(spectra_list) %>%
     # gives length as character/names and occurrence as value
     table() %>%
     which.max() %>%
     # extract length
     names() %>%
     strtoi()
-  length_spectra <- sapply(spectra_list, length) == common_length
+  length_spectra <- lengths(spectra_list) == common_length
   # Checking spectra are profile data
-  regular_spectra <- sapply(spectra_list, MALDIquant::isRegular)
+  regular_spectra <- vapply(spectra_list,
+                            MALDIquant::isRegular,
+                            FUN.VALUE = logical(1))
   # Summarise the checks
   checking_list <- list(
     is_empty = empty_spectra,

@@ -73,7 +73,9 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
     )
     regex_to_catch <- match.arg(remove_calibration, to_catch, several.ok = T) %>%
       paste(collapse = "|")
-    to_remove <- sapply(biotyper_list, function(x) grepl(regex_to_catch, MALDIquant::metaData(x)$file))
+    to_remove <- vapply(biotyper_list,
+                        function(x){grepl(regex_to_catch, MALDIquant::metaData(x)$file)},
+                        FUN.VALUE = logical(1))
     biotyper_list <- biotyper_list[!to_remove]
   }
   # Clean up the symbolink links if any

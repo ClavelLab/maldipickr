@@ -525,7 +525,9 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
     )
     regex_to_catch <- match.arg(remove_calibration, to_catch, several.ok = T) %>%
       paste(collapse = "|")
-    to_remove <- sapply(biotyper_list, function(x) grepl(regex_to_catch, MALDIquant::metaData(x)$file))
+    to_remove <- vapply(biotyper_list,
+                        function(x){grepl(regex_to_catch, MALDIquant::metaData(x)$file)},
+                        FUN.VALUE = logical(1))
     biotyper_list <- biotyper_list[!to_remove]
   }
   # Clean up the symbolink links if any
@@ -602,19 +604,21 @@ Either way, the function outputs a list of logical vectors (`TRUE` or `FALSE`) i
 #' @export
 check_spectra <- function(spectra_list) {
   # Checking spectra are not empty
-  empty_spectra <- sapply(spectra_list, MALDIquant::isEmpty)
+  empty_spectra <- vapply(spectra_list, MALDIquant::isEmpty, FUN.VALUE = logical(1))
   # Checking spectra are the same length
   ## Getting the most common length
-  common_length <- sapply(spectra_list, length) %>%
+  common_length <- lengths(spectra_list) %>%
     # gives length as character/names and occurrence as value
     table() %>%
     which.max() %>%
     # extract length
     names() %>%
     strtoi()
-  length_spectra <- sapply(spectra_list, length) == common_length
+  length_spectra <- lengths(spectra_list) == common_length
   # Checking spectra are profile data
-  regular_spectra <- sapply(spectra_list, MALDIquant::isRegular)
+  regular_spectra <- vapply(spectra_list,
+                            MALDIquant::isRegular,
+                            FUN.VALUE = logical(1))
   # Summarise the checks
   checking_list <- list(
     is_empty = empty_spectra,

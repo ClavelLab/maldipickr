@@ -160,13 +160,13 @@ is_a_rds_list <- function(rds_list) {
       "The list does not contain characters"
     )
   }
-  exts <- sapply(rds_list, tools::file_ext) %>% toupper()
+  exts <- vapply(rds_list, tools::file_ext, FUN.VALUE = character(1)) %>% toupper()
   if (any(exts != "RDS")) {
     stop(
       "The list contains paths that do not end with the expected .RDS suffix."
     )
   }
-  existences <- sapply(rds_list, file.exists)
+  existences <- vapply(rds_list, file.exists, FUN.VALUE = logical(1))
   if (any(!existences)) {
     stop(
       "The list contains paths pointing to RDS files that do not exist."
