@@ -58,13 +58,18 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_spectra</span><span class="op">(</span><span class="va">spectra_list</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_spectra</span><span class="op">(</span><span class="va">spectra_list</span>, tolerance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>spectra_list</dt>
 <dd><p>A list of <a href="https://rdrr.io/pkg/MALDIquant/man/MassSpectrum-class.html" class="external-link">MALDIquant::MassSpectrum</a> objects</p></dd>
+
+
+<dt>tolerance</dt>
+<dd><p>A numeric indicating the accepted tolerance to the spectra length.
+The default value is the machine numerical precision and is close to 1.5e-8.</p></dd>
 
 </dl></div>
     <div class="section level2">
