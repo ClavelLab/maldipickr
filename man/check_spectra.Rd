@@ -4,10 +4,13 @@
 \alias{check_spectra}
 \title{Evaluate the spectra regularities}
 \usage{
-check_spectra(spectra_list)
+check_spectra(spectra_list, tolerance = sqrt(.Machine$double.eps))
 }
 \arguments{
 \item{spectra_list}{A list of \link[MALDIquant:MassSpectrum-class]{MALDIquant::MassSpectrum} objects}
+
+\item{tolerance}{A numeric indicating the accepted tolerance to the spectra length.
+The default value is the machine numerical precision and is close to 1.5e-8.}
 }
 \value{
 A list of logical vectors of length \code{spectra_list} indicating if the spectra are empty (\code{is_empty}), of an odd length (\code{is_outlier_length}) or not a profile spectra (\code{is_not_regular}).

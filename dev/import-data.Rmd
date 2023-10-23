@@ -596,13 +596,15 @@ Either way, the function outputs a list of logical vectors (`TRUE` or `FALSE`) i
 #' Assess whether all the spectra in the list are not empty, of the same length and correspond to profile data.
 #'
 #' @param spectra_list A list of [MALDIquant::MassSpectrum] objects
+#' @param tolerance A numeric indicating the accepted tolerance to the spectra length.
+#'  The default value is the machine numerical precision and is close to 1.5e-8.
 #'
 #' @return A list of logical vectors of length `spectra_list` indicating if the spectra are empty (`is_empty`), of an odd length (`is_outlier_length`) or not a profile spectra (`is_not_regular`).
 #'
 #' @seealso [process_spectra]
 #'
 #' @export
-check_spectra <- function(spectra_list) {
+check_spectra <- function(spectra_list, tolerance = sqrt(.Machine$double.eps)) {
   # Checking spectra are not empty
   empty_spectra <- vapply(spectra_list, MALDIquant::isEmpty, FUN.VALUE = logical(1))
   # Checking spectra are the same length
@@ -614,11 +616,22 @@ check_spectra <- function(spectra_list) {
     # extract length
     names() %>%
     strtoi()
-  length_spectra <- lengths(spectra_list) == common_length
+  length_spectra <- vapply(lengths(spectra_list),
+    function(x) {
+      isTRUE(
+        all.equal.numeric(
+          target = common_length, x,
+          tolerance = tolerance, scale = 1
+        )
+      )
+    },
+    FUN.VALUE = logical(1)
+  )
   # Checking spectra are profile data
   regular_spectra <- vapply(spectra_list,
-                            MALDIquant::isRegular,
-                            FUN.VALUE = logical(1))
+    MALDIquant::isRegular,
+    FUN.VALUE = logical(1)
+  )
   # Summarise the checks
   checking_list <- list(
     is_empty = empty_spectra,
@@ -667,6 +680,26 @@ test_that("check_spectra warns with empty spectra", {
   expect_warning(
     check_spectra(c(MALDIquant::createMassSpectrum(mass = 0, intensity = 0))),
     "Some spectra"
+  )
+})
+uneven_size <- c(MALDIquant::createMassSpectrum(1:3, 1:3),
+                 MALDIquant::createMassSpectrum(10:13, 10:13)
+                 )
+test_that("check_spectra works with tolerance argument",{
+  expect_warning(
+    out <- check_spectra(uneven_size),
+    "Some spectra"
+  )
+  expect_identical(
+    out$is_outlier_length,
+    c(FALSE, TRUE)
+  )
+  expect_no_warning(
+    out_tolerance <- check_spectra(uneven_size, tolerance = 1)
+  )
+  expect_identical(
+    out_tolerance$is_outlier_length,
+    c(FALSE, FALSE)
   )
 })
 ```
