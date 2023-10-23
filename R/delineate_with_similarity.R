@@ -6,28 +6,18 @@
 #' or Pearson product moment), infer the species clusters based on a
 #' threshold **above** (or **equal to**) which spectra are considered alike.
 #'
-#' @param sim_matrix A *n* × *n* similarity matrix, with *n* the number of spectra. Columns should be named as the rows.
+#' @param sim_matrix A \eqn{n \times n} similarity matrix, with \eqn{n} the number of spectra. Columns should be named as the rows.
 #' @param threshold A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.
+#' @param method The method of hierarchical clustering to use. The default and recommended method is "complete", but any methods from [stats::hclust] are valid.
 #'
-#' @return A tibble of *n* rows for each spectra and 3 columns:
+#' @return A tibble of \eqn{n} rows for each spectra and 3 columns:
 #' * `name`: the rownames of the similarity matrix indicating the spectra names
-#' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to _c_, the total number of clusters.
+#' * `membership`: integers stating the cluster number to which the spectra belong to. It starts from 1 to \eqn{c}, the total number of clusters.
 #' * `cluster_size`: integers indicating the total number of spectra in the corresponding cluster.
 #'
-#' @details The matrix is essentially a network
-#'  where nodes are spectra and links exist between spectra only if the similarity
-#'  between the spectra is above the threshold.
-#'
-#'  The original idea to find the cluster members comes from a [StackOverflow answer by the user
-#'  ekstroem](https://stackoverflow.com/a/57613463). However, here the
-#'  implementation differs in two way:
-#'
-#'  1. It relies on the connected components of the network instead of the fast greedy
-#'   modularity algorithm.
-#'  2. It uses base R functions to reduce the dependencies
-#'
-#'
-#' @seealso For similarity metrics: [`coop::tcosine`](https://rdrr.io/cran/coop/man/cosine.html), [stats::cor], [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [delineate_with_identification]. For further analyses: [set_reference_spectra].
+#' @details The similarity matrix is converted to a distance matrix by subtracting the value one. This approach works for cosine similarity and positive correlations that have an upper bound of 1. Clusters are then delineated using hierarchical clustering. The default method of hierarchical clustering is the complete linkage (also known as farthest neighbor clustering) to ensure that the within-group minimum similarity of each cluster respects the threshold. See the Details section of [stats::hclust] for others valid methods to use.
+#' 
+#' @seealso For similarity metrics: [`coop::tcosine`](https://rdrr.io/cran/coop/man/cosine.html), [`stats::cor`](https://rdrr.io/r/stats/cor.html), [`Hmisc::rcorr`](https://rdrr.io/cran/Hmisc/man/rcorr.html). For using taxonomic identifications for clusters : [delineate_with_identification]. For further analyses: [set_reference_spectra].
 #' @export
 #' @examples
 #' # Toy similarity matrix between the six example spectra of
@@ -58,7 +48,7 @@
 #' # Delineate clusters based on a 0.92 threshold applied
 #' #  to the similarity matrix
 #' delineate_with_similarity(cosine_similarity, threshold = 0.92)
-delineate_with_similarity <- function(sim_matrix, threshold) {
+delineate_with_similarity <- function(sim_matrix, threshold, method = "complete") {
   if (!is.matrix(sim_matrix)) {
     stop("The similarity matrix is not a matrix.")
   }
@@ -71,31 +61,28 @@ delineate_with_similarity <- function(sim_matrix, threshold) {
   if (any(rownames(sim_matrix) != colnames(sim_matrix))) {
     stop("The similarity matrix has no identical names.")
   }
-
-  # Spectra as nodes are connected only if similarity is above the threshold
-  #
-  name_gtr_eq_threshold <- function(vec, threshold) {
-    if (!is.numeric(threshold)) {
+  if (!is.numeric(threshold)) {
       stop("The threshold provided is not a numeric.")
-    }
-    # Names of vec were checked above with the full matrix
-    base::names(vec)[vec >= threshold]
   }
-  # Extract elements of lists from nested lists and ensure sorted uniqueness
-  gather_cluster_membership <- function(nested_list) {
-    base::unlist(nested_list, use.names = FALSE) %>%
-      base::unique() %>%
-      base::sort() %>%
-      paste(collapse = "|") %>%
-      base::as.factor() %>%
-      return()
+  if( threshold < 0 | threshold > 1 ){
+    stop("The threshold provided is not in the range [0-1].")
   }
-  # Delineate clusters by creating a vector of membership (including self) and friends-of-friends with recursive lists.
-  # The vector is then rendered unique using factors and converted into integer id
-  memberships <- apply(sim_matrix, 1, name_gtr_eq_threshold, threshold = threshold)
+  
+  # Clustering with default complete-linkage after
+  #  conversion of similarity matrix to distance matrix
+  #
+  # WARNING: despite being distance agnostic, we expect the distance to be [0,1]
+  dist_matrix <- stats::as.dist(1 - sim_matrix)
+  hierarchical_clustering <- stats::hclust(dist_matrix, method = method)
+  
+  # Spectra belongs to the same cluster only if similarity is above or equal to the threshold
+  #
+  # The threshold is converted to a distance threshold
+  dist_threshold <- 1 - threshold
+  memberships <- stats::cutree(hierarchical_clustering, h = dist_threshold)
 
-  lapply(memberships, function(x) memberships[x]) %>%
-    sapply(gather_cluster_membership) %>%
+
+  memberships %>%
     tibble::enframe(value = "membership") %>%
     dplyr::group_by(.data$membership) %>%
     dplyr::mutate(

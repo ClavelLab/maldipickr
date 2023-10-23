@@ -141,12 +141,14 @@ sim_matrix <- coop::tcosine(fm)
 
 ### Similarity to clusters
 
-When the similarity matrix is computed between all pairs of the studied spectra, the next step is to delineate clusters of spectra to dereplicate the measured bacterial colonies.
+When the similarity matrix is computed between all pairs of the studied spectra, the next step is to delineate clusters of spectra in order to dereplicate the measured bacterial colonies, that is to find which are nearly identical colonies.
 
-The [`delineate_with_similarity()`](https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html) is agnostic of the similarity metric used, whether it is the cosine metric or the Pearson product moment, provided that a numeric threshold relevant to the metric used is given, and *above which* two spectra would be considered similar.
+The [`delineate_with_similarity()`](https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html) is agnostic of the similarity metric used provided that the upper bound is one and that a numeric threshold relevant to the metric used is given. We recommend the cosine metric or the Pearson product moment.
 
-Indeed, the matrix is essentially an adjacency network, where nodes are spectra and links exist between spectra only if the similarity between the spectra is **above** (or **equal to**) the threshold.
-This representation allows to infer the clusters easily. A table summarizes for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
+Hierarchical clustering will then group spectra in the same cluster only if the similarity between the spectra is **above** (or **equal to**) the provided threshold.
+The default and recommended method is the _complete linkage_, also known as the farthest neighbor, to ensure that the within-group minimum similarity of each cluster respects the threshold.
+
+Finally, a table summarizes for each spectra, to which cluster number it was assigned to and the size of the cluster, which is the total number of spectra in the cluster.
 
 
 
@@ -182,8 +184,6 @@ cosine_similarity <- matrix(
 #  to the similarity matrix
 delineate_with_similarity(cosine_similarity, threshold = 0.92)
 ```
-
-  
 
 ### Set a reference spectrum for each cluster
 

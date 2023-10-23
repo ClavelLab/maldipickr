@@ -21,22 +21,14 @@ cosine_similarity <- matrix(
     )
   )
 )
-cosine_similarity_with_fof <- matrix(
-  c(
-    1, 0.994, 0.995, 0.995, 0.993, 0.994, 0.91, 0.996,
-    0.994, 1, 0.997, 0.995, 0.995, 0.994, 0.91, 0.995,
-    0.995, 0.997, 1, 0.995, 0.995, 0.997, 0.913, 0.997,
-    0.995, 0.995, 0.995, 1, 0.994, 0.993, 0.907, 0.998,
-    0.993, 0.995, 0.995, 0.994, 1, 0.995, 0.915, 0.994,
-    0.994, 0.994, 0.997, 0.993, 0.995, 1, 0.922, 0.996,
-    0.91, 0.91, 0.913, 0.907, 0.915, 0.922, 1, 0.907,
-    0.996, 0.995, 0.997, 0.998, 0.994, 0.996, 0.907, 1
-  ),
-  nrow = 8,
-  dimnames = list(
-    c("1_A", "2_B", "3_C", "4_D", "5_E", "6_F", "7_G", "8_H"),
-    c("1_A", "2_B", "3_C", "4_D", "5_E", "6_F", "7_G", "8_H")
-  )
+cosine_similarity_toy <- matrix(
+  c(1.00, 0.92, 0.80,
+    0.92, 1.00, 0.94,
+    0.80, 0.94, 1.00),
+  nrow = 3, byrow = TRUE,
+  dimnames = rep(
+    list(c("A", "B", "C")),
+    times = 2)
 )
 test_that("delineate_with_similarity works", {
   expect_equal(
@@ -46,11 +38,19 @@ test_that("delineate_with_similarity works", {
     delineate_with_similarity(cosine_similarity, 0.92)$membership,
     c(1, 2, 2, 1, 1, 1)
   )
+})
+test_that("delineate_with_similarity works with different linkage", {
   expect_equal(
     delineate_with_similarity(
-      cosine_similarity_with_fof, 0.92
+      cosine_similarity_toy, 0.92, method = "complete"
     )$membership,
-    rep(1, times = 8)
+    c(1, 2, 2)
+  )
+    expect_equal(
+    delineate_with_similarity(
+      cosine_similarity_toy, 0.92, method = "single"
+    )$membership,
+    c(1, 1, 1)
   )
 })
 test_that("delineate_with_similarity fails with wrong input", {
@@ -65,5 +65,13 @@ test_that("delineate_with_similarity fails with wrong input", {
   expect_error(
     delineate_with_similarity(cosine_similarity, TRUE),
     "not a numeric"
+  )
+  expect_error(
+    delineate_with_similarity(cosine_similarity, 2.5),
+    "not in the range"
+  )
+  expect_error(
+    delineate_with_similarity(cosine_similarity, 0.92, method = "farthest"),
+    "invalid clustering method"
   )
 })

@@ -4,18 +4,20 @@
 \alias{delineate_with_similarity}
 \title{Delineate clusters from a similarity matrix}
 \usage{
-delineate_with_similarity(sim_matrix, threshold)
+delineate_with_similarity(sim_matrix, threshold, method = "complete")
 }
 \arguments{
-\item{sim_matrix}{A \emph{n} × \emph{n} similarity matrix, with \emph{n} the number of spectra. Columns should be named as the rows.}
+\item{sim_matrix}{A \eqn{n \times n} similarity matrix, with \eqn{n} the number of spectra. Columns should be named as the rows.}
 
 \item{threshold}{A numeric value indicating the minimal similarity between two spectra. Adjust accordingly to the similarity metric used.}
+
+\item{method}{The method of hierarchical clustering to use. The default and recommended method is "complete", but any methods from \link[stats:hclust]{stats::hclust} are valid.}
 }
 \value{
-A tibble of \emph{n} rows for each spectra and 3 columns:
+A tibble of \eqn{n} rows for each spectra and 3 columns:
 \itemize{
 \item \code{name}: the rownames of the similarity matrix indicating the spectra names
-\item \code{membership}: integers stating the cluster number to which the spectra belong to. It starts from 1 to \emph{c}, the total number of clusters.
+\item \code{membership}: integers stating the cluster number to which the spectra belong to. It starts from 1 to \eqn{c}, the total number of clusters.
 \item \code{cluster_size}: integers indicating the total number of spectra in the corresponding cluster.
 }
 }
@@ -25,17 +27,7 @@ or Pearson product moment), infer the species clusters based on a
 threshold \strong{above} (or \strong{equal to}) which spectra are considered alike.
 }
 \details{
-The matrix is essentially a network
-where nodes are spectra and links exist between spectra only if the similarity
-between the spectra is above the threshold.
-
-The original idea to find the cluster members comes from a \href{https://stackoverflow.com/a/57613463}{StackOverflow answer by the user ekstroem}. However, here the
-implementation differs in two way:
-\enumerate{
-\item It relies on the connected components of the network instead of the fast greedy
-modularity algorithm.
-\item It uses base R functions to reduce the dependencies
-}
+The similarity matrix is converted to a distance matrix by subtracting the value one. This approach works for cosine similarity and positive correlations that have an upper bound of 1. Clusters are then delineated using hierarchical clustering. The default method of hierarchical clustering is the complete linkage (also known as farthest neighbor clustering) to ensure that the within-group minimum similarity of each cluster respects the threshold. See the Details section of \link[stats:hclust]{stats::hclust} for others valid methods to use.
 }
 \examples{
 # Toy similarity matrix between the six example spectra of
@@ -68,5 +60,5 @@ cosine_similarity <- matrix(
 delineate_with_similarity(cosine_similarity, threshold = 0.92)
 }
 \seealso{
-For similarity metrics: \href{https://rdrr.io/cran/coop/man/cosine.html}{\code{coop::tcosine}}, \link[stats:cor]{stats::cor}, \href{https://rdrr.io/cran/Hmisc/man/rcorr.html}{\code{Hmisc::rcorr}}. For using taxonomic identifications for clusters : \link{delineate_with_identification}. For further analyses: \link{set_reference_spectra}.
+For similarity metrics: \href{https://rdrr.io/cran/coop/man/cosine.html}{\code{coop::tcosine}}, \href{https://rdrr.io/r/stats/cor.html}{\code{stats::cor}}, \href{https://rdrr.io/cran/Hmisc/man/rcorr.html}{\code{Hmisc::rcorr}}. For using taxonomic identifications for clusters : \link{delineate_with_identification}. For further analyses: \link{set_reference_spectra}.
 }
