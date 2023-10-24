@@ -230,14 +230,14 @@ merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra =
 
   peakless <- list()
   # List the spectra with no peaks detected and remove them
+  # Initially using rownames of dataframe, now using dplyr functions for consistency
   if (remove_peakless_spectra) {
     peakless <- lapply( # Extract the metadata object from all element of the list
       processed, `[[`, "metadata"
     ) %>%
-      lapply(function(mdata) {
-        rownames(mdata)[mdata$peaks == 0]
-      }) %>%
-      unlist()
+      dplyr::bind_rows(.id = "list_identifier") %>%
+      dplyr::filter(.data$peaks == 0) %>%
+      dplyr::pull(.data$name)
     if (length(peakless) > 0) {
       warning(
         "No peaks were detected in the following spectra, so they will be removed\n",
