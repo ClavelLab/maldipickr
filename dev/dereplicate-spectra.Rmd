@@ -1394,6 +1394,14 @@ test_that("pick_spectra works", {
     pick_spectra(clusters, is_sorted = TRUE)$to_pick,
     c(FALSE, FALSE, TRUE, FALSE, TRUE, FALSE)
   )
+  expect_message(
+    out <- pick_spectra(clusters, metadata, "OD600", is_sorted = TRUE),
+    "The 'is_sorted' flag is set to TRUE, while a metadata table is provided."
+  )
+  expect_equal(
+    out$to_pick,
+    c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE)
+  )
 })
 test_that("pick_spectra fails without metadata and column", {
   expect_error(
@@ -1411,6 +1419,16 @@ test_that("pick_spectra fails without metadata and column", {
   expect_error(
     pick_spectra(clusters, altered_metadata, "OD600"),
     "The spectra names in the metadata"
+  )
+  expect_error(
+    pick_spectra(clusters, metadata, "CRITERIA_NOT_IN_TIBBLE"),
+    "The 'criteria_column' is not present in the merged tibble."
+  )
+  expect_error(
+    pick_spectra(clusters, metadata, "OD600",
+      soft_mask_column = "is_egde" # Typo in soft_mask_column
+    ),
+    "The 'soft_mask_column' is not present in the merged tibble."
   )
   expect_error(
     pick_spectra(clusters, metadata, "OD600",
