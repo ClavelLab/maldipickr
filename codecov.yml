@@ -9,6 +9,8 @@ coverage:
         threshold: 1%
         informational: true
 
+codecov:
+  token: 24297687-8b6a-4417-aacf-24e1c97cbaa4
 
 # When modifying this file, please validate using
 # curl -X POST --data-binary @codecov.yml https://codecov.io/validate
