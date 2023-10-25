@@ -1,3 +1,22 @@
+# maldipickr 1.2.0
+
+## Changed
+
+* (**BREAKING**) Change homemade clustering to robust hierarchical clustering in `delineate_with_similarity()` (#32). The default method of hierarchical clustering is the complete linkage (also known as farthest neighbor clustering) to ensure that the within-group minimum similarity of each cluster respects the threshold
+* Change `sapply()` calls to more type-robust `vapply()` calls
+
+## Added
+
+* (**BREAKING**) Set a minimum R version >= 3.2.0 (#31)
+* Add hierarchical clustering linkage method as argument to `delineate_with_similarity()`
+* Add tolerance argument to `check_spectra()` to allow flexible spectra length checks
+* Add more unit tests to key functions: `pick_spectra()` (#26) and `merge_processed_spectra()` (#27)
+
+## Fixed
+
+* Fix missing spectra names when merging spectra lists with peak-less spectra
+* Fix coverage update issue by adding codecov token (#34)
+
 # maldipickr 1.1.1
 
 ## Fixed
