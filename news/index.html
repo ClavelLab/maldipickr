@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">maldipickr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,27 @@
       <small>Source: <a href="https://github.com/ClavelLab/maldipickr/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="maldipickr-120">maldipickr 1.2.0<a class="anchor" aria-label="anchor" href="#maldipickr-120"></a></h2>
+<div class="section level3">
+<h3 id="changed-1-2-0">Changed<a class="anchor" aria-label="anchor" href="#changed-1-2-0"></a></h3>
+<ul><li>(<strong>BREAKING</strong>) Change homemade clustering to robust hierarchical clustering in <code><a href="../reference/delineate_with_similarity.html">delineate_with_similarity()</a></code> (<a href="https://github.com/ClavelLab/maldipickr/issues/32" class="external-link">#32</a>). The default method of hierarchical clustering is the complete linkage (also known as farthest neighbor clustering) to ensure that the within-group minimum similarity of each cluster respects the threshold</li>
+<li>Change <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply()</a></code> calls to more type-robust <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply()</a></code> calls</li>
+</ul></div>
+<div class="section level3">
+<h3 id="added-1-2-0">Added<a class="anchor" aria-label="anchor" href="#added-1-2-0"></a></h3>
+<ul><li>(<strong>BREAKING</strong>) Set a minimum R version &gt;= 3.2.0 (<a href="https://github.com/ClavelLab/maldipickr/issues/31" class="external-link">#31</a>)</li>
+<li>Add hierarchical clustering linkage method as argument to <code><a href="../reference/delineate_with_similarity.html">delineate_with_similarity()</a></code>
+</li>
+<li>Add tolerance argument to <code><a href="../reference/check_spectra.html">check_spectra()</a></code> to allow flexible spectra length checks</li>
+<li>Add more unit tests to key functions: <code><a href="../reference/pick_spectra.html">pick_spectra()</a></code> (<a href="https://github.com/ClavelLab/maldipickr/issues/26" class="external-link">#26</a>) and <code><a href="../reference/merge_processed_spectra.html">merge_processed_spectra()</a></code> (<a href="https://github.com/ClavelLab/maldipickr/issues/27" class="external-link">#27</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixed-1-2-0">Fixed<a class="anchor" aria-label="anchor" href="#fixed-1-2-0"></a></h3>
+<ul><li>Fix missing spectra names when merging spectra lists with peak-less spectra</li>
+<li>Fix coverage update issue by adding codecov token (<a href="https://github.com/ClavelLab/maldipickr/issues/34" class="external-link">#34</a>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="maldipickr-111">maldipickr 1.1.1<a class="anchor" aria-label="anchor" href="#maldipickr-111"></a></h2><p class="text-muted">CRAN release: 2023-09-07</p>
 <div class="section level3">
