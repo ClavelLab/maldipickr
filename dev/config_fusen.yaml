@@ -12,7 +12,6 @@ dereplicate-spectra.Rmd:
   tests:
   - tests/testthat/test-process_spectra.R
   - tests/testthat/test-merge_processed_spectra.R
-  - tests/testthat/test-similarity_to_clusters.R
   - tests/testthat/test-delineate_with_similarity.R
   - tests/testthat/test-delineate_with_identification.R
   - tests/testthat/test-import_spede_clusters.R
@@ -33,10 +32,12 @@ flat_utils.Rmd:
   - R/is_a_processed_spectra_list.R
   - R/is_a_rds_list.R
   - R/is_well_on_edge.R
+  - R/get_spectra_names.R
   tests:
   - tests/testthat/test-is_well_on_edge.R
   - tests/testthat/test-is_a_rds_list.R
   - tests/testthat/test-is_a_processed_spectra_list.R
+  - tests/testthat/test-get_spectra_names.R
   vignettes: []
   inflate:
     flat_file: dev/flat_utils.Rmd
