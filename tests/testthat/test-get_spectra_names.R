@@ -25,3 +25,9 @@ test_that("get_spectra_names warns when duplicate", {
     out$sanitized_name, c("species1_G2", "species1_G2")
   )
 })
+test_that("get_spectra_names fails on empty spectra", {
+  expect_error(
+    get_spectra_names(c(MALDIquant::createMassSpectrum(0, 0))),
+    "Empty spectra detected!"
+  )
+})

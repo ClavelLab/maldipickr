@@ -56,6 +56,7 @@ The full procedure is illustrated in the example below. While in this case, all 
 #'
 #'
 #' @param spectra_list A list of [MALDIquant::MassSpectrum] objects.
+#' @param spectra_names A [tibble::tibble] (or [data.frame]) of sanitized spectra names by default from [get_spectra_names]. If provided manually, the column `sanitized_name` will be used to name the spectra.
 #' @param rds_prefix A character indicating the prefix for the `.RDS` output files to be written in the `processed` directory. By default, no prefix are given and thus no files are written.
 #'
 #' @return A named list of three objects:
@@ -70,7 +71,9 @@ The full procedure is illustrated in the example below. While in this case, all 
 #'
 #' @note The original R code on which this function is based is accessible at: <https://github.com/strejcem/MALDIvs16S>
 #' @examples
-process_spectra <- function(spectra_list, rds_prefix = NULL) {
+process_spectra <- function(spectra_list,
+                            spectra_names = get_spectra_names(spectra_list),
+                            rds_prefix = NULL) {
   # It returns the list and write it for future processing as an RDS file.
 
   # 1. SQRT transformation
@@ -106,15 +109,15 @@ process_spectra <- function(spectra_list, rds_prefix = NULL) {
     "peaks" = lengths(snr_list)
   )
 
-
   # Add the spectra identifiers to all objects
-  rownames(metadata) <- names(spectra) <- names(peaks) <- sapply(spectra, function(x) {
-    # e.g., 230117_1750_1_B1
-    gsub(
-      "[-\\.]", "_",
-      MALDIquant::metaData(x)[["fullName"]]
+  if(! "sanitized_name" %in% colnames(spectra_names)){
+    stop(
+      "Missing 'sanitized_name' column in the provided 'spectra_names' tibble!",
+      "\n\nTip: Use the `get_spectra_names()` for default and compliant names."
     )
-  })
+  }
+  rownames(metadata) <- names(spectra) <- names(peaks) <- spectra_names[["sanitized_name"]]
+  
   # Aggregate the objects to a list
   processed_list <- list(
     "spectra" = spectra,
@@ -173,10 +176,30 @@ test_that("process_spectra works", {
     )
   )
 })
-test_that("process_spectra warns on empty spectra", {
-  expect_warning(
+test_that("process_spectra with automatic names fails on empty spectra with maldipickr functions", {
+  expect_error(
     process_spectra(c(MALDIquant::createMassSpectrum(0, 0))),
+    "Empty spectra detected!"
+  )
+})
+test_that("process_spectra with manual names warns on empty spectra with MALDIquant functions", {
+  expect_warning(
+    process_spectra(
+      c(MALDIquant::createMassSpectrum(0, 0)),
+      spectra_names = tibble::tibble(sanitized_name = "Dummy_name")
+    ),
     "MassSpectrum object is empty"
+  )
+})
+test_that("process_spectra with manual names fails if wrong column", {
+  expect_error(
+    process_spectra(
+      spectra_list_test,
+      spectra_names = tibble::tibble(
+        sanitized_wrong_column = c("spectra1","spectra2")
+        )
+    ),
+    "Missing 'sanitized_name' column"
   )
 })
 ```
@@ -354,13 +377,13 @@ test_that("merge_processed_spectra fails with the wrong input", {
 
 test_that("merge_processed_spectra fails with only empty peaks", {
   expect_warning(
-    empty_peaks <- list(
-      createMassSpectrum(
-        mass = 4500:5000,
-        intensity = rep(0, 501),
-        metaData = list(fullName = "foo")
-      )
-    ) %>% process_spectra(),
+      empty_peaks <- list(
+        createMassSpectrum(
+          mass = 4500:5000,
+          intensity = rep(0, 501),
+          metaData = list(fullName = "foo")
+        )
+      ) %>% process_spectra(spectra_names = tibble::tibble(sanitized_name = "foo")),
     "MassSpectrum object is empty!"
   )
   expect_warning(

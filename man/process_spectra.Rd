@@ -4,10 +4,16 @@
 \alias{process_spectra}
 \title{Process Bruker MALDI Biotyper spectra \emph{à la} Strejcek et al. (2018)}
 \usage{
-process_spectra(spectra_list, rds_prefix = NULL)
+process_spectra(
+  spectra_list,
+  spectra_names = get_spectra_names(spectra_list),
+  rds_prefix = NULL
+)
 }
 \arguments{
 \item{spectra_list}{A list of \link[MALDIquant:MassSpectrum-class]{MALDIquant::MassSpectrum} objects.}
+
+\item{spectra_names}{A \link[tibble:tibble]{tibble::tibble} (or \link{data.frame}) of sanitized spectra names by default from \link{get_spectra_names}. If provided manually, the column \code{sanitized_name} will be used to name the spectra.}
 
 \item{rds_prefix}{A character indicating the prefix for the \code{.RDS} output files to be written in the \code{processed} directory. By default, no prefix are given and thus no files are written.}
 }

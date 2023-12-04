@@ -41,13 +41,13 @@ test_that("merge_processed_spectra fails with the wrong input", {
 
 test_that("merge_processed_spectra fails with only empty peaks", {
   expect_warning(
-    empty_peaks <- list(
-      createMassSpectrum(
-        mass = 4500:5000,
-        intensity = rep(0, 501),
-        metaData = list(fullName = "foo")
-      )
-    ) %>% process_spectra(),
+      empty_peaks <- list(
+        createMassSpectrum(
+          mass = 4500:5000,
+          intensity = rep(0, 501),
+          metaData = list(fullName = "foo")
+        )
+      ) %>% process_spectra(spectra_names = tibble::tibble(sanitized_name = "foo")),
     "MassSpectrum object is empty!"
   )
   expect_warning(

@@ -16,9 +16,29 @@ test_that("process_spectra works", {
     )
   )
 })
-test_that("process_spectra warns on empty spectra", {
-  expect_warning(
+test_that("process_spectra with automatic names fails on empty spectra with maldipickr functions", {
+  expect_error(
     process_spectra(c(MALDIquant::createMassSpectrum(0, 0))),
+    "Empty spectra detected!"
+  )
+})
+test_that("process_spectra with manual names warns on empty spectra with MALDIquant functions", {
+  expect_warning(
+    process_spectra(
+      c(MALDIquant::createMassSpectrum(0, 0)),
+      spectra_names = tibble::tibble(sanitized_name = "Dummy_name")
+    ),
     "MassSpectrum object is empty"
+  )
+})
+test_that("process_spectra with manual names fails if wrong column", {
+  expect_error(
+    process_spectra(
+      spectra_list_test,
+      spectra_names = tibble::tibble(
+        sanitized_wrong_column = c("spectra1","spectra2")
+        )
+    ),
+    "Missing 'sanitized_name' column"
   )
 })

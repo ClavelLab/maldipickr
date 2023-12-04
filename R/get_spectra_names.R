@@ -36,7 +36,21 @@ get_spectra_names <- function(spectra_list){
       )
     }
     
-    spectra_names <- lapply(spectra_list, function(spectra) {
+    # Need to make sure that the spectra are not empty here to avoid
+    # a tibble issue like:
+    # Error in `tibble::as_tibble_row()`:
+    # ! Columns 1, 2, and 3 must be named.
+    #
+    # Therefore, error if the spectra is empty or not
+    empty_spectra <- vapply(spectra_list, MALDIquant::isEmpty, FUN.VALUE = logical(1))
+    
+    if(any(empty_spectra)){
+      stop(
+        "Empty spectra detected! Preprocess the data accordingly using `check_spectra()`"
+      )
+    }
+    
+    spectra_names <- lapply(spectra_list,  function(spectra){
       MALDIquant::metaData(spectra)[c("name", "fullName", "file")] %>%
         tibble::as_tibble_row()
     }) %>%
@@ -46,7 +60,7 @@ get_spectra_names <- function(spectra_list){
       ) %>% 
       dplyr::relocate("sanitized_name")
     
-    if( nrow(spectra_names) > dplyr::n_distinct(spectra_names$sanitized_name)){
+    if( nrow(spectra_names) > dplyr::n_distinct(spectra_names[["sanitized_name"]])){
       warning(
         "Non-unique values in spectra names!",
         "\n\nQuickfix: use `dplyr::mutate(sanitized_name = base::make.unique(sanitized_name))`"
