@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">maldipickr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">process_spectra</span><span class="op">(</span></span>
 <span>  <span class="va">spectra_list</span>,</span>
 <span>  spectra_names <span class="op">=</span> <span class="fu"><a href="get_spectra_names.html">get_spectra_names</a></span><span class="op">(</span><span class="va">spectra_list</span><span class="op">)</span>,</span>
-<span>  rds_prefix <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  rds_prefix <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -76,7 +76,7 @@
 
 
 <dt>rds_prefix</dt>
-<dd><p>A character indicating the prefix for the <code>.RDS</code> output files to be written in the <code>processed</code> directory. By default, no prefix are given and thus no files are written.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Writing to disk as RDS is no longer supported. A character indicating the prefix for the <code>.RDS</code> output files to be written in the <code>processed</code> directory. By default, no prefix are given and thus no files are written.</p></dd>
 
 </dl></div>
     <div class="section level2">
