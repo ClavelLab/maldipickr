@@ -7,7 +7,7 @@
 process_spectra(
   spectra_list,
   spectra_names = get_spectra_names(spectra_list),
-  rds_prefix = NULL
+  rds_prefix = deprecated()
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ process_spectra(
 
 \item{spectra_names}{A \link[tibble:tibble]{tibble::tibble} (or \link{data.frame}) of sanitized spectra names by default from \link{get_spectra_names}. If provided manually, the column \code{sanitized_name} will be used to name the spectra.}
 
-\item{rds_prefix}{A character indicating the prefix for the \code{.RDS} output files to be written in the \code{processed} directory. By default, no prefix are given and thus no files are written.}
+\item{rds_prefix}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Writing to disk as RDS is no longer supported. A character indicating the prefix for the \code{.RDS} output files to be written in the \code{processed} directory. By default, no prefix are given and thus no files are written.}
 }
 \value{
 A named list of three objects:
