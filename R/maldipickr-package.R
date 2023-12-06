@@ -16,6 +16,7 @@
 #' @importFrom dplyr right_join
 #' @importFrom dplyr select
 #' @importFrom dplyr ungroup
+#' @importFrom lifecycle deprecated
 #' @importFrom MALDIquant binPeaks
 #' @importFrom MALDIquant calibrateIntensity
 #' @importFrom MALDIquant createMassSpectrum
