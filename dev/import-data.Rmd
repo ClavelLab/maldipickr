@@ -639,6 +639,8 @@ check_spectra <- function(spectra_list, tolerance = sqrt(.Machine$double.eps)) {
     is_not_regular = !regular_spectra
   )
   if (any(Reduce(any, checking_list))) {
+    # TODO: convert warning to message and discard spectra to remove
+    # or point to `remove_spectra()`
     # List all the spectra that should be removed
     to_remove <- lapply(checking_list, which) %>%
       unlist() %>%
