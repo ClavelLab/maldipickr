@@ -10,3 +10,10 @@ template:
     code_font: "Hack"
     primary: "#cf5c36"
   theme: "tango"
+
+news:
+  releases:
+  - text: "Version 1.2.0"
+    href: "https://clavellab.github.io/maldipickr/news/index.html#maldipickr-120"
+  - text: "Version 1.1.1"
+    href: "https://clavellab.github.io/maldipickr/news/index.html#maldipickr-111"
