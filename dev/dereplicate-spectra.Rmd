@@ -425,6 +425,71 @@ test_that("merge_processed_spectra works with one peakless spectra and RDS input
 })
 ```
 
+## Remove (raw or processed) spectra
+
+```{r function-remove_spectra}
+#' Remove (raw or processed) spectra
+#'
+#' The `remove_spectra()` function is used to discard specific spectra from (1) raw spectra list by removing them, or (2) processed spectra by removing them from the spectra, peaks and metadata objects.
+#'
+#' @param spectra_list A list of [MALDIquant::MassSpectrum] objects OR A list of processed spectra from [process_spectra]
+#' @param to_remove The spectra to be removed. In the case of raw spectra: a logical vector same size of `spectra_list` or from [check_spectra] function. In the case of processed spectra: names of the spectra as formatted in [get_spectra_names] in the `sanitized_name` column.
+#'
+#' @return The same object as `spectra_list` minus the spectra in `to_remove`.
+#'
+#' @export
+remove_spectra <- function(spectra_list, to_remove) {
+  if (is_a_processed_spectra_list(spectra_list)) {
+    if (base::class(to_remove) != "character") {
+      stop(
+        "remove_spectra() with processed spectra expects spectra names in 'to_remove'"
+      )
+    }
+    spectra_names <- spectra_list[["metadata"]][["name"]]
+    if (!to_remove %in% spectra_names) {
+      stop(
+        "Spectra names in 'to_remove' are not present in the spectra list"
+      )
+    }
+    to_remove <- spectra_names %in% to_remove
+    # spectra_list[["spectra"]], to_remove
+    # spectra_list[["peaks"]], to_remove
+    # spectra_list[["metadata"]][!to_remove, ]
+    # could fall back to the function below for raw spectra but used on spectra, peaks after converting the names in logical
+  } else {
+    # spectra_list is a raw spectra
+    # to_remove should be logical vector of same length as
+    if (base::unlist(to_remove) %>% base::class != "logical") {
+      stop(
+        "remove_spectra() with raw spectra expects logical in 'to_remove'",
+        "You could provide the output of `check_spectra()`."
+      )
+    }
+    to_remove <- switch(base::class(to_remove),
+      "list" = Reduce(any, to_remove),
+      "logical" = to_remove
+    )
+    if (base::length(spectra_list) != base::length(to_remove)) {
+      stop(
+        "Unequal lengths between spectra_list and to_remove"
+      )
+    }
+    return(spectra_list[!to_remove])
+  }
+}
+```
+
+```{r examples-remove_spectra}
+remove_spectra()
+```
+
+```{r tests-remove_spectra}
+test_that("remove_spectra works", {
+  expect_true(inherits(remove_spectra, "function"))
+})
+```
+
+
 ## Compute a similarity matrix between all processed spectra (not included)
 
 Once all the batches of spectra have been processed together, we can use a distance metric to evaluate how close the spectra are to one another.
