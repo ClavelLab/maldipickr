@@ -443,7 +443,189 @@ test_that("get_spectra_names fails on empty spectra", {
   )
 })
 ```
+
+
+# Remove (raw or processed) spectra
+
+## Internal remove_spectra_logical for raw spectra
+
+```{r function-remove_spectra_logical}
+#' Remove raw spectra
+#'
+#' The `remove_spectra()` function is used to discard specific spectra from raw spectra list by removing them.
+#'
+#' @param spectra_list A list of [MALDIquant::MassSpectrum] objects
+#' @param to_remove The spectra to be removed. A logical vector same size of `spectra_list` or from [check_spectra] function
+#'
+#' @return The same object as `spectra_list` minus the spectra in `to_remove`.
+#' @noRd
+remove_spectra_logical <- function(spectra_list, to_remove) {
+  to_remove_class <- base::unlist(to_remove) %>% base::class()
+  if (to_remove_class != "logical") {
+    stop(
+      "Non logical values in 'to_remove' against expectations\n",
+      "You could provide the output of `check_spectra()`."
+    )
+  }
+  to_remove <- switch(base::class(to_remove),
+    "list" = Reduce(`|`, to_remove),
+    "logical" = to_remove
+  )
+  if (base::length(spectra_list) != base::length(to_remove)) {
+    stop(
+      "Unequal lengths between spectra_list and to_remove"
+    )
+  }
+  return(spectra_list[!to_remove])
+}
+```
+
+```{r tests-remove_spectra_logical}
+half_empty <- c(
+  MALDIquant::createMassSpectrum(1:3, c(0,0,0)),
+  MALDIquant::createMassSpectrum(11:13, 11:13)
+)
+test_that("remove_spectra_logical works", {
+  expect_length(
+    remove_spectra_logical(half_empty, check_spectra(half_empty)),
+    1
+  )
+  expect_length(
+    remove_spectra_logical(half_empty, to_remove = c(TRUE, FALSE)),
+    1
+  )
+})
+test_that("remove_spectra_logical fails with wrong input", {
+  expect_error(
+    remove_spectra_logical(half_empty, to_remove = "please_remove"),
+    "Non logical values"
+  )
+  expect_error(
+    remove_spectra_logical(half_empty, to_remove = TRUE),
+    "Unequal lengths"
+  )
+})
+```
   
+## Exported function to remove spectra
+
+```{r function-remove_spectra}
+#' Remove (raw or processed) spectra
+#'
+#' The `remove_spectra()` function is used to discard specific spectra from (1) raw spectra list by removing them, or (2) processed spectra by removing them from the spectra, peaks and metadata objects.
+#'
+#' @param spectra_list A list of [MALDIquant::MassSpectrum] objects OR A list of processed spectra from [process_spectra]
+#' @param to_remove The spectra to be removed. In the case of raw spectra: a logical vector same size of `spectra_list` or from [check_spectra] function. In the case of processed spectra: names of the spectra as formatted in [get_spectra_names] in the `sanitized_name` column.
+#'
+#' @return The same object as `spectra_list` minus the spectra in `to_remove`.
+#'
+#' @export
+remove_spectra <- function(spectra_list, to_remove) {
+  if (base::class(spectra_list) == "list" &
+    base::class(spectra_list[[1]]) == "MassSpectrum"
+  ) {
+    # spectra_list is a raw spectra
+    # to_remove should be logical vector
+    remove_spectra_logical(spectra_list, to_remove) %>%
+      return()
+  } else if (is_a_processed_spectra_list(spectra_list)) {
+    if (base::class(to_remove) != "character") {
+      stop(
+        "remove_spectra() with processed spectra expects spectra names in 'to_remove'"
+      )
+    }
+    spectra_names <- spectra_list[[1]][["metadata"]][["name"]]
+    if (!to_remove %in% spectra_names) {
+      stop(
+        "Spectra names in 'to_remove' are not present in the spectra list"
+      )
+    }
+    to_remove <- spectra_names %in% to_remove
+
+    list(
+      "spectra" = remove_spectra_logical(spectra_list[[1]][["spectra"]], to_remove),
+      "peaks" = remove_spectra_logical(spectra_list[[1]][["peaks"]], to_remove),
+      "metadata" = spectra_list[[1]][["metadata"]][!to_remove, ]
+    ) %>% return()
+  } else {
+    stop("spectra_list is not a list of raw spectra nor a list of processed spectra")
+  }
+}
+```
+
+```{r examples-remove_spectra}
+# Get an example directory of six Bruker MALDI Biotyper spectra
+directory_biotyper_spectra <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+)
+# Import only the first two spectra
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)[1:2]
+# Introduce artificially an empty raw spectra
+spectra_list <- c(spectra_list, MALDIquant::createMassSpectrum(0, 0))
+# Empty spectra are detected by `check_spectra()`
+#   and can be removed by `remove_spectra()`
+spectra_list %>% 
+  remove_spectra(to_remove = check_spectra(.))
+
+# Get an example processed spectra
+processed_path <- system.file(
+    "three_processed_spectra_with_one_peakless.RDS",
+    package = "maldipickr")
+processed <- readRDS(processed_path) %>% list()
+
+# Remove a specific spectra
+remove_spectra(processed, "empty_H12")
+```
+
+```{r tests-remove_spectra}
+# Processed data
+processed_path <- system.file(
+    "three_processed_spectra_with_one_peakless.RDS",
+    package = "maldipickr")
+processed <- readRDS(processed_path) %>% list()
+test_that("remove_spectra works on processed spectra", {
+  expect_mapequal(
+    remove_spectra(processed, "empty_H12") %>% base::lengths(),
+    c(spectra = 2L, peaks = 2L, metadata = 3L)
+  )
+})
+test_that("remove_spectra fails with wrong input on processed spectra", {
+  expect_error(
+    remove_spectra(processed, "empty_H2") ,
+    "Spectra names in 'to_remove'"
+  )
+  expect_error(
+    remove_spectra(processed, c(TRUE, FALSE)) ,
+    "remove_spectra\\(\\) with processed spectra expects spectra names"
+  )
+})
+# Raw data
+directory_biotyper_spectra <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+)
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)[1:2]
+spectra_list <- c(spectra_list, MALDIquant::createMassSpectrum(0, 0))
+test_that("remove_spectra works on raw spectra", {
+  expect_equal(
+    remove_spectra(spectra_list, c(FALSE, FALSE, TRUE)) %>% base::lengths(),
+    c(20882L, 20882L)
+  )
+  expect_equal(
+    remove_spectra(spectra_list, check_spectra(spectra_list)) %>% base::lengths(),
+    c(20882L, 20882L)
+  )
+})
+test_that("remove_spectra fails with wrong input on raw spectra", {
+  expect_error(
+    remove_spectra(spectra_list, "species1"),
+    "Non logical values in 'to_remove'"
+  )
+})
+```
+
+
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
