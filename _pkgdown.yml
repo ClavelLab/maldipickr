@@ -24,6 +24,7 @@ reference:
       - check_spectra
       - merge_processed_spectra
       - process_spectra
+      - remove_spectra
 
   - title: "Dereplicate"
     desc: "Functions to cluster and reduce redundancy"
