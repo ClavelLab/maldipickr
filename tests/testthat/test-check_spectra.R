@@ -8,24 +8,24 @@ test_that("check_spectra works", {
   )
 })
 test_that("check_spectra warns with empty spectra", {
-  expect_warning(
+  expect_message(
     check_spectra(c(MALDIquant::createMassSpectrum(mass = 0, intensity = 0))),
-    "Some spectra"
+    "Some spectra are incorrect"
   )
 })
 uneven_size <- c(MALDIquant::createMassSpectrum(1:3, 1:3),
                  MALDIquant::createMassSpectrum(10:13, 10:13)
                  )
 test_that("check_spectra works with tolerance argument",{
-  expect_warning(
+  expect_message(
     out <- check_spectra(uneven_size),
-    "Some spectra"
+    "Some spectra are incorrect"
   )
   expect_identical(
     out$is_outlier_length,
     c(FALSE, TRUE)
   )
-  expect_no_warning(
+  expect_no_message(
     out_tolerance <- check_spectra(uneven_size, tolerance = 1)
   )
   expect_identical(
