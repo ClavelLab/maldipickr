@@ -5,8 +5,8 @@
 #' Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
 #'
 #' @param processed_spectra A [list] of the processed spectra and associated peaks and metadata in two possible formats:
-#' * A list of **paths** to RDS files produced by [process_spectra] when using the `rds_prefix` option.
 #' * A list of **in-memory objects** (named `spectra`, `peaks`, `metadata`) produced by [process_spectra].
+#' * `r lifecycle::badge('deprecated')` A list of **paths** to RDS files produced by [process_spectra] when using the `rds_prefix` option.
 #' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
 #' @param interpolate_missing A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.
 #'
@@ -57,6 +57,11 @@ merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra =
   # Determine the type of input with a sneak-peek at the first element
   if (typeof(processed_spectra[[1]]) == "character") {
     if (is_a_rds_list(processed_spectra)) {
+      lifecycle::deprecate_warn(
+        when = "1.2.9000",
+      what = "merge_processed_spectra(processed_spectra = 'must be an in-memory object')",
+      details = "Ability to read processed spectra from RDS files will be dropped in next release."
+      )
       processed <- lapply(processed_spectra, readRDS)
     }
   } else {

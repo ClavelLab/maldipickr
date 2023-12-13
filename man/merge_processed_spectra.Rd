@@ -13,8 +13,8 @@ merge_processed_spectra(
 \arguments{
 \item{processed_spectra}{A \link{list} of the processed spectra and associated peaks and metadata in two possible formats:
 \itemize{
-\item A list of \strong{paths} to RDS files produced by \link{process_spectra} when using the \code{rds_prefix} option.
 \item A list of \strong{in-memory objects} (named \code{spectra}, \code{peaks}, \code{metadata}) produced by \link{process_spectra}.
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} A list of \strong{paths} to RDS files produced by \link{process_spectra} when using the \code{rds_prefix} option.
 }}
 
 \item{remove_peakless_spectra}{A logical indicating whether to discard the spectra without detected peaks.}
