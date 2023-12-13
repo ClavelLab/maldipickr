@@ -1,3 +1,7 @@
+# Add URL for website metadata
+# src: https://pkgdown.r-lib.org/articles/metadata.html
+url: https://clavellab.github.io/maldipickr
+
 template:
   bootswatch: litera
   bootstrap: 5
