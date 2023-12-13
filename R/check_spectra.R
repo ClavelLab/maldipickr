@@ -60,15 +60,9 @@ check_spectra <- function(spectra_list, tolerance = sqrt(.Machine$double.eps)) {
     is_not_regular = !regular_spectra
   )
   if (any(Reduce(any, checking_list))) {
-    # List all the spectra that should be removed
-    to_remove <- lapply(checking_list, which) %>%
-      unlist() %>%
-      unique() %>%
-      paste(collapse = ",")
-    warning(
-      "Some spectra (", to_remove, ") are incorrect (empty, outlier length or irregular).\n",
-      "They can be removed as follow:\n",
-      " spectra_list <- spectra_list[-c(", to_remove, ")]"
+    message(
+      "Some spectra are incorrect (empty, outlier length or irregular).\n",
+      "They can be removed using `remove_spectra()`"
     )
   }
   return(checking_list)
