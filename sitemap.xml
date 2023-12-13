@@ -1,75 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/dereplicate-bruker-maldi-biotyper-spectra.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/articles/dereplicate-bruker-maldi-biotyper-spectra.html</loc>
   </url>
   <url>
-    <loc>/articles/import-data-from-bruker-maldi-biotyper.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/articles/import-data-from-bruker-maldi-biotyper.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/articles/index.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/check_spectra.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/check_spectra.html</loc>
   </url>
   <url>
-    <loc>/reference/delineate_with_identification.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/delineate_with_identification.html</loc>
   </url>
   <url>
-    <loc>/reference/delineate_with_similarity.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/delineate_with_similarity.html</loc>
   </url>
   <url>
-    <loc>/reference/get_spectra_names.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/get_spectra_names.html</loc>
   </url>
   <url>
-    <loc>/reference/import_biotyper_spectra.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/import_biotyper_spectra.html</loc>
   </url>
   <url>
-    <loc>/reference/import_spede_clusters.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/import_spede_clusters.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/is_well_on_edge.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/is_well_on_edge.html</loc>
   </url>
   <url>
-    <loc>/reference/maldipickr-package.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/maldipickr-package.html</loc>
   </url>
   <url>
-    <loc>/reference/merge_processed_spectra.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html</loc>
   </url>
   <url>
-    <loc>/reference/pick_spectra.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/pick_spectra.html</loc>
   </url>
   <url>
-    <loc>/reference/pipe.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>/reference/process_spectra.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/process_spectra.html</loc>
   </url>
   <url>
-    <loc>/reference/read_biotyper_report.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/read_biotyper_report.html</loc>
   </url>
   <url>
-    <loc>/reference/read_many_biotyper_reports.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/read_many_biotyper_reports.html</loc>
   </url>
   <url>
-    <loc>/reference/set_reference_spectra.html</loc>
+    <loc>https://clavellab.github.io/maldipickr/reference/remove_spectra.html</loc>
+  </url>
+  <url>
+    <loc>https://clavellab.github.io/maldipickr/reference/set_reference_spectra.html</loc>
   </url>
 </urlset>
