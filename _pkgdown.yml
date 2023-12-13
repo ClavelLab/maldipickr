@@ -11,6 +11,36 @@ template:
     primary: "#cf5c36"
   theme: "tango"
 
+reference:
+  - title: "Import"
+    desc: "Functions to import raw spectra, identifications or clusters"
+    contents:
+      - starts_with("import_")
+      - starts_with("read_")
+
+  - title: "Process"
+    desc: "Functions to analyze and verify multiple spectra data"
+    contents:
+      - check_spectra
+      - merge_processed_spectra
+      - process_spectra
+
+  - title: "Dereplicate"
+    desc: "Functions to cluster and reduce redundancy"
+    contents:
+      - starts_with("delineate_")
+
+  - title: "Cherry-pick"
+    desc: "Function to pinpoint and label specific spectra within clusters"
+    contents:
+      - pick_spectra
+      - set_reference_spectra
+
+  - title: "Miscellaneous"
+    contents:
+      - is_well_on_edge
+      - get_spectra_names
+
 news:
   releases:
   - text: "Version 1.2.0"
