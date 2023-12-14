@@ -1,4 +1,21 @@
-# maldipickr (development version)
+# maldipickr 1.3.0
+
+## Fixed
+
+* Fix non-unique names possibility during spectra processing (#37)
+
+## Changed
+
+* Deprecate ability to write RDS in `process_spectra()` (#38)
+* Deprecate ability to read RDS in `merge_processed_spectra()`
+* Change warnings in `check_spectra()` to messages pointing to use `remove_spectra()`
+
+## Added
+
+* Add `get_spectra_names()` to extract, format spectra names and warn against non-uniqueness
+* Add `remove_spectra()` to better handle discarding raw or processed spectra
+* Add `{lifecycle}` to better handle deprecation
+* Add sections to the function reference list to improve clarity on website
 
 # maldipickr 1.2.0
 

@@ -1,6 +1,6 @@
 Hello CRAN team,
 
-this release sets a minimum R version and change a homemade clustering to a robust hierarchical clustering in one of the key function.
+this release helps users to ensure unique names during spectra processing and better handle discarding spectra. It also deprecates now unecessary RDS read/write features. The notes were the same as for v1.2.0 release.
 
 Thank you for your time!
 
@@ -18,20 +18,20 @@ Tested remotely:
 * rhub Fedora Linux, R-devel, clang, gfortran: *2 NOTES*
 * rhub Ubuntu Linux 20.04.1 LTS, R-release, GCC: *2 NOTES*
 * rhub Windows Server 2022, R-devel, 64 bit: *4 NOTES*
-* winbuilder R Under development (unstable) (2023-10-24 r85407 ucrt): *1 NOTE*
+* winbuilder R Under development (unstable) (2023-12-12 r85669 ucrt): *1 NOTE*
 
 ### NOTES
 
 ```
-* checking CRAN incoming feasibility ... [12s] NOTE
+* checking CRAN incoming feasibility ... [24s] NOTE
 Maintainer: 'Charlie Pauvert <cpauvert@ukaachen.de>'
 
-Version contains large components (1.1.1.9000)
+Version contains large components (1.2.0.9000)
 ```
 
 on: rhub Fedora Linux / rhub Ubuntu Linux / rhub Windows R-devel / winbuilder
 
-=> _The submitted version will be 1.2.0_
+=> _The submitted version will be 1.3.0_
 
 
 ```
