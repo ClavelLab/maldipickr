@@ -44,6 +44,8 @@ reference:
 
 news:
   releases:
+  - text: "Version 1.3.0"
+    href: "https://clavellab.github.io/maldipickr/news/index.html#maldipickr-130"
   - text: "Version 1.2.0"
     href: "https://clavellab.github.io/maldipickr/news/index.html#maldipickr-120"
   - text: "Version 1.1.1"
