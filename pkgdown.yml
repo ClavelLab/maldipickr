@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   dereplicate-bruker-maldi-biotyper-spectra: dereplicate-bruker-maldi-biotyper-spectra.html
   import-data-from-bruker-maldi-biotyper: import-data-from-bruker-maldi-biotyper.html
-last_built: 2023-12-14T15:27Z
+last_built: 2023-12-14T15:29Z
 urls:
   reference: https://clavellab.github.io/maldipickr/reference
   article: https://clavellab.github.io/maldipickr/articles
