@@ -59,7 +59,26 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="maldipickr-development-version">maldipickr (development version)<a class="anchor" aria-label="anchor" href="#maldipickr-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.3.0" id="maldipickr-130">maldipickr 1.3.0<a class="anchor" aria-label="anchor" href="#maldipickr-130"></a></h2>
+<div class="section level3">
+<h3 id="fixed-1-3-0">Fixed<a class="anchor" aria-label="anchor" href="#fixed-1-3-0"></a></h3>
+<ul><li>Fix non-unique names possibility during spectra processing (<a href="https://github.com/ClavelLab/maldipickr/issues/37" class="external-link">#37</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-1-3-0">Changed<a class="anchor" aria-label="anchor" href="#changed-1-3-0"></a></h3>
+<ul><li>Deprecate ability to write RDS in <code><a href="../reference/process_spectra.html">process_spectra()</a></code> (<a href="https://github.com/ClavelLab/maldipickr/issues/38" class="external-link">#38</a>)</li>
+<li>Deprecate ability to read RDS in <code><a href="../reference/merge_processed_spectra.html">merge_processed_spectra()</a></code>
+</li>
+<li>Change warnings in <code><a href="../reference/check_spectra.html">check_spectra()</a></code> to messages pointing to use <code><a href="../reference/remove_spectra.html">remove_spectra()</a></code>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="added-1-3-0">Added<a class="anchor" aria-label="anchor" href="#added-1-3-0"></a></h3>
+<ul><li>Add <code><a href="../reference/get_spectra_names.html">get_spectra_names()</a></code> to extract, format spectra names and warn against non-uniqueness</li>
+<li>Add <code><a href="../reference/remove_spectra.html">remove_spectra()</a></code> to better handle discarding raw or processed spectra</li>
+<li>Add <a href="https://lifecycle.r-lib.org/" class="external-link">lifecycle</a> to better handle deprecation</li>
+<li>Add sections to the function reference list to improve clarity on website</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="maldipickr-120">maldipickr 1.2.0<a class="anchor" aria-label="anchor" href="#maldipickr-120"></a></h2><p class="text-muted">CRAN release: 2023-10-25</p>
