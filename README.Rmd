@@ -76,9 +76,15 @@ report_tbl <- read_biotyper_report(
 report_tbl %>%
   dplyr::select(name, bruker_species, bruker_log)
 
-# Delineate clusters from the identifications
+
+# Delineate clusters from the identifications after filtering the reliable ones
 #   and cherry-pick one representative spectra.
 #   The chosen ones are indicated by `to_pick` column
+report_tbl <- report_tbl %>%
+  dplyr::mutate(
+      bruker_species = dplyr::if_else(bruker_log >= 2, bruker_species,
+                                      "not reliable identification")
+  )
 report_tbl %>%
   delineate_with_identification() %>%
   pick_spectra(report_tbl, criteria_column = "bruker_log") %>%

@@ -87,9 +87,15 @@ report_tbl %>%
 #> 3 unknown_isolate_3 Faecalibacterium prausnitzii       1.96
 #> 4 unknown_isolate_4 Faecalibacterium prausnitzii       2.07
 
-# Delineate clusters from the identifications
+
+# Delineate clusters from the identifications after filtering the reliable ones
 #   and cherry-pick one representative spectra.
 #   The chosen ones are indicated by `to_pick` column
+report_tbl <- report_tbl %>%
+  dplyr::mutate(
+      bruker_species = dplyr::if_else(bruker_log >= 2, bruker_species,
+                                      "not reliable identification")
+  )
 report_tbl %>%
   delineate_with_identification() %>%
   pick_spectra(report_tbl, criteria_column = "bruker_log") %>%
@@ -100,8 +106,8 @@ report_tbl %>%
 #>   <chr>      <lgl>   <chr>               <int>        <int> <chr>          <int>
 #> 1 unknown_i… TRUE    not reliable …          2            1 <NA>               1
 #> 2 unknown_i… TRUE    not reliable …          3            1 <NA>               1
-#> 3 unknown_i… FALSE   Faecalibacter…          1            2 <NA>               1
-#> 4 unknown_i… TRUE    Faecalibacter…          1            2 <NA>               1
+#> 3 unknown_i… TRUE    not reliable …          4            1 <NA>               1
+#> 4 unknown_i… TRUE    Faecalibacter…          1            1 <NA>               1
 #> # ℹ 4 more variables: bruker_quality <chr>, bruker_taxid <dbl>,
 #> #   bruker_hash <chr>, bruker_log <dbl>
 ```
