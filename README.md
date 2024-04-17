@@ -26,6 +26,17 @@ is right for your needs!* The documented and tested R functions will
 help you dereplicate MALDI-TOF data and cherry-pick representative
 spectra of microbial isolates.
 
+## Graphical overview
+
+<figure>
+<img src="man/figures/maldipickr-data-flow-portrait.png"
+alt="Illustration of the data flow when using the R package {maldipickr} to cherry-pick bacterial isolates with MALDI Biotyper. It depicts the two possible approaches using either taxonomic identification reports (left) or spectra data (right)" />
+<figcaption aria-hidden="true">Illustration of the data flow when using
+the R package {maldipickr} to cherry-pick bacterial isolates with MALDI
+Biotyper. It depicts the two possible approaches using either taxonomic
+identification reports (left) or spectra data (right)</figcaption>
+</figure>
+
 ## Quickstart
 
 How to **cherry-pick bacterial isolates** with MALDI Biotyper:
