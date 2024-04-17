@@ -163,9 +163,11 @@ and are not affiliated with the company Bruker, therefore this package
 is independent of the company and is distributed under the [GPL-3.0
 License](https://clavellab.github.io/maldipickr/LICENSE.html).
 
-The hexagonal logo was created by Charlie Pauvert and uses the
-[Hack](https://sourcefoundry.org/hack/) font and a color palette
-generated at <https://coolors.co>.
+The hexagonal logo was created by Charlie Pauvert and uses the [Atkinson
+Hyperlegible
+font](https://fonts.google.com/specimen/Atkinson+Hyperlegible/about)
+font and a color palette generated at
+[coolors.co](https://coolors.co/cf5c36-f0f0c9-555358).
 
 ## References
 
