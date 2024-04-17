@@ -185,7 +185,8 @@ usethis::use_import_from("utils", c("read.delim", "read.csv"))
 # Add a logo
 
 ```{r logo, eval=FALSE}
-usethis::use_logo("/data/logo-maldipickr.png")
+usethis::use_logo("/data/logo-maldipickr.png")#first
+usethis::use_logo("logo-maldipickr.svg")# later to fix #43
 ```
 
 # Ignore files during package build

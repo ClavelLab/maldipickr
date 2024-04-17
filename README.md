@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# maldipickr <img src="man/figures/logo.png" align="right" height="138" />
+# maldipickr <a href="https://clavellab.github.io/maldipickr"><img src="man/figures/logo.svg" align="right" height="139" alt="maldipickr website" /></a>
 
 <!-- badges: start -->
 
@@ -59,7 +59,7 @@ processed %>%
   dplyr::relocate(name, to_pick)
 #> # A tibble: 6 × 7
 #>   name         to_pick membership cluster_size   SNR peaks is_reference
-#>   <chr>        <lgl>        <int>        <int> <dbl> <dbl> <lgl>       
+#>   <chr>        <lgl>        <int>        <int> <dbl> <int> <lgl>       
 #> 1 species1_G2  FALSE            1            4  5.09    21 FALSE       
 #> 2 species2_E11 FALSE            2            2  5.54    22 FALSE       
 #> 3 species2_E12 TRUE             2            2  5.63    23 TRUE        
