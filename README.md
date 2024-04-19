@@ -14,17 +14,15 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![codecov](https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://app.codecov.io/github/ClavelLab/maldipickr)
 <!-- badges: end -->
 
-- Are you using the MALDI-TOF[^1] Biotyper to identify bacterial
-  isolates? **Yes**
-- Do you want to select representative isolates for further experiments?
-  **Yes**
-- Do you need fast and automated selection decisions that you can
-  retrace? **Yes**
+- [x] You are using the MALDI-TOF[^1] Biotyper to identify bacterial
+  isolates
+- [x] You want to select representative isolates for further experiments
+- [x] You need fast and automated selection decisions that you can
+  retrace
 
-> The [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package
-> is right for your needs! The documented and tested R functions will
-> help you dereplicate MALDI-TOF data and cherry-pick representative
-> spectra of microbial isolates.
+**`{maldipickr}`** provides documented and tested R functions that will
+help you dereplicate MALDI-TOF data and cherry-pick representative
+spectra of microbial isolates.
 
 ## Contents
 
