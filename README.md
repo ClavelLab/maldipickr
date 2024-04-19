@@ -30,13 +30,12 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 
 - [Graphical overview](#graphical-overview)
 - [Quickstart](#quickstart)
-  - [using spectra data](#using-spectra-data)
-  - [using taxonomic identification
+  - [Using spectra data](#using-spectra-data)
+  - [Using taxonomic identification
     report](#using-taxonomic-identification-report)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Acknowledgements](#acknowledgements)
-- [Code of Conduct](#code-of-conduct)
 - [References](#references)
 
 ## Graphical overview
@@ -193,7 +192,7 @@ font](https://fonts.google.com/specimen/Atkinson+Hyperlegible/about)
 font and a color palette generated at
 [coolors.co](https://coolors.co/cf5c36-f0f0c9-555358).
 
-## Code of Conduct
+### Code of Conduct
 
 Please note that the
 [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package is
