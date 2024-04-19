@@ -14,70 +14,31 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![codecov](https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://app.codecov.io/github/ClavelLab/maldipickr)
 <!-- badges: end -->
 
-- Are you using the MALDI-TOF[^1] Biotyper to identify bacterial
-  isolates? **Yes**
-- Do you want to select representative isolates for further experiments?
-  **Yes**
-- Do you need fast and automated selection decisions that you can
-  retrace? **Yes**
+- You are using the MALDI-TOF[^1] Biotyper to identify bacterial
+  isolates
+- You want to select representative isolates for further experiments
+- You need fast and automated selection decisions that you can retrace
 
-↪ *The [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package
-is right for your needs!* The documented and tested R functions will
-help you dereplicate MALDI-TOF data and cherry-pick representative
-spectra of microbial isolates.
+`{maldipickr}` provides documented and tested R functions that will help
+you dereplicate MALDI-TOF data and cherry-pick representative spectra of
+microbial isolates.
 
 ## Graphical overview
 
-<figure>
-<img src="man/figures/maldipickr-data-flow-portrait.png"
-alt="Illustration of the data flow when using the R package {maldipickr} to cherry-pick bacterial isolates with MALDI Biotyper. It depicts the two possible approaches using either taxonomic identification reports (left) or spectra data (right)" />
-<figcaption aria-hidden="true">Illustration of the data flow when using
-the R package {maldipickr} to cherry-pick bacterial isolates with MALDI
-Biotyper. It depicts the two possible approaches using either taxonomic
-identification reports (left) or spectra data (right)</figcaption>
-</figure>
+<a href="https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.svg"><img src="man/figures/maldipickr-data-flow-portrait.png" align="center" height="250px" width="auto" alt="maldipickr graphical overview" /></a>
+
+Illustration (click for a bigger version) of the data flow when using
+`{maldipickr}` to cherry-pick bacterial isolates with MALDI Biotyper. It
+depicts the two possible approaches using either taxonomic
+identification reports (left) or spectra data (right).
 
 ## Quickstart
 
 How to **cherry-pick bacterial isolates** with MALDI Biotyper:
 
-- [using spectra data](#using-spectra-data)
 - [using taxonomic identification
   report](#using-taxonomic-identification-report)
-
-### Using spectra data
-
-``` r
-library(maldipickr)
-# Set up the directory location of your spectra data
-spectra_dir <- system.file("toy-species-spectra", package = "maldipickr")
-
-# Import and process the spectra
-processed <- spectra_dir %>%
-  import_biotyper_spectra() %>%
-  process_spectra()
-
-# Delineate spectra clusters using Cosine similarity
-#  and cherry-pick one representative spectra.
-#  The chosen ones are indicated by `to_pick` column
-processed %>%
-  list() %>%
-  merge_processed_spectra() %>%
-  coop::tcosine() %>%
-  delineate_with_similarity(threshold = 0.92) %>%
-  set_reference_spectra(processed$metadata) %>%
-  pick_spectra() %>%
-  dplyr::relocate(name, to_pick)
-#> # A tibble: 6 × 7
-#>   name         to_pick membership cluster_size   SNR peaks is_reference
-#>   <chr>        <lgl>        <int>        <int> <dbl> <int> <lgl>       
-#> 1 species1_G2  FALSE            1            4  5.09    21 FALSE       
-#> 2 species2_E11 FALSE            2            2  5.54    22 FALSE       
-#> 3 species2_E12 TRUE             2            2  5.63    23 TRUE        
-#> 4 species3_F7  FALSE            1            4  4.89    26 FALSE       
-#> 5 species3_F8  TRUE             1            4  5.56    25 TRUE        
-#> 6 species3_F9  FALSE            1            4  5.40    25 FALSE
-```
+- [using spectra data](#using-spectra-data)
 
 ### Using taxonomic identification report
 
@@ -123,6 +84,40 @@ report_tbl %>%
 #> #   bruker_hash <chr>, bruker_log <dbl>
 ```
 
+### Using spectra data
+
+``` r
+library(maldipickr)
+# Set up the directory location of your spectra data
+spectra_dir <- system.file("toy-species-spectra", package = "maldipickr")
+
+# Import and process the spectra
+processed <- spectra_dir %>%
+  import_biotyper_spectra() %>%
+  process_spectra()
+
+# Delineate spectra clusters using Cosine similarity
+#  and cherry-pick one representative spectra.
+#  The chosen ones are indicated by `to_pick` column
+processed %>%
+  list() %>%
+  merge_processed_spectra() %>%
+  coop::tcosine() %>%
+  delineate_with_similarity(threshold = 0.92) %>%
+  set_reference_spectra(processed$metadata) %>%
+  pick_spectra() %>%
+  dplyr::relocate(name, to_pick)
+#> # A tibble: 6 × 7
+#>   name         to_pick membership cluster_size   SNR peaks is_reference
+#>   <chr>        <lgl>        <int>        <int> <dbl> <int> <lgl>       
+#> 1 species1_G2  FALSE            1            4  5.09    21 FALSE       
+#> 2 species2_E11 FALSE            2            2  5.54    22 FALSE       
+#> 3 species2_E12 TRUE             2            2  5.63    23 TRUE        
+#> 4 species3_F7  FALSE            1            4  4.89    26 FALSE       
+#> 5 species3_F8  TRUE             1            4  5.56    25 TRUE        
+#> 6 species3_F9  FALSE            1            4  5.40    25 FALSE
+```
+
 ## Installation
 
 `{maldipickr}` is available on the
@@ -153,7 +148,30 @@ and showcase how to:
     simple to complex
     design](https://clavellab.github.io/maldipickr/articles/dereplicate-bruker-maldi-biotyper-spectra.html).
 
-## Acknowledgments
+## Troubleshoot
+
+If something unexpected happened when using this package, please first
+search the [current open or closed
+issues](https://github.com/ClavelLab/maldipickr/issues?q=is%3Aissue++)
+to look for similar problems. If you are the first, you are more than
+welcome to open a new issue using the “Bug report” template with a
+minimal [reprex](https://www.tidyverse.org/help/#reprex).
+
+## Contribute
+
+All contributions are welcome and the
+[`CONTRIBUTING.md`](https://clavellab.github.io/maldipickr/CONTRIBUTING.html)
+documents how to participate.
+
+Please note that the
+[`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package is
+released with a [Contributor Code of
+Conduct](https://clavellab.github.io/maldipickr/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+## Credits
+
+### Acknowledgements
 
 This R package is developed for spectra data generated by the Bruker
 MALDI Biotyper device. The
