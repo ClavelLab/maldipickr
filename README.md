@@ -25,7 +25,7 @@ microbial isolates.
 
 ## Graphical overview
 
-<a href="https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.svg"><img src="man/figures/maldipickr-data-flow-portrait.png" align="center" height="250px" width="auto" alt="maldipickr graphical overview" /></a>
+<a href="https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png"><img src="man/figures/maldipickr-data-flow-portrait-thumb.png" alt="Thumbnail of maldipickr graphical overview" /></a>
 
 Illustration (click for a bigger version) of the data flow when using
 `{maldipickr}` to cherry-pick bacterial isolates with MALDI Biotyper. It
