@@ -38,13 +38,26 @@ These helpers in `{maldipickr}` are called {targets} factories, which means they
 #' Given a vector of paths to `acqus` and `acqu` MALDI Biotyper directories, this targets
 #'  factory facilitates the steps from raw spectra to quality-checked processed spectra.
 #' 
+#' # TODO: add link to [targets::tar_target]
+#' 
 #' @param name A character indicating the prefix of all targets created by the factory.
 #' For instance, `name = anaerobe` will create the target `anaerobe_spectra_raw` among others.
 #' @param raw_spectra_directories A vector of paths to directories containing MALDI Biotyper spectra files. This is similar to the `biotyper_directory` parameter from [import_biotyper_spectra], but as a character vector.
 #' @inheritParams check_spectra
-#' @inheritParams targets::tar_target_raw
+#' @inheritParams targets::tar_target_raw # TODO: add others parameters to inherit
 #'
-#' @return A target object
+#' # TODO: restrain format to only rds or qs but for qs warn with rlang::check_installed
+#'
+#' @return A list of target objects whose names use the `name` argument as a prefix:
+#' `*_plates_files` (e.g., `anaerobe_plates_files`): 
+#' `*_plates` (e.g., `anaerobe_plates`): 
+#' `*_spectra_raw` (e.g., `anaerobe_spectra_raw`): 
+#' `*_checks` (e.g., `anaerobe_checks`): 
+#' `*_valid_spectra` (e.g., `anaerobe_valid_spectra`): 
+#' `*_spectra_stats` (e.g., `anaerobe_spectra_stats`): 
+#' `*_processed` (e.g., `anaerobe_processed`): 
+#' 
+#' @note Once the workflow is checked (with [targets::tar_manifest] or [targets::tar_visnetwork]) and run (with [targets::tar_make]), all the target objects returned can be accessed using [targets::tar_read]] (e.g., `targets::tar_read(anaerobe_spectra_stats)`).
 #' 
 #' @export
 tar_import_and_process_spectra <- function(
@@ -134,7 +147,7 @@ if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
         library(maldipickr)
         list(
           tar_import_and_process_spectra(
-            name = "example",
+            name = "anaerobe",
             raw_spectra_directories = system.file(
               "toy-species-spectra",
               package = "maldipickr"),
