@@ -107,7 +107,8 @@ What is special about using `README.Rmd` instead of just `README.md`? You can in
 pkgload::load_all()
 
 # Generate documentation and deal with dependencies
-attachment::att_amend_desc()
+# Ran once after issue with pkgs moved from Suggests to Imports
+attachment::att_amend_desc(extra.suggests = c("targets","tarchetypes"),pkg_ignore = c("targets","tarchetypes"), normalize = TRUE, update.config = TRUE)
 
 # Check the package
 devtools::check()
@@ -180,7 +181,7 @@ usethis::use_import_from(
 usethis::use_import_from("readBrukerFlexData", "readBrukerFlexDir")
 usethis::use_import_from("stats", "median")
 usethis::use_import_from("utils", c("read.delim", "read.csv"))
-
+# See attachment::att_amend_desc above, because fusen moves the confi below to Imports during inflate
 usethis::use_package("targets", type = "Suggests", min_version = "1.7.0")
 usethis::use_package("tarchetypes", type = "Suggests", min_version = "0.9.0")
 ```
