@@ -34,6 +34,8 @@ Imports:
     readBrukerFlexData,
     rlang,
     stats,
+    tarchetypes (>= 0.9.0),
+    targets (>= 1.7.0),
     tibble,
     tidyr,
     tidyselect,
@@ -43,8 +45,6 @@ Suggests:
     knitr,
     rmarkdown,
     spelling,
-    tarchetypes (>= 0.9.0),
-    targets (>= 1.7.0),
     testthat
 VignetteBuilder: 
     knitr

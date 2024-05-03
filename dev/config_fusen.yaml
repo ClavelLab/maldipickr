@@ -79,3 +79,16 @@ keep:
   - tests/testthat/test-remove_spectra_logical.R
   - tests/testthat/test-remove_spectra.R
   vignettes: []
+maldipickr-workflow-with-targets.Rmd:
+  path: dev/maldipickr-workflow-with-targets.Rmd
+  state: active
+  R: R/tar_import_and_process_spectra.R
+  tests: tests/testthat/test-tar_import_and_process_spectra.R
+  vignettes: vignettes/maldipickr-workflow-with-targets.Rmd
+  inflate:
+    flat_file: dev/maldipickr-workflow-with-targets.Rmd
+    vignette_name: maldipickr Workflow with targets
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: 'yes'
