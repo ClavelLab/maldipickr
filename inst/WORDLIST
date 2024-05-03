@@ -1,5 +1,4 @@
 Aerts
-BioTyper
 Bioinformatics
 Biotyper
 Bruker
@@ -18,6 +17,7 @@ Desorption
 Dumolin
 Gibb
 Golay
+Hyperlegible
 Jeugt
 Junkova
 MALDI
@@ -34,7 +34,6 @@ Savitzky
 Schellaert
 Smrhova
 Spectrometry
-StackOverflow
 Strejcek
 Strejeck
 Strimmer
@@ -46,15 +45,16 @@ Verheyde
 Wieme
 acqu
 al
+biotyper
 bruker
 codebase
 codecov
+coolors
 csv
 dereplicate
 dereplication
 desorption
 doi
-ekstroem
 et
 fmicb
 funder
@@ -62,10 +62,10 @@ fusen
 kDa
 magrittr
 maldi
-modularity
 natively
 quickstart
 rRNA
+reprex
 scalable
 spectrometry
 tibble
