@@ -39,7 +39,7 @@ if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
     targets::tar_script({
         library(maldipickr)
         list(
-          tar_spectra_import(
+          tar_import_and_process_spectra(
             name = "example",
             raw_spectra_directories = system.file(
               "toy-species-spectra",
