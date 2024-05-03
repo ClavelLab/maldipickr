@@ -166,7 +166,7 @@ usethis::use_import_from(
 usethis::use_import_from("tidyselect", "starts_with")
 # To solve "no visible binding variable error from devtools:check
 # https://dplyr.tidyverse.org/articles/programming.html#eliminating-r-cmd-check-notes
-usethis::use_import_from("rlang", ".data")
+usethis::use_import_from("rlang", ".data","check_installed")
 usethis::use_import_from(
   "MALDIquant",
   c(
@@ -180,6 +180,9 @@ usethis::use_import_from(
 usethis::use_import_from("readBrukerFlexData", "readBrukerFlexDir")
 usethis::use_import_from("stats", "median")
 usethis::use_import_from("utils", c("read.delim", "read.csv"))
+
+usethis::use_package("targets", type = "Suggests", min_version = "1.7.0")
+usethis::use_package("tarchetypes", type = "Suggests", min_version = "0.9.0")
 ```
 
 # Add a logo
