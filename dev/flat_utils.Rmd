@@ -641,6 +641,16 @@ test_that("remove_spectra fails with wrong input on raw spectra", {
 #' @seealso [check_spectra]
 #' @export
 gather_spectra_stats <- function(check_vectors){
+  equal_length<-unique(lengths(check_vectors))
+  if(typeof(check_vectors) != "list" |
+     length(equal_length) != 1 |
+     names(check_vectors) != c("is_empty", "is_outlier_length", "is_not_regular")
+  ){
+    stop(
+      "Unexpected format for checks_vectors. Are you sure this is the output of maldicpickr::check_spectra()?"
+    )
+  }
+  
   # check_vectors from maldipickr::check_spectra
   # src: https://stackoverflow.com/a/51140480/21085566
   aggregated_checks <- Reduce(`|`, check_vectors)
@@ -648,7 +658,7 @@ gather_spectra_stats <- function(check_vectors){
     tibble::as_tibble_row()
   tibble::tibble(
     "n_spectra" = length(aggregated_checks),
-    "n_valid_spectra" = n_spectra - sum(aggregated_checks)
+    "n_valid_spectra" = .data$n_spectra - sum(aggregated_checks)
   ) %>%
     dplyr::bind_cols(check_stats) %>%
     return()
