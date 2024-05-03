@@ -625,7 +625,89 @@ test_that("remove_spectra fails with wrong input on raw spectra", {
 })
 ```
 
+# gather_spectra_stats
 
+```{r function-gather_spectra_stats}
+#' Aggregate spectra quality-check statistics
+#'
+#'
+#' @param check_vectors A list of logical vectors from [check_spectra]
+#'
+#' @return A tibble of one row with the following 5 columns of integers:
+#' * `n_spectra`: total number of raw spectra.
+#' * `n_valid_spectra`: total number of spectra passing all quality checks
+#' * `is_empty`, `is_outlier_length` and `is_not_regular`: total of spectra flagged with these irregularities.
+#'
+#' @seealso [check_spectra]
+#' @export
+gather_spectra_stats <- function(check_vectors) {
+  if (typeof(check_vectors) != "list" ||
+    is.null(names(check_vectors))) {
+    stop(
+      "check_vectors is not a named list. See maldipickr::check_spectra() help page for a correct format."
+    )
+  }
+  equal_length <- unique(lengths(check_vectors))
+  if (length(equal_length) != 1 ||
+    any(names(check_vectors) != c("is_empty", "is_outlier_length", "is_not_regular"))
+  ) {
+    stop(
+      "Unexpected format for checks_vectors. Are you sure this is the output of maldipickr::check_spectra()?"
+    )
+  }
+
+  # check_vectors from maldipickr::check_spectra
+  # src: https://stackoverflow.com/a/51140480/21085566
+  aggregated_checks <- Reduce(`|`, check_vectors)
+  check_stats <- vapply(check_vectors, sum, FUN.VALUE = integer(1)) %>%
+    tibble::as_tibble_row()
+  tibble::tibble(
+    "n_spectra" = length(aggregated_checks),
+    "n_valid_spectra" = .data$n_spectra - sum(aggregated_checks)
+  ) %>%
+    dplyr::bind_cols(check_stats) %>%
+    return()
+}
+```
+
+```{r example-gather_spectra_stats}
+# Get an example directory of six Bruker MALDI Biotyper spectra
+directory_biotyper_spectra <- system.file(
+  "toy-species-spectra",
+  package = "maldipickr"
+)
+# Import the six spectra
+spectra_list <- import_biotyper_spectra(directory_biotyper_spectra)
+# Display the list of checks, with FALSE where no anomaly is detected
+checks <- check_spectra(spectra_list)
+# Aggregate the statistics of quality-checked spectra
+gather_spectra_stats(checks)
+```
+
+```{r tests-gather_spectra_stats}
+test_that("gather_spectra_stats works", {
+  expect_equal(check_spectra(
+    c(MALDIquant::createMassSpectrum(1:3, 1:3), MALDIquant::createMassSpectrum(11:13, 11:13))
+  ) |> gather_spectra_stats(), structure(list(
+    n_spectra = 2L, n_valid_spectra = 2L, is_empty = 0L,
+    is_outlier_length = 0L, is_not_regular = 0L
+  ), class = c(
+    "tbl_df",
+    "tbl", "data.frame"
+  ), row.names = c(NA, -1L)))
+})
+test_that("gather_spectra_stats fails",{
+  expect_error(
+    gather_spectra_stats("spectra"),
+    "check_vectors is not a named list"
+  )
+  expect_error(
+    gather_spectra_stats(list("foo" = c(TRUE,TRUE),"bar" = c(TRUE))),
+    "Unexpected format for checks_vectors. Are you sure this is the output of maldipickr::check_spectra()?"
+  )
+})
+```
+  
 
 ```{r development-inflate, eval=FALSE}
 # Run but keep eval=FALSE to avoid infinite loop
