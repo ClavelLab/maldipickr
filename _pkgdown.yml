@@ -32,10 +32,15 @@ reference:
       - starts_with("delineate_")
 
   - title: "Cherry-pick"
-    desc: "Function to pinpoint and label specific spectra within clusters"
+    desc: "Functions to pinpoint and label specific spectra within clusters"
     contents:
       - pick_spectra
       - set_reference_spectra
+
+  - title: "Workflow"
+    desc: "Functions (i.e., targets factories) to facilitate {targets} workflow development for {maldipickr}"
+    contents:
+      - starts_with("tar_")
 
   - title: "Miscellaneous"
     contents:
