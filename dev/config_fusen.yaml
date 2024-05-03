@@ -71,11 +71,13 @@ keep:
   path: keep
   state: active
   R:
+  - R/gather_spectra_stats.R
   - R/remove_spectra_logical.R
   - R/remove_spectra.R
   - R/maldipickr-package.R
   - R/utils-pipe.R
   tests:
+  - tests/testthat/test-gather_spectra_stats.R
   - tests/testthat/test-remove_spectra_logical.R
   - tests/testthat/test-remove_spectra.R
   vignettes: []

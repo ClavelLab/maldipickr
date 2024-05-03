@@ -640,17 +640,22 @@ test_that("remove_spectra fails with wrong input on raw spectra", {
 #'
 #' @seealso [check_spectra]
 #' @export
-gather_spectra_stats <- function(check_vectors){
-  equal_length<-unique(lengths(check_vectors))
-  if(typeof(check_vectors) != "list" |
-     length(equal_length) != 1 |
-     names(check_vectors) != c("is_empty", "is_outlier_length", "is_not_regular")
-  ){
+gather_spectra_stats <- function(check_vectors) {
+  if (typeof(check_vectors) != "list" ||
+    is.null(names(check_vectors))) {
     stop(
-      "Unexpected format for checks_vectors. Are you sure this is the output of maldicpickr::check_spectra()?"
+      "check_vectors is not a named list. See maldipickr::check_spectra() help page for a correct format."
     )
   }
-  
+  equal_length <- unique(lengths(check_vectors))
+  if (length(equal_length) != 1 ||
+    any(names(check_vectors) != c("is_empty", "is_outlier_length", "is_not_regular"))
+  ) {
+    stop(
+      "Unexpected format for checks_vectors. Are you sure this is the output of maldipickr::check_spectra()?"
+    )
+  }
+
   # check_vectors from maldipickr::check_spectra
   # src: https://stackoverflow.com/a/51140480/21085566
   aggregated_checks <- Reduce(`|`, check_vectors)
@@ -690,6 +695,16 @@ test_that("gather_spectra_stats works", {
     "tbl_df",
     "tbl", "data.frame"
   ), row.names = c(NA, -1L)))
+})
+test_that("gather_spectra_stats fails",{
+  expect_error(
+    gather_spectra_stats("spectra"),
+    "check_vectors is not a named list"
+  )
+  expect_error(
+    gather_spectra_stats(list("foo" = c(TRUE,TRUE),"bar" = c(TRUE))),
+    "Unexpected format for checks_vectors. Are you sure this is the output of maldipickr::check_spectra()?"
+  )
 })
 ```
   
