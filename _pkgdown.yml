@@ -2,6 +2,10 @@
 # src: https://pkgdown.r-lib.org/articles/metadata.html
 url: https://clavellab.github.io/maldipickr
 
+home:
+  title: "Reduce the redundancy of bacterial isolates"
+  description: "A R package to dereplicate and cherry-pick mass spectrometry spectra obtained from bacterial isolates."
+
 template:
   bootswatch: litera
   bootstrap: 5
@@ -10,6 +14,10 @@ template:
     code_font: "Hack"
     primary: "#cf5c36"
   theme: "tango"
+  opengraph:
+    image:
+      src: https://repository-images.githubusercontent.com/613291736/be5379b5-ce72-430d-bb4c-70155ba6a0ad
+      alt: "maldipickr logo with the legend Dereplicate and cherry-pick mass spectrometry spectra"
 
 reference:
   - title: "Import"
@@ -50,3 +58,6 @@ news:
     href: "https://clavellab.github.io/maldipickr/news/index.html#maldipickr-120"
   - text: "Version 1.1.1"
     href: "https://clavellab.github.io/maldipickr/news/index.html#maldipickr-111"
+
+development:
+  mode: auto
