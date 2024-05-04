@@ -64,14 +64,14 @@ import_biotyper_spectra <- function(biotyper_directory, remove_calibration = c("
   })
   biotyper_list <- unname(biotyper_list)
   # Catch the arguments of which spectrum to remove
-  remove_calibration <- match.arg(remove_calibration, several.ok = T)
+  remove_calibration <- match.arg(remove_calibration, several.ok = TRUE)
   if (length(remove_calibration) != 0) {
     # Regex to remove the chosen spectrum
     to_catch <- c(
       "BTS" = "BTS|BTS_Validation",
       "Autocalibration" = "Autocalibration"
     )
-    regex_to_catch <- match.arg(remove_calibration, to_catch, several.ok = T) %>%
+    regex_to_catch <- match.arg(remove_calibration, to_catch, several.ok = TRUE) %>%
       paste(collapse = "|")
     to_remove <- vapply(biotyper_list,
                         function(x){grepl(regex_to_catch, MALDIquant::metaData(x)$file)},
