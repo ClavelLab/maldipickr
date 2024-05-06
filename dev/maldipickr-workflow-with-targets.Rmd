@@ -29,16 +29,16 @@ These helpers in `{maldipickr}` are called {targets} factories, which means they
 
 
 
-# tar_import_and_process_spectra
+# Target factory to import and process spectra
     
 ```{r function-tar_import_and_process_spectra}
 #' Import and process checked spectra using targets
 #' 
 #' 
-#' Given a vector of paths to `acqus` and `acqu` MALDI Biotyper directories, this targets
-#'  factory facilitates the steps from raw spectra to quality-checked processed spectra.
-#' 
-#' # TODO: add link to [targets::tar_target]
+#' Given a vector of paths to MALDI Biotyper directories containing `acqus` and
+#'  `acqu`, this target factory facilitates the steps from raw spectra to
+#'   quality-checked processed spectra. See [targets::tar_target] for more
+#'   information about what are target objects.
 #' 
 #' @param name A character indicating the prefix of all targets created by the factory.
 #' For instance, `name = anaerobe` will create the target `anaerobe_spectra_raw` among others.
