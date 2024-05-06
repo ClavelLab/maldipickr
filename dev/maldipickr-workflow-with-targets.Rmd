@@ -44,7 +44,7 @@ These helpers in `{maldipickr}` are called {targets} factories, which means they
 #' For instance, `name = anaerobe` will create the target `anaerobe_spectra_raw` among others.
 #' @param raw_spectra_directories A vector of paths to directories containing MALDI Biotyper spectra files. This is similar to the `biotyper_directory` parameter from [import_biotyper_spectra], but as a character vector.
 #' @inheritParams check_spectra
-#' @inheritParams targets::tar_target_raw # TODO: add others parameters to inherit
+#' @inheritParams targets::tar_target_raw # TODO: add others parameters to inherit, maybe with ... to targets::tar_target()?
 #'
 #' # TODO: restrain format to only rds or qs but for qs warn with rlang::check_installed
 #'
