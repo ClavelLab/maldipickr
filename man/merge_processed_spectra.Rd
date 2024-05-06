@@ -13,7 +13,7 @@ merge_processed_spectra(
 \arguments{
 \item{processed_spectra}{A \link{list} of the processed spectra and associated peaks and metadata in two possible formats:
 \itemize{
-\item A list of \strong{in-memory objects} (named \code{spectra}, \code{peaks}, \code{metadata}) produced by \link{process_spectra}.
+\item A list of \strong{in-memory objects} (named \code{spectra}, \code{peaks}, \code{metadata}) produced by \link{process_spectra}. Named lists will have names dropped, see Note.
 \item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} A list of \strong{paths} to RDS files produced by \link{process_spectra} when using the \code{rds_prefix} option.
 }}
 
@@ -26,6 +26,12 @@ A \emph{n}×\emph{p} matrix, with \emph{n} spectra as rows and \emph{p} features
 }
 \description{
 Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
+}
+\note{
+When aggregating multiple runs of processed spectra, if a named list is
+provided, note that the names will be dropped, to prevent further downstream
+issues when these names were being appended to the rownames of the matrix
+thus preventing downstream metadata merge.
 }
 \examples{
 # Get an example directory of six Bruker MALDI Biotyper spectra
@@ -56,6 +62,14 @@ fm_all <- merge_processed_spectra(list(processed, processed, processed))
 # The feature matrix has 3×6=18 spectra as rows and
 #  35 peaks as columns
 dim(fm_all)
+
+# If using a list, names will be dropped and are not propagated to the matrix.
+\dontrun{
+fm_all <- merge_processed_spectra(
+ list("A" = processed, "B" = processed, "C" = processed))
+any(grepl("A|B|C", rownames(fm_all))) # FALSE
+ }
+
 }
 \seealso{
 \link{process_spectra}, the "Value" section in \href{https://rdrr.io/cran/MALDIquant/man/intensityMatrix-functions.html}{\code{MALDIquant::intensityMatrix}}

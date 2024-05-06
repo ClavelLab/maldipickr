@@ -13,6 +13,14 @@ test_that("merge_processed_spectra works", {
   expect_identical(
     sum(fm == 0), 0L
   )
+  expect_no_error(
+    fm_multiple <- merge_processed_spectra(
+      list("with_name_bar" = processed_test, "with_name_foo" = processed_test)
+    )
+  )
+  expect_equal(
+    dim(fm_multiple), c(4, 26)
+  )
 })
 test_that("merge_processed_spectra works without interpolation", {
   expect_no_error(

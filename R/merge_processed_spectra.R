@@ -5,12 +5,17 @@
 #' Aggregate multiple processed spectra, their associated peaks and metadata into a feature matrix and a concatenated metadata table.
 #'
 #' @param processed_spectra A [list] of the processed spectra and associated peaks and metadata in two possible formats:
-#' * A list of **in-memory objects** (named `spectra`, `peaks`, `metadata`) produced by [process_spectra].
+#' * A list of **in-memory objects** (named `spectra`, `peaks`, `metadata`) produced by [process_spectra]. Named lists will have names dropped, see Note.
 #' * `r lifecycle::badge('deprecated')` A list of **paths** to RDS files produced by [process_spectra] when using the `rds_prefix` option.
 #' @param remove_peakless_spectra A logical indicating whether to discard the spectra without detected peaks.
 #' @param interpolate_missing A logical indicating if intensity values for missing peaks should be interpolated from the processed spectra signal or left NA which would then be converted to 0.
 #'
 #' @return A *n*×*p* matrix, with *n* spectra as rows and *p* features as columns that are the peaks found in all the processed spectra.
+#'
+#' @note When aggregating multiple runs of processed spectra, if a named list is
+#' provided, note that the names will be dropped, to prevent further downstream
+#' issues when these names were being appended to the rownames of the matrix
+#' thus preventing downstream metadata merge.
 #'
 #' @seealso [process_spectra], the "Value" section in [`MALDIquant::intensityMatrix`](https://rdrr.io/cran/MALDIquant/man/intensityMatrix-functions.html)
 #' @export
@@ -43,6 +48,14 @@
 #' # The feature matrix has 3×6=18 spectra as rows and
 #' #  35 peaks as columns
 #' dim(fm_all)
+#'
+#' # If using a list, names will be dropped and are not propagated to the matrix.
+#' \dontrun{
+#' fm_all <- merge_processed_spectra(
+#'  list("A" = processed, "B" = processed, "C" = processed))
+#' any(grepl("A|B|C", rownames(fm_all))) # FALSE
+#'  }
+#' 
 merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra = TRUE, interpolate_missing = TRUE) {
   if (any(
     is.null(processed_spectra),
@@ -68,6 +81,12 @@ merge_processed_spectra <- function(processed_spectra, remove_peakless_spectra =
     processed <- processed_spectra
   }
 
+  # Names at the upper level causes problems when aggregating multiple runs by
+  #  being appended to the rownames of matrix thus preventing downstream metadata
+  #  merge.
+  if(!is.null(names(processed))){
+    processed <- unname(processed)
+  }
   stopifnot(is_a_processed_spectra_list(processed))
 
   peakless <- list()
