@@ -251,7 +251,15 @@ value.</p>
 <span><span class="co"># The feature matrix has 3×6=18 spectra as rows and</span></span>
 <span><span class="co">#  35 peaks as columns</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fm_all</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 18 35</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 18 35</span></span>
+<span></span>
+<span><span class="co"># If using a list, names will be dropped and are not propagated to the matrix.</span></span>
+<span><span class="co">#' \dontrun{</span></span>
+<span><span class="co">#' fm_all &lt;- merge_processed_spectra(</span></span>
+<span><span class="co">#'  list("A" = processed, "B" = processed, "C" = processed))</span></span>
+<span><span class="co">#' any(grepl("A|B|C", rownames(fm_all))) # FALSE</span></span>
+<span><span class="co">#'  }</span></span>
+<span><span class="co">#' </span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="compute-a-similarity-matrix-between-all-processed-spectra-not-included">Compute a similarity matrix between all processed spectra (not
