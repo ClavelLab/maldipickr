@@ -40,8 +40,8 @@ These helpers in `{maldipickr}` are called {targets} factories, which means they
 #'   quality-checked processed spectra. See [targets::tar_target] for more
 #'   information about what are target objects.
 #' 
-#' @param name A character indicating the prefix of all targets created by the factory.
-#' For instance, `name = anaerobe` will create the target `anaerobe_spectra_raw` among others.
+#' @param name A symbol indicating the prefix of all targets created by the factory.
+#' For instance, calling `tar_import_and_process_spectra(anaerobe, ...)` will create the target `anaerobe_spectra_raw` among others (see the Value section).
 #' @param raw_spectra_directories A vector of paths to directories containing MALDI Biotyper spectra files. This is similar to the `biotyper_directory` parameter from [import_biotyper_spectra], but as a character vector.
 #' @inheritParams check_spectra
 #' @inheritParams targets::tar_target_raw # TODO: add others parameters to inherit, maybe with ... to targets::tar_target()?
@@ -67,7 +67,7 @@ tar_import_and_process_spectra <- function(
   rlang::check_installed(c("targets", "tarchetypes"),
     reason = "to facilitate {maldipickr} workflow development"
   )
-  targets::tar_assert_chr(name)
+  name <- targets::tar_deparse_language(substitute(name))
   targets::tar_assert_path(raw_spectra_directories)
   targets::tar_assert_dbl(tolerance)
 

@@ -12,8 +12,8 @@ tar_import_and_process_spectra(
 )
 }
 \arguments{
-\item{name}{A character indicating the prefix of all targets created by the factory.
-For instance, \code{name = anaerobe} will create the target \code{anaerobe_spectra_raw} among others.}
+\item{name}{A symbol indicating the prefix of all targets created by the factory.
+For instance, calling \code{tar_import_and_process_spectra(anaerobe, ...)} will create the target \code{anaerobe_spectra_raw} among others (see the Value section).}
 
 \item{raw_spectra_directories}{A vector of paths to directories containing MALDI Biotyper spectra files. This is similar to the \code{biotyper_directory} parameter from \link{import_biotyper_spectra}, but as a character vector.}
 
