@@ -109,6 +109,14 @@ fm_all <- merge_processed_spectra(list(processed, processed, processed))
 # The feature matrix has 3×6=18 spectra as rows and
 #  35 peaks as columns
 dim(fm_all)
+
+# If using a list, names will be dropped and are not propagated to the matrix.
+#' \dontrun{
+#' fm_all <- merge_processed_spectra(
+#'  list("A" = processed, "B" = processed, "C" = processed))
+#' any(grepl("A|B|C", rownames(fm_all))) # FALSE
+#'  }
+#' 
 ```
 
   

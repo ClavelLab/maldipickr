@@ -12,6 +12,7 @@ Convenient wrapper functions for the analysis of matrix-assisted laser desorptio
 Useful links:
 \itemize{
   \item \url{https://github.com/ClavelLab/maldipickr}
+  \item \url{https://clavellab.github.io/maldipickr/}
   \item Report bugs at \url{https://github.com/ClavelLab/maldipickr/issues}
 }
 
