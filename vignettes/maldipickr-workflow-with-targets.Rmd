@@ -35,7 +35,7 @@ These helpers in `{maldipickr}` are called {targets} factories, which means they
 
 
 
-# tar_import_and_process_spectra
+# Target factory to import and process spectra
 
     
 
@@ -48,7 +48,7 @@ if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
         library(maldipickr)
         list(
           tar_import_and_process_spectra(
-            name = "example",
+            name = "anaerobe",
             raw_spectra_directories = system.file(
               "toy-species-spectra",
               package = "maldipickr"),

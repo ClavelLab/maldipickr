@@ -3,16 +3,28 @@
 #' Import and process checked spectra using targets
 #' 
 #' 
-#' Given a vector of paths to `acqus` and `acqu` MALDI Biotyper directories, this targets
-#'  factory facilitates the steps from raw spectra to quality-checked processed spectra.
+#' Given a vector of paths to MALDI Biotyper directories containing `acqus` and
+#'  `acqu`, this target factory facilitates the steps from raw spectra to
+#'   quality-checked processed spectra. See [targets::tar_target] for more
+#'   information about what are target objects.
 #' 
 #' @param name A character indicating the prefix of all targets created by the factory.
 #' For instance, `name = anaerobe` will create the target `anaerobe_spectra_raw` among others.
 #' @param raw_spectra_directories A vector of paths to directories containing MALDI Biotyper spectra files. This is similar to the `biotyper_directory` parameter from [import_biotyper_spectra], but as a character vector.
 #' @inheritParams check_spectra
-#' @inheritParams targets::tar_target_raw
+#' @inheritParams targets::tar_target_raw # TODO: add others parameters to inherit, maybe with ... to targets::tar_target()?
 #'
-#' @return A target object
+#' # TODO: restrain format to only rds or qs but for qs warn with rlang::check_installed
+#'
+#' @return A list of target objects whose names use the `name` argument as a prefix:
+#' `*_plates_files` (e.g., `anaerobe_plates_files`) and `*_plates` (e.g., `anaerobe_plates`): are unnamed and named lists of input paths provided by `raw_spectra_directories`, respectively, as produced by [tarchetypes::tar_files_input]. 
+#' `*_spectra_raw` (e.g., `anaerobe_spectra_raw`): is a list-of-list of imported spectra objects produced by [import_biotyper_spectra].
+#' `*_checks` (e.g., `anaerobe_checks`): is a list-of-list of logical vectors produced by [check_spectra]. 
+#' `*_valid_spectra` (e.g., `anaerobe_valid_spectra`): is a list-of-list of subset of quality-checked spectra produced by [remove_spectra].
+#' `*_spectra_stats` (e.g., `anaerobe_spectra_stats`): is a tibble of statistics from the quality-check produced by [gather_spectra_stats] with a row for each input paths from `_plates_files`.
+#' `*_processed` (e.g., `anaerobe_processed`): is a list-of-list of processed spectra and associated peaks produced by [process_spectra].
+#' 
+#' @note Once the workflow is checked (with [targets::tar_manifest] or [targets::tar_visnetwork]) and run (with [targets::tar_make]), all the target objects returned can be accessed using [targets::tar_read]] (e.g., `targets::tar_read(anaerobe_spectra_stats)`).
 #' 
 #' @export
 #' @examples
@@ -22,7 +34,7 @@
 #'         library(maldipickr)
 #'         list(
 #'           tar_import_and_process_spectra(
-#'             name = "example",
+#'             name = "anaerobe",
 #'             raw_spectra_directories = system.file(
 #'               "toy-species-spectra",
 #'               package = "maldipickr"),

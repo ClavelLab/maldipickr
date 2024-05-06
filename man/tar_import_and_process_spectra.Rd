@@ -27,11 +27,22 @@ way to save and load this file. See the "Storage formats" section
 for a detailed list of possible data storage formats.}
 }
 \value{
-A target object
+A list of target objects whose names use the \code{name} argument as a prefix:
+\verb{*_plates_files} (e.g., \code{anaerobe_plates_files}) and \verb{*_plates} (e.g., \code{anaerobe_plates}): are unnamed and named lists of input paths provided by \code{raw_spectra_directories}, respectively, as produced by \link[tarchetypes:tar_files_input]{tarchetypes::tar_files_input}.
+\verb{*_spectra_raw} (e.g., \code{anaerobe_spectra_raw}): is a list-of-list of imported spectra objects produced by \link{import_biotyper_spectra}.
+\verb{*_checks} (e.g., \code{anaerobe_checks}): is a list-of-list of logical vectors produced by \link{check_spectra}.
+\verb{*_valid_spectra} (e.g., \code{anaerobe_valid_spectra}): is a list-of-list of subset of quality-checked spectra produced by \link{remove_spectra}.
+\verb{*_spectra_stats} (e.g., \code{anaerobe_spectra_stats}): is a tibble of statistics from the quality-check produced by \link{gather_spectra_stats} with a row for each input paths from \verb{_plates_files}.
+\verb{*_processed} (e.g., \code{anaerobe_processed}): is a list-of-list of processed spectra and associated peaks produced by \link{process_spectra}.
 }
 \description{
-Given a vector of paths to \code{acqus} and \code{acqu} MALDI Biotyper directories, this targets
-factory facilitates the steps from raw spectra to quality-checked processed spectra.
+Given a vector of paths to MALDI Biotyper directories containing \code{acqus} and
+\code{acqu}, this target factory facilitates the steps from raw spectra to
+quality-checked processed spectra. See \link[targets:tar_target]{targets::tar_target} for more
+information about what are target objects.
+}
+\note{
+Once the workflow is checked (with \link[targets:tar_manifest]{targets::tar_manifest} or \link[targets:tar_visnetwork]{targets::tar_visnetwork}) and run (with \link[targets:tar_make]{targets::tar_make}), all the target objects returned can be accessed using \link[targets:tar_read]{targets::tar_read}] (e.g., \code{targets::tar_read(anaerobe_spectra_stats)}).
 }
 \examples{
 if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
@@ -40,7 +51,7 @@ if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
         library(maldipickr)
         list(
           tar_import_and_process_spectra(
-            name = "example",
+            name = "anaerobe",
             raw_spectra_directories = system.file(
               "toy-species-spectra",
               package = "maldipickr"),
