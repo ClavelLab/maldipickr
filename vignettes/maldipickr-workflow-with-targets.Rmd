@@ -64,4 +64,18 @@ if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
 
   
 
+# Target factory to pick representative spectra from clusters of MALDI-TOF spectra
+
+    
+
+  
+
+```{r example-tar_pick_with_similarity, eval = FALSE}
+tar_pick_with_similarity()
+```
+
+  
+
+  
+
 
