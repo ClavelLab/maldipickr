@@ -6,9 +6,11 @@ dir.t: tests
 extra.suggests:
   - targets
   - tarchetypes
+  - coop
 pkg_ignore:
   - targets
   - tarchetypes
+  - coop
 document: yes
 normalize: yes
 inside_rmd: no

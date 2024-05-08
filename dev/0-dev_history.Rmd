@@ -108,7 +108,7 @@ pkgload::load_all()
 
 # Generate documentation and deal with dependencies
 # Ran once after issue with pkgs moved from Suggests to Imports
-attachment::att_amend_desc(extra.suggests = c("targets","tarchetypes"),pkg_ignore = c("targets","tarchetypes"), normalize = TRUE, update.config = TRUE)
+attachment::att_amend_desc(extra.suggests = c("targets","tarchetypes", "coop"),pkg_ignore = c("targets","tarchetypes", "coop"), normalize = TRUE, update.config = TRUE)
 
 # Check the package
 devtools::check()

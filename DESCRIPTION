@@ -41,6 +41,7 @@ Imports:
     tools,
     utils
 Suggests:
+    coop,
     knitr,
     rmarkdown,
     spelling,
