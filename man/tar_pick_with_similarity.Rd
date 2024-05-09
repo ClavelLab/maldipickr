@@ -21,7 +21,7 @@ the target \code{anaerobe_sim_interpolated} among others (see the Value section)
 A list of target objects whose names use the \code{name} argument as a prefix:
 \itemize{
 \item \verb{*_fm_interpolated} (e.g.,  \code{anaerobe_fm_interpolated}): a matrix produced by \link{merge_processed_spectra}.
-\item \verb{*_sim_interpolated} (e.g.,  \code{anaerobe_sim_interpolated}): a symetric cosine similarity matrix produced by \link[coop:cosine]{coop::tcosine}.
+\item \verb{*_sim_interpolated} (e.g.,  \code{anaerobe_sim_interpolated}): a symmetric cosine similarity matrix produced by \link[coop:cosine]{coop::tcosine}.
 \item \verb{*_df_interpolated} (e.g.,  \code{anaerobe_df_interpolated}): a tibble with the membership (i.e., which cluster label) each spectra belongs to produced by \link{delineate_with_similarity}.
 \item \verb{*_processed_metadata} (e.g.,  \code{anaerobe_processed_metadata}): a tibble of aggregated technical metadata for each spectra.
 \item \verb{*_clusters} (e.g.,  \code{anaerobe_clusters}): a tibble indicating with the previous metadata and which spectra was chosen as reference produced by \link{set_reference_spectra}.
