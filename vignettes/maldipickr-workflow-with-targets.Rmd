@@ -71,7 +71,7 @@ if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
   
 
 ```{r example-tar_pick_with_similarity, eval = FALSE}
-tar_pick_with_similarity()
+#'\dontrun{tar_pick_with_similarity()}
 ```
 
   

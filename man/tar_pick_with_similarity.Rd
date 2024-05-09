@@ -22,11 +22,18 @@ A list of target objects whose names use the \code{name} argument as a prefix:
 \itemize{
 \item \verb{*_fm_interpolated} (e.g.,  \code{anaerobe_fm_interpolated}): a matrix produced by \link{merge_processed_spectra}.
 \item \verb{*_sim_interpolated} (e.g.,  \code{anaerobe_sim_interpolated}): a symetric cosine similarity matrix produced by \link[coop:cosine]{coop::tcosine}.
+\item \verb{*_df_interpolated} (e.g.,  \code{anaerobe_df_interpolated}): a tibble with the membership (i.e., which cluster label) each spectra belongs to produced by \link{delineate_with_similarity}.
+\item \verb{*_processed_metadata} (e.g.,  \code{anaerobe_processed_metadata}): a tibble of aggregated technical metadata for each spectra.
+\item \verb{*_clusters} (e.g.,  \code{anaerobe_clusters}): a tibble indicating with the previous metadata and which spectra was chosen as reference produced by \link{set_reference_spectra}.
+\item \verb{*_picked} (e.g.,  \code{anaerobe_picked}): a tibble containing all the previous metadata but more importantly which spectra should be picked produced by \link{pick_spectra}.
 }
 }
 \description{
-Description
+Given upstream targets of processed spectra (from \link{tar_import_and_process_spectra})
+this target factory facilitates the steps from quality-checked
+processed spectra to clusters of spectra. See \link[targets:tar_target]{targets::tar_target} for more
+information about what are target objects.
 }
 \examples{
-tar_pick_with_similarity()
+\dontrun{tar_pick_with_similarity()}
 }

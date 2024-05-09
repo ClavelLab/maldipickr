@@ -169,7 +169,10 @@ test_that("tar_import_and_process_spectra works", {
 ```{r function-tar_pick_with_similarity}
 #' Delineate clusters of spectra to be picked using targets
 #' 
-#' Description
+#' Given upstream targets of processed spectra (from [tar_import_and_process_spectra])
+#'  this target factory facilitates the steps from quality-checked
+#'  processed spectra to clusters of spectra. See [targets::tar_target] for more
+#'  information about what are target objects.
 #' 
 #' @param name A symbol indicating the prefix of all targets created by the factory.
 #' For instance, calling `tar_pick_with_similarity(anaerobe, ...)` will create
@@ -181,6 +184,10 @@ test_that("tar_import_and_process_spectra works", {
 #' @return A list of target objects whose names use the `name` argument as a prefix:
 #' * `*_fm_interpolated` (e.g.,  `anaerobe_fm_interpolated`): a matrix produced by [merge_processed_spectra].
 #' * `*_sim_interpolated` (e.g.,  `anaerobe_sim_interpolated`): a symetric cosine similarity matrix produced by [coop::tcosine].
+#' * `*_df_interpolated` (e.g.,  `anaerobe_df_interpolated`): a tibble with the membership (i.e., which cluster label) each spectra belongs to produced by [delineate_with_similarity].
+#' * `*_processed_metadata` (e.g.,  `anaerobe_processed_metadata`): a tibble of aggregated technical metadata for each spectra.
+#' * `*_clusters` (e.g.,  `anaerobe_clusters`): a tibble indicating with the previous metadata and which spectra was chosen as reference produced by [set_reference_spectra].
+#' * `*_picked` (e.g.,  `anaerobe_picked`): a tibble containing all the previous metadata but more importantly which spectra should be picked produced by [pick_spectra].
 #' 
 #' @export
 tar_pick_with_similarity <- function(
@@ -209,10 +216,18 @@ tar_pick_with_similarity <- function(
 
   name_fm <- paste0(name, "_fm_interpolated")
   name_sim <- paste0(name, "_sim_interpolated")
+  name_df <- paste0(name, "_df_interpolated")
+  name_processed_metadata <- paste0(name, "_processed_metadata")
+  name_clusters <- paste0(name, "_clusters")
+  name_picked <- paste0(name, "_picked")
 
 
   sym_fm <- as.symbol(name_fm)
   sym_sim <- as.symbol(name_sim)
+  sym_df <- as.symbol(name_df)
+  sym_processed_metadata <- as.symbol(name_processed_metadata)
+  sym_clusters <- as.symbol(name_clusters)
+
   list(
     targets::tar_target_raw(
       name = name_fm,
@@ -225,13 +240,45 @@ tar_pick_with_similarity <- function(
       command = substitute(coop::tcosine(fm_interpolated),
         env = list(fm_interpolated = sym_fm)
       )
+    ),
+    targets::tar_target_raw(
+      name = name_df,
+      command = substitute(delineate_with_similarity(
+        sim_matrix = sim_interpolated,
+        threshold = threshold,
+        method = "complete"),
+        env = list(sim_interpolated = sym_sim, threshold = threshold)
+      )
+    ),
+    targets::tar_target_raw(
+      name = name_processed_metadata,
+      command = substitute(
+        dplyr::bind_rows(
+          lapply(processed_spectra, `[[`, "metadata")),
+        env = list(processed_spectra = processed_expr)
+      ),
+      iteration = "list"
+    ),
+    targets::tar_target_raw(
+      name = name_clusters,
+      command = substitute(
+        set_reference_spectra(df_interpolated, processed_metadata),
+        env = list(df_interpolated = sym_df, processed_metadata = sym_processed_metadata)
+      )
+    ),
+    targets::tar_target_raw(
+      name = name_picked,
+      command = substitute(
+        pick_spectra(df_interpolated, ...),
+        env = list(df_interpolated = sym_clusters)
+      )
     )
   )
 }
 ```
   
 ```{r example-tar_pick_with_similarity, eval=FALSE}
-tar_pick_with_similarity()
+#'\dontrun{tar_pick_with_similarity()}
 ```
   
 ```{r tests-tar_pick_with_similarity}
