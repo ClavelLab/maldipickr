@@ -46,7 +46,7 @@ tar_pick_with_similarity <- function(
   # which will create list(fast_processed, slow_processed) from
   #  targets_spectra = c(fast_target_factory, slow_target_factory)
   name_processed <- tarchetypes::tar_select_names(targets_spectra, targets::ends_with("_processed"))
-  processed_expr <- as.call(c(as.symbol("list"), lapply(name_processed, as.symbol)))
+  processed_expr <- as.call(c(as.symbol("c"), lapply(name_processed, as.symbol)))
 
 
   name_fm <- paste0(name, "_fm_interpolated")
