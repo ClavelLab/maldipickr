@@ -16,7 +16,7 @@
 #'
 #' @return A list of target objects whose names use the `name` argument as a prefix:
 #' * `*_fm_interpolated` (e.g.,  `anaerobe_fm_interpolated`): a matrix produced by [merge_processed_spectra].
-#' * `*_sim_interpolated` (e.g.,  `anaerobe_sim_interpolated`): a symmetric cosine similarity matrix produced by [coop::tcosine].
+#' * `*_sim_interpolated` (e.g.,  `anaerobe_sim_interpolated`): a symmetric cosine similarity matrix produced by the transposed version of [coop::cosine].
 #' * `*_df_interpolated` (e.g.,  `anaerobe_df_interpolated`): a tibble with the membership (i.e., which cluster label) each spectra belongs to produced by [delineate_with_similarity].
 #' * `*_processed_metadata` (e.g.,  `anaerobe_processed_metadata`): a tibble of aggregated technical metadata for each spectra.
 #' * `*_clusters` (e.g.,  `anaerobe_clusters`): a tibble indicating with the previous metadata and which spectra was chosen as reference produced by [set_reference_spectra].
