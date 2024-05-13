@@ -160,7 +160,25 @@ if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
   
 ```{r tests-tar_import_and_process_spectra}
 test_that("tar_import_and_process_spectra works", {
-  expect_true(inherits(tar_import_and_process_spectra, "function")) 
+  skip_if_not_installed("targets")
+  skip_if_not_installed("tarchetypes")
+  skip_on_cran()
+  targets::tar_dir({ # tar_dir() runs code from a temporary directory.
+    targets::tar_script({
+        library(maldipickr)
+        list(
+          tar_import_and_process_spectra(
+            name = "anaerobe",
+            raw_spectra_directories = system.file(
+              "toy-species-spectra",
+              package = "maldipickr"),
+            tolerance = 1
+          )
+        )},ask = FALSE)
+  # Enough targets are created.
+  out <- targets::tar_manifest(callr_function = NULL)
+  expect_equal(nrow(out), 7L)
+  })
 })
 ```
   
