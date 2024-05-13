@@ -118,7 +118,7 @@ tar_import_and_process_spectra <- function(
       pattern = substitute(map(sym_valid_spectra),
         env = list(sym_valid_spectra = sym_valid_spectra)
       ),
-      format = format
+      format = format, iteration = "list"
     )
   )
 }
