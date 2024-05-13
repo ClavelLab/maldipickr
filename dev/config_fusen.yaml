@@ -86,8 +86,12 @@ keep:
 maldipickr-workflow-with-targets.Rmd:
   path: dev/maldipickr-workflow-with-targets.Rmd
   state: active
-  R: R/tar_import_and_process_spectra.R
-  tests: tests/testthat/test-tar_import_and_process_spectra.R
+  R:
+  - R/tar_import_and_process_spectra.R
+  - R/tar_pick_with_similarity.R
+  tests:
+  - tests/testthat/test-tar_import_and_process_spectra.R
+  - tests/testthat/test-tar_pick_with_similarity.R
   vignettes: vignettes/maldipickr-workflow-with-targets.Rmd
   inflate:
     flat_file: dev/maldipickr-workflow-with-targets.Rmd
