@@ -12,7 +12,7 @@
 #'  the target `anaerobe_sim_interpolated` among others (see the Value section).
 #' @param targets_spectra A list of targets produced by [tar_import_and_process_spectra] that should contains one or more targets named `*_processed`.
 #' @param threshold A numeric value indicating the minimal cosine similarity between two spectra.
-#' @param ... Arguments passed to [pick_spectra]
+#' @inheritParams pick_spectra
 #'
 #' @return A list of target objects whose names use the `name` argument as a prefix:
 #' * `*_fm_interpolated` (e.g.,  `anaerobe_fm_interpolated`): a matrix produced by [merge_processed_spectra].
@@ -28,7 +28,11 @@
 tar_pick_with_similarity <- function(
     name,
     targets_spectra,
-    threshold, ...) {
+    threshold,
+    metadata_df = NULL, criteria_column = NULL,
+    hard_mask_column = NULL, soft_mask_column = NULL,
+    is_descending_order = TRUE,
+    is_sorted = FALSE) {
   rlang::check_installed(c("targets", "tarchetypes", "coop"),
     reason = "to facilitate {maldipickr} workflow development"
   )
@@ -104,8 +108,19 @@ tar_pick_with_similarity <- function(
     targets::tar_target_raw(
       name = name_picked,
       command = substitute(
-        pick_spectra(df_interpolated, ...),
-        env = list(df_interpolated = sym_clusters)
+        pick_spectra(cluster_df = df_interpolated,
+                     metadata_df = metadata_df, criteria_column = criteria_column,
+                     hard_mask_column = hard_mask_column,
+                     soft_mask_column = soft_mask_column,
+                     is_descending_order = is_descending_order,
+                     is_sorted = is_sorted),
+        env = list(df_interpolated = sym_clusters,
+                     metadata_df = metadata_df, criteria_column = criteria_column,
+                     hard_mask_column = hard_mask_column,
+                     soft_mask_column = soft_mask_column,
+                     is_descending_order = is_descending_order,
+                     is_sorted = is_sorted
+                   )
       )
     )
   )

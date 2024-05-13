@@ -4,7 +4,17 @@
 \alias{tar_pick_with_similarity}
 \title{Delineate clusters of spectra to be picked using targets}
 \usage{
-tar_pick_with_similarity(name, targets_spectra, threshold, ...)
+tar_pick_with_similarity(
+  name,
+  targets_spectra,
+  threshold,
+  metadata_df = NULL,
+  criteria_column = NULL,
+  hard_mask_column = NULL,
+  soft_mask_column = NULL,
+  is_descending_order = TRUE,
+  is_sorted = FALSE
+)
 }
 \arguments{
 \item{name}{A symbol indicating the prefix of all targets created by the factory.
@@ -15,7 +25,22 @@ the target \code{anaerobe_sim_interpolated} among others (see the Value section)
 
 \item{threshold}{A numeric value indicating the minimal cosine similarity between two spectra.}
 
-\item{...}{Arguments passed to \link{pick_spectra}}
+\item{metadata_df}{Optional tibble with relevant metadata to guide the
+picking process (e.g., OD600).}
+
+\item{criteria_column}{Optional character indicating the column in \code{metadata_df}
+to be used as a criteria.}
+
+\item{hard_mask_column}{Column name in the \code{cluster_df} or \code{metadata_df} tibble indicating whether the spectra, \strong{and the clusters to which they belong} should be discarded (\code{TRUE}) or not (\code{FALSE}) before the picking decision.}
+
+\item{soft_mask_column}{Column name in the \code{cluster_df} or \code{metadata_df} tibble indicating whether the spectra should be discarded (\code{TRUE}) or not (\code{FALSE}) before the picking decision.}
+
+\item{is_descending_order}{Optional logical indicating whether to sort the \code{criteria_column} from the highest-to-lowest value (\code{TRUE}) or lowest-to-highest (\code{FALSE}).}
+
+\item{is_sorted}{Optional logical to indicate that the \code{cluster_df} is
+already sorted by cluster based on (usually multiple) internal criteria to
+pick the first of each cluster. This flag is \strong{overridden} if a \code{metadata_df}
+is provided.}
 }
 \value{
 A list of target objects whose names use the \code{name} argument as a prefix:
