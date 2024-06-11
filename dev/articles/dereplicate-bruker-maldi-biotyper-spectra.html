@@ -18,7 +18,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Dereplicate Bruker MALDI Biotyper spectra">
+<script src="../extra.js"></script><meta property="og:title" content="Dereplicate Bruker MALDI Biotyper spectra">
 <meta property="og:description" content="maldipickr">
 <meta property="og:image" content="https://repository-images.githubusercontent.com/613291736/be5379b5-ce72-430d-bb4c-70155ba6a0ad">
 <meta property="og:image:alt" content="maldipickr logo with the legend Dereplicate and cherry-pick mass spectrometry spectra">
@@ -181,8 +181,9 @@ high-throughput analyses.</p>
 <span><span class="co">#&gt;   ..$ species3_F7 :Formal class 'MassPeaks' [package "MALDIquant"] with 4 slots</span></span>
 <span><span class="co">#&gt;   ..$ species3_F8 :Formal class 'MassPeaks' [package "MALDIquant"] with 4 slots</span></span>
 <span><span class="co">#&gt;   ..$ species3_F9 :Formal class 'MassPeaks' [package "MALDIquant"] with 4 slots</span></span>
-<span><span class="co">#&gt;  $ metadata: tibble [6 × 3] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co"># A detailed view of the metadata with the median signal-to-noise</span></span>
+<span><span class="co">#&gt;  $ metadata: tibble [6 × 3] (S3: tbl_df/tbl/data.frame)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># A detailed view of the metadata with the median signal-to-noise</span></span>
 <span><span class="co">#  ratio (SNR) and the number of peaks</span></span>
 <span><span class="va">processed</span><span class="op">$</span><span class="va">metadata</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
@@ -219,7 +220,7 @@ processed spectra signal. The current function enables the analyst to
 decide whether to interpolate the values or leave missing peaks as
 <code>NA</code> which would then be converted to an null intensity
 value.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span>
 <span><span class="va">directory_biotyper_spectra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">"toy-species-spectra"</span>,</span>
@@ -234,25 +235,29 @@ value.</p>
 <span><span class="co"># The feature matrix has 6 spectra as rows and</span></span>
 <span><span class="co">#  35 peaks as columns</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1]  6 35</span></span>
-<span><span class="co"># Notice the difference when the interpolation is turned off</span></span>
+<span><span class="co">#&gt; [1]  6 35</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Notice the difference when the interpolation is turned off</span></span>
 <span><span class="va">fm_no_interpolation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_processed_spectra.html">merge_processed_spectra</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">processed</span><span class="op">)</span>,</span>
 <span>  interpolate_missing <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">fm</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># 0</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">fm_no_interpolation</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># 68</span></span>
-<span><span class="co">#&gt; [1] 68</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">fm_no_interpolation</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="co"># 68</span></span>
+<span><span class="co">#&gt; [1] 68</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Multiple runs can be aggregated using list()</span></span>
 <span><span class="co"># Merge the spectra to produce the feature matrix</span></span>
 <span><span class="va">fm_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_processed_spectra.html">merge_processed_spectra</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">processed</span>, <span class="va">processed</span>, <span class="va">processed</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># The feature matrix has 3×6=18 spectra as rows and</span></span>
 <span><span class="co">#  35 peaks as columns</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fm_all</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 18 35</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] 18 35</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># If using a list, names will be dropped and are not propagated to the matrix.</span></span>
 <span><span class="co">#' \dontrun{</span></span>
 <span><span class="co">#' fm_all &lt;- merge_processed_spectra(</span></span>
@@ -277,7 +282,7 @@ feature matrix from <a href="https://clavellab.github.io/maldipickr/reference/me
 has spectra as rows and peaks values as columns. So to get a similarity
 matrix between spectra, either the feature matrix must be transposed or
 a dedicated function must be used.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A. Compute the similarity matrix on the transposed feature matrix</span></span>
 <span><span class="co">#   using Pearson correlation coefficient</span></span>
 <span><span class="va">sim_matrix</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span></span>
@@ -315,7 +320,7 @@ each cluster respects the threshold.</p>
 <p>Finally, a table summarizes for each spectra, to which cluster number
 it was assigned to and the size of the cluster, which is the total
 number of spectra in the cluster.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Toy similarity matrix between the six example spectra of</span></span>
 <span><span class="co">#  three species. The cosine metric is used and a value of</span></span>
 <span><span class="co">#  zero indicates dissimilar spectra and a value of one</span></span>
@@ -367,7 +372,7 @@ then the highest number of detected peaks.</p>
 does not change the order of the cluster table but merely adds an
 additional column <code>is_reference</code> to indicate whether the
 corresponding spectrum is representative of the cluster.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get an example directory of six Bruker MALDI Biotyper spectra</span></span>
 <span><span class="co"># Import the six spectra and</span></span>
 <span><span class="co"># Transform the spectra signals according to Strejcek et al. (2018)</span></span>
@@ -434,7 +439,7 @@ the microorganisms using its internal database. Once the report or
 reports are imported (in R using <a href="https://clavellab.github.io/maldipickr/reference/read_biotyper_report.html"><code>read_biotyper_report()</code></a>),
 the function <a href="https://clavellab.github.io/maldipickr/reference/delineate_with_identification.html"><code>delineate_with_identification()</code></a>
 will group spectra based on their identifications.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">report_unknown</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_biotyper_report.html">read_biotyper_report</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"biotyper_unknown.csv"</span>, package <span class="op">=</span> <span class="st">"maldipickr"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -468,7 +473,7 @@ produces a comma separated table. The example below illustrates how to
 import this table into R to be consistent with the dereplication table
 generated within the <a href="https://github.com/ClavelLab/maldipickr" class="external-link"><code>{maldipickr}</code></a>
 package.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Reformat the output from SPeDE table</span></span>
 <span><span class="co"># https://github.com/LM-UGent/SPeDE</span></span>
 <span><span class="fu"><a href="../reference/import_spede_clusters.html">import_spede_clusters</a></span><span class="op">(</span></span>
@@ -529,7 +534,7 @@ cluster table with an additional logical column named
 <code>to_pick</code> to indicate whether the colony associated with the
 spectra should be picked (<code>TRUE</code>) or not picked
 (<code>FALSE</code>).</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 0. Load a toy example of a tibble of clusters created by</span></span>
 <span><span class="co">#   the `delineate_with_similarity` function.</span></span>
 <span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span></span>
@@ -553,8 +558,9 @@ spectra should be picked (<code>TRUE</code>) or not picked
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> species2_E12 TRUE             2            2  5.63    23 TRUE        </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> species3_F7  FALSE            1            4  4.89    26 FALSE       </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> species3_F8  TRUE             1            4  5.56    25 TRUE        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3_F9  FALSE            1            4  5.40    25 FALSE</span></span>
-<span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3_F9  FALSE            1            4  5.40    25 FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># 2.1 Simulate OD600 values with uniform distribution</span></span>
 <span><span class="co">#  for each of the colonies we measured with</span></span>
 <span><span class="co">#  the Bruker MALDI Biotyper</span></span>
@@ -572,8 +578,9 @@ spectra should be picked (<code>TRUE</code>) or not picked
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> species2_E12 0.735</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> species3_F7  0.973</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> species3_F8  0.740</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3_F9  0.201</span></span>
-<span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3_F9  0.201</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># 2.2 Pick the spectra based on the highest</span></span>
 <span><span class="co">#   OD600 value per cluster</span></span>
 <span><span class="fu"><a href="../reference/pick_spectra.html">pick_spectra</a></span><span class="op">(</span><span class="va">clusters</span>, <span class="va">metadata</span>, <span class="st">"OD600"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -586,8 +593,9 @@ spectra should be picked (<code>TRUE</code>) or not picked
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> species2_E12 FALSE            2            2  5.63    23 TRUE         0.735</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> species3_F7  TRUE             1            4  4.89    26 FALSE        0.973</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> species3_F8  FALSE            1            4  5.56    25 TRUE         0.740</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3_F9  FALSE            1            4  5.40    25 FALSE        0.201</span></span>
-<span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3_F9  FALSE            1            4  5.40    25 FALSE        0.201</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># 3.1 Say that the wells on the right side of the plate are</span></span>
 <span><span class="co">#   used for negative controls and should not be picked.</span></span>
 <span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="va">metadata</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -613,8 +621,9 @@ spectra should be picked (<code>TRUE</code>) or not picked
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> species3… TRUE             1            4  4.89    26 FALSE        0.973     7</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> species3… FALSE            1            4  5.56    25 TRUE         0.740     8</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> species3… FALSE            1            4  5.40    25 FALSE        0.201     9</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: is_edge &lt;lgl&gt;</span></span></span>
-<span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: is_edge &lt;lgl&gt;</span></span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># 4.1 Say that some spectra were picked before</span></span>
 <span><span class="co">#   (e.g., in the column F) in a previous experiment.</span></span>
 <span><span class="co"># We do not want to pick clusters with those spectra</span></span>
