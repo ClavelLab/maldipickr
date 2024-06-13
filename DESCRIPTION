@@ -41,9 +41,12 @@ Imports:
     tools,
     utils
 Suggests:
+    coop,
     knitr,
     rmarkdown,
     spelling,
+    tarchetypes (>= 0.9.0),
+    targets (>= 1.7.0),
     testthat
 VignetteBuilder: 
     knitr

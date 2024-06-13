@@ -107,7 +107,8 @@ What is special about using `README.Rmd` instead of just `README.md`? You can in
 pkgload::load_all()
 
 # Generate documentation and deal with dependencies
-attachment::att_amend_desc()
+# Ran once after issue with pkgs moved from Suggests to Imports
+attachment::att_amend_desc(extra.suggests = c("targets","tarchetypes", "coop"),pkg_ignore = c("targets","tarchetypes", "coop"), normalize = TRUE, update.config = TRUE)
 
 # Check the package
 devtools::check()
@@ -166,7 +167,7 @@ usethis::use_import_from(
 usethis::use_import_from("tidyselect", "starts_with")
 # To solve "no visible binding variable error from devtools:check
 # https://dplyr.tidyverse.org/articles/programming.html#eliminating-r-cmd-check-notes
-usethis::use_import_from("rlang", ".data")
+usethis::use_import_from("rlang", ".data","check_installed")
 usethis::use_import_from(
   "MALDIquant",
   c(
@@ -180,6 +181,9 @@ usethis::use_import_from(
 usethis::use_import_from("readBrukerFlexData", "readBrukerFlexDir")
 usethis::use_import_from("stats", "median")
 usethis::use_import_from("utils", c("read.delim", "read.csv"))
+# See attachment::att_amend_desc above, because fusen moves the confi below to Imports during inflate
+usethis::use_package("targets", type = "Suggests", min_version = "1.7.0")
+usethis::use_package("tarchetypes", type = "Suggests", min_version = "0.9.0")
 ```
 
 # Add a logo
@@ -192,6 +196,6 @@ usethis::use_logo("logo-maldipickr.svg")# later to fix #43
 # Ignore files during package build
 
 ```{r build_ignore, eval=FALSE}
-usethis::use_build_ignore(c("_pkgdown.yml", "docs", "pkgdown", "processed", "codecov.yml"))
+usethis::use_build_ignore(c("_pkgdown.yml", "docs", "pkgdown", "processed", "codecov.yml", "CONTRIBUTING.md"))
 ```
 

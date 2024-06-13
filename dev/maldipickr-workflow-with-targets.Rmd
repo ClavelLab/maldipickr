@@ -1,0 +1,357 @@
+---
+title: "maldipickr Workflow with targets"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+```{r development-load}
+# Load already included functions if relevant
+pkgload::load_all(export_all = FALSE)
+```
+
+
+Simultaneous bacterial isolation efforts require rapid dereplication of bacteria, if not their identification, to reduce the redundancy of isolates.
+
+To this end,  the workhorse functions of [`{maldipickr}`](https://github.com/ClavelLab/maldipickr)
+help import and then analyze MALDI-TOF spectra to dereplicate and cherry-pick mass spectrometry spectra.
+The vignettes ["Import data from Bruker MALDI Biotyper"](https://clavellab.github.io/maldipickr/articles/import-data-from-bruker-maldi-biotyper.html) and ["Dereplicate Bruker MALDI Biotyper spectra"](https://clavellab.github.io/maldipickr/articles/dereplicate-bruker-maldi-biotyper-spectra.html) explain these functions in details if need be.
+
+
+This vignette showcase functions to facilitate reproducible and trustworthy workflow development `{maldipickr}` (using [`{targets}`](https://docs.ropensci.org/targets/)). We invite readers unfamiliar with {targets} to read the short and well-written walk-through ["How to use {targets}"](https://books.ropensci.org/targets/walkthrough.html) to understand how {targets} help analysts "coordinate the pieces of computationally demanding analysis projects" and "skips costly runtime for tasks that are already up to date" (source: <https://cran.r-project.org/package=targets>).
+
+
+These helpers in `{maldipickr}` are called {targets} factories, which means they return target objects or lists of target objects. 
+
+
+
+# Target factory to import and process spectra
+    
+```{r function-tar_import_and_process_spectra}
+#' Import and process checked spectra using targets
+#' 
+#' 
+#' Given a vector of paths to MALDI Biotyper directories containing `acqus` and
+#'  `acqu`, this target factory facilitates the steps from raw spectra to
+#'   quality-checked processed spectra. See [targets::tar_target] for more
+#'   information about what are target objects.
+#' 
+#' @param name A symbol indicating the prefix of all targets created by the factory.
+#' For instance, calling `tar_import_and_process_spectra(anaerobe, ...)` will create the target `anaerobe_spectra_raw` among others (see the Value section).
+#' @param raw_spectra_directories A vector of paths to directories containing MALDI Biotyper spectra files. This is similar to the `biotyper_directory` parameter from [import_biotyper_spectra], but as a character vector.
+#' @inheritParams check_spectra
+#' @inheritParams targets::tar_target_raw # TODO: add others parameters to inherit, maybe with ... to targets::tar_target()?
+#'
+#' # TODO: restrain format to only rds or qs but for qs warn with rlang::check_installed
+#'
+#' @return A list of target objects whose names use the `name` argument as a prefix:
+#' `*_plates_files` (e.g., `anaerobe_plates_files`) and `*_plates` (e.g., `anaerobe_plates`): are unnamed and named lists of input paths provided by `raw_spectra_directories`, respectively, as produced by [tarchetypes::tar_files_input]. 
+#' `*_spectra_raw` (e.g., `anaerobe_spectra_raw`): is a list-of-list of imported spectra objects produced by [import_biotyper_spectra].
+#' `*_checks` (e.g., `anaerobe_checks`): is a list-of-list of logical vectors produced by [check_spectra]. 
+#' `*_valid_spectra` (e.g., `anaerobe_valid_spectra`): is a list-of-list of subset of quality-checked spectra produced by [remove_spectra].
+#' `*_spectra_stats` (e.g., `anaerobe_spectra_stats`): is a tibble of statistics from the quality-check produced by [gather_spectra_stats] with a row for each input paths from `_plates_files`.
+#' `*_processed` (e.g., `anaerobe_processed`): is a list-of-list of processed spectra and associated peaks produced by [process_spectra].
+#' 
+#' @note Once the workflow is checked (with [targets::tar_manifest] or [targets::tar_visnetwork]) and run (with [targets::tar_make]), all the target objects returned can be accessed using [targets::tar_read]] (e.g., `targets::tar_read(anaerobe_spectra_stats)`).
+#' 
+#' @export
+tar_import_and_process_spectra <- function(
+    name,
+    raw_spectra_directories,
+    tolerance,
+    format = targets::tar_option_get("format")) {
+  rlang::check_installed(c("targets", "tarchetypes"),
+    reason = "to facilitate {maldipickr} workflow development"
+  )
+  name <- targets::tar_deparse_language(substitute(name))
+  targets::tar_assert_path(raw_spectra_directories)
+  targets::tar_assert_dbl(tolerance)
+
+  name_plates <- paste0(name, "_plates")
+  name_spectra_raw <- paste0(name, "_spectra_raw")
+  name_checks <- paste0(name, "_checks")
+  name_spectra_stats <- paste0(name, "_spectra_stats")
+  name_valid_spectra <- paste0(name, "_valid_spectra")
+  name_processed <- paste0(name, "_processed")
+
+  sym_plates <- as.symbol(name_plates)
+  sym_spectra_raw <- as.symbol(name_spectra_raw)
+  sym_checks <- as.symbol(name_checks)
+  sym_spectra_stats <- as.symbol(name_spectra_stats)
+  sym_valid_spectra <- as.symbol(name_valid_spectra)
+
+  list(
+    tarchetypes::tar_files_input_raw(name_plates,
+      raw_spectra_directories,
+      format = "file"
+    ),
+    targets::tar_target_raw(name_spectra_raw,
+      command = substitute(suppressWarnings(import_biotyper_spectra(sym_plates)),
+        env = list(sym_plates = sym_plates)
+      ),
+      pattern = substitute(map(sym_plates),
+        env = list(sym_plates = sym_plates)
+      ),
+      format = format
+    ),
+    targets::tar_target_raw(name_checks,
+      command = substitute(check_spectra(sym_spectra_raw, tolerance),
+        env = list(tolerance = tolerance, sym_spectra_raw = sym_spectra_raw)
+      ),
+      pattern = substitute(map(sym_spectra_raw), env = list(sym_spectra_raw = sym_spectra_raw)),
+      format = format
+    ),
+    targets::tar_target_raw(name_spectra_stats,
+      command = substitute(
+        gather_spectra_stats(sym_checks) %>%
+          dplyr::mutate(maldi_plate = sym_plates),
+        env = list(sym_checks = sym_checks, sym_plates = sym_plates)
+      ),
+      pattern = substitute(map(sym_checks, sym_plates),
+        env = list(sym_checks = sym_checks, sym_plates = sym_plates)
+      ),
+      iteration = "vector", format = format
+    ),
+    # Filter-out non empty spectra and unusual spectra
+    targets::tar_target_raw(name_valid_spectra,
+      command = substitute(remove_spectra(sym_spectra_raw, sym_checks),
+        env = list(sym_spectra_raw = sym_spectra_raw, sym_checks = sym_checks)
+      ),
+      pattern = substitute(map(sym_spectra_raw, sym_checks),
+        env = list(sym_spectra_raw = sym_spectra_raw, sym_checks = sym_checks)
+      ),
+      format = format
+    ),
+    targets::tar_target_raw(name_processed,
+      command = substitute(process_spectra(sym_valid_spectra),
+        env = list(sym_valid_spectra = sym_valid_spectra)
+      ),
+      pattern = substitute(map(sym_valid_spectra),
+        env = list(sym_valid_spectra = sym_valid_spectra)
+      ),
+      format = format, iteration = "list"
+    )
+  )
+}
+```
+  
+```{r example-tar_import_and_process_spectra}
+if (Sys.getenv("TAR_LONG_EXAMPLES") == "true") {
+  targets::tar_dir({ # tar_dir() runs code from a temporary directory.
+    targets::tar_script({
+        library(maldipickr)
+        list(
+          tar_import_and_process_spectra(
+            name = "anaerobe",
+            raw_spectra_directories = system.file(
+              "toy-species-spectra",
+              package = "maldipickr"),
+            tolerance = 1
+          )
+        )},ask = FALSE)
+    targets::tar_make()
+  })
+}
+```
+  
+```{r tests-tar_import_and_process_spectra}
+# Tests for targets factory borrowed from
+# src: https://github.com/ropensci/jagstargets/blob/2bad8b2958d0252a5993d341d38f8d9d02aeb41a/tests/testthat/test-tar_jags_rep_dic.R
+test_that("tar_import_and_process_spectra works", {
+  skip_if_not_installed("targets")
+  skip_if_not_installed("tarchetypes")
+  skip_on_cran()
+  targets::tar_dir({ # tar_dir() runs code from a temporary directory.
+    targets::tar_script({
+      library(maldipickr)
+      list(
+        tar_import_and_process_spectra(
+          name = "anaerobe",
+          raw_spectra_directories = system.file(
+            "toy-species-spectra",
+            package = "maldipickr"),
+          tolerance = 1
+        )
+      )},ask = FALSE)
+    # Enough targets are created.
+    out <- targets::tar_manifest(callr_function = NULL)
+    expect_equal(nrow(out), 7L)
+    # Nodes in the graph are connected properly.
+    out <- targets::tar_network(callr_function = NULL, targets_only = TRUE)$edges
+    out <- dplyr::arrange(out, from, to)
+    rownames(out) <- NULL
+    exp <- tibble::tribble(
+      ~from,                     ~to,
+      "anaerobe_checks",         "anaerobe_spectra_stats",
+      "anaerobe_checks",         "anaerobe_valid_spectra",
+      "anaerobe_plates",         "anaerobe_spectra_raw",
+      "anaerobe_plates",         "anaerobe_spectra_stats",
+      "anaerobe_plates_files",   "anaerobe_plates",
+      "anaerobe_spectra_raw",    "anaerobe_checks",
+      "anaerobe_spectra_raw",    "anaerobe_valid_spectra",
+      "anaerobe_valid_spectra",  "anaerobe_processed"
+    )
+    exp <- dplyr::arrange(exp, from, to)
+    rownames(exp) <- NULL
+    expect_equal(out, exp)
+    # The pipeline produces correctly formatted output.
+    capture.output(suppressWarnings(targets::tar_make(callr_function = NULL)))
+    expect_equal( nrow(
+      targets::tar_read(anaerobe_processed)[[1]][["metadata"]]
+    ), 6L )
+  })
+})
+test_that("tar_import_and_process_spectra fails on wrong input", {
+  skip_if_not_installed("targets")
+  skip_if_not_installed("tarchetypes")
+  skip_on_cran()
+  targets::tar_dir({ # tar_dir() runs code from a temporary directory.
+    targets::tar_script({
+      library(maldipickr)
+      list(
+        tar_import_and_process_spectra(
+          name = "anaerobe",
+          raw_spectra_directories = "data_directory_that_should_not_exist",
+          tolerance = 1
+        )
+      )},ask = FALSE)
+    expect_error(tar_make(), class = "tar_condition_validate")
+  })
+})
+```
+  
+# Target factory to pick representative spectra from clusters of MALDI-TOF spectra
+    
+```{r function-tar_pick_with_similarity}
+#' Delineate clusters of spectra to be picked using targets
+#' 
+#' Given upstream targets of processed spectra (from [tar_import_and_process_spectra])
+#'  this target factory facilitates the steps from quality-checked
+#'  processed spectra to clusters of spectra. See [targets::tar_target] for more
+#'  information about what are target objects.
+#' 
+#' @param name A symbol indicating the prefix of all targets created by the factory.
+#' For instance, calling `tar_pick_with_similarity(anaerobe, ...)` will create
+#'  the target `anaerobe_sim_interpolated` among others (see the Value section).
+#' @param targets_spectra A list of targets produced by [tar_import_and_process_spectra] that should contains one or more targets named `*_processed`.
+#' @param threshold A numeric value indicating the minimal cosine similarity between two spectra.
+#' @param ... Arguments passed to [pick_spectra]
+#'
+#' @return A list of target objects whose names use the `name` argument as a prefix:
+#' * `*_fm_interpolated` (e.g.,  `anaerobe_fm_interpolated`): a matrix produced by [merge_processed_spectra].
+#' * `*_sim_interpolated` (e.g.,  `anaerobe_sim_interpolated`): a symmetric cosine similarity matrix produced by [coop::tcosine].
+#' * `*_df_interpolated` (e.g.,  `anaerobe_df_interpolated`): a tibble with the membership (i.e., which cluster label) each spectra belongs to produced by [delineate_with_similarity].
+#' * `*_processed_metadata` (e.g.,  `anaerobe_processed_metadata`): a tibble of aggregated technical metadata for each spectra.
+#' * `*_clusters` (e.g.,  `anaerobe_clusters`): a tibble indicating with the previous metadata and which spectra was chosen as reference produced by [set_reference_spectra].
+#' * `*_picked` (e.g.,  `anaerobe_picked`): a tibble containing all the previous metadata but more importantly which spectra should be picked produced by [pick_spectra].
+#' 
+#' @export
+tar_pick_with_similarity <- function(
+    name,
+    targets_spectra,
+    threshold, ...) {
+  rlang::check_installed(c("targets", "tarchetypes", "coop"),
+    reason = "to facilitate {maldipickr} workflow development"
+  )
+  name <- targets::tar_deparse_language(substitute(name))
+  targets::tar_assert_dbl(threshold)
+  targets::tar_assert_list(targets_spectra)
+  targets_spectra <- unlist(list(targets_spectra), recursive = TRUE)
+
+
+  # It was tricky to apply the symbol transformation to a list whilst constructing
+  #  a list structure that could be used correctly by merge_processed_spectra()
+  # Thankfully, @wlandau suggested an awesome solution to a similar problem
+  # https://github.com/ropensci/targets/discussions/461#discussioncomment-709984
+  #
+  # which will create list(fast_processed, slow_processed) from
+  #  targets_spectra = c(fast_target_factory, slow_target_factory)
+  name_processed <- tarchetypes::tar_select_names(targets_spectra, targets::ends_with("_processed"))
+  processed_expr <- as.call(c(as.symbol("c"), lapply(name_processed, as.symbol)))
+
+
+  name_fm <- paste0(name, "_fm_interpolated")
+  name_sim <- paste0(name, "_sim_interpolated")
+  name_df <- paste0(name, "_df_interpolated")
+  name_processed_metadata <- paste0(name, "_processed_metadata")
+  name_clusters <- paste0(name, "_clusters")
+  name_picked <- paste0(name, "_picked")
+
+
+  sym_fm <- as.symbol(name_fm)
+  sym_sim <- as.symbol(name_sim)
+  sym_df <- as.symbol(name_df)
+  sym_processed_metadata <- as.symbol(name_processed_metadata)
+  sym_clusters <- as.symbol(name_clusters)
+
+  list(
+    targets::tar_target_raw(
+      name = name_fm,
+      command = substitute(merge_processed_spectra(processed_spectra),
+        env = list(processed_spectra = processed_expr)
+      )
+    ),
+    targets::tar_target_raw(
+      name = name_sim,
+      command = substitute(coop::tcosine(fm_interpolated),
+        env = list(fm_interpolated = sym_fm)
+      )
+    ),
+    targets::tar_target_raw(
+      name = name_df,
+      command = substitute(delineate_with_similarity(
+        sim_matrix = sim_interpolated,
+        threshold = threshold,
+        method = "complete"),
+        env = list(sim_interpolated = sym_sim, threshold = threshold)
+      )
+    ),
+    targets::tar_target_raw(
+      name = name_processed_metadata,
+      command = substitute(
+        dplyr::bind_rows(
+          lapply(processed_spectra, `[[`, "metadata")),
+        env = list(processed_spectra = processed_expr)
+      ),
+      iteration = "list"
+    ),
+    targets::tar_target_raw(
+      name = name_clusters,
+      command = substitute(
+        set_reference_spectra(df_interpolated, processed_metadata),
+        env = list(df_interpolated = sym_df, processed_metadata = sym_processed_metadata)
+      )
+    ),
+    targets::tar_target_raw(
+      name = name_picked,
+      command = substitute(
+        pick_spectra(df_interpolated, ...),
+        env = list(df_interpolated = sym_clusters)
+      )
+    )
+  )
+}
+```
+  
+```{r example-tar_pick_with_similarity, eval=FALSE}
+#'\dontrun{tar_pick_with_similarity()}
+```
+  
+```{r tests-tar_pick_with_similarity}
+test_that("tar_pick_with_similarity works", {
+  expect_true(inherits(tar_pick_with_similarity, "function")) 
+})
+```
+  
+
+```{r development-inflate, eval=FALSE}
+# Run but keep eval=FALSE to avoid infinite loop
+# Execute in the console directly
+fusen::inflate(flat_file = "dev/maldipickr-workflow-with-targets.Rmd",
+               vignette_name = "maldipickr Workflow with targets")
+```
+
