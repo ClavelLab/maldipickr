@@ -22,9 +22,11 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 you dereplicate MALDI-TOF data and cherry-pick representative spectra of
 microbial isolates.
 
-> Check out the graphical overview (click for a bigger version).
+> Check out the **graphical overview**.
 > `{maldipickr}` can use two approaches: 
 > from taxonomic identification reports (left) or from spectra data (right).
+> Click on the thumbnail for a bigger version.
+>
 > <a href="https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png"><img src="man/figures/maldipickr-data-flow-portrait-thumb.png" alt="Thumbnail of maldipickr graphical overview" /></a>
 
 ## Installation
