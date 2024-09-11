@@ -79,3 +79,16 @@ keep:
   - tests/testthat/test-remove_spectra_logical.R
   - tests/testthat/test-remove_spectra.R
   vignettes: []
+maldipickr.Rmd:
+  path: dev/maldipickr.Rmd
+  state: active
+  R: []
+  tests: []
+  vignettes: vignettes/maldipickr.Rmd
+  inflate:
+    flat_file: dev/maldipickr.Rmd
+    vignette_name: maldipickr
+    open_vignette: true
+    check: false
+    document: true
+    overwrite: ask

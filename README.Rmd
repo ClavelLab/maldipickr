@@ -36,67 +36,6 @@ knitr::opts_chunk$set(
 
 Illustration (click for a bigger version) of the data flow when using `{maldipickr}` to cherry-pick bacterial isolates with MALDI Biotyper. It depicts the two possible approaches using either taxonomic identification reports (left) or spectra data (right).
 
-## Quickstart
-
-How to **cherry-pick bacterial isolates** with MALDI Biotyper:
-
-* [using taxonomic identification report](#using-taxonomic-identification-report)
-* [using spectra data](#using-spectra-data)
-
-
-### Using taxonomic identification report
-
-```{r quickstart_report, eval=TRUE}
-library(maldipickr)
-# Import Biotyper CSV report
-#  and glimpse at the table
-report_tbl <- read_biotyper_report(
-  system.file("biotyper_unknown.csv", package = "maldipickr")
-)
-report_tbl %>%
-  dplyr::select(name, bruker_species, bruker_log)
-
-
-# Delineate clusters from the identifications after filtering the reliable ones
-#   and cherry-pick one representative spectra.
-#   The chosen ones are indicated by `to_pick` column
-report_tbl <- report_tbl %>%
-  dplyr::mutate(
-      bruker_species = dplyr::if_else(bruker_log >= 2, bruker_species,
-                                      "not reliable identification")
-  )
-report_tbl %>%
-  delineate_with_identification() %>%
-  pick_spectra(report_tbl, criteria_column = "bruker_log") %>%
-  dplyr::relocate(name, to_pick, bruker_species)
-```
-
-### Using spectra data
-
-```{r quickstart_spectra}
-library(maldipickr)
-# Set up the directory location of your spectra data
-spectra_dir <- system.file("toy-species-spectra", package = "maldipickr")
-
-# Import and process the spectra
-processed <- spectra_dir %>%
-  import_biotyper_spectra() %>%
-  process_spectra()
-
-# Delineate spectra clusters using Cosine similarity
-#  and cherry-pick one representative spectra.
-#  The chosen ones are indicated by `to_pick` column
-processed %>%
-  list() %>%
-  merge_processed_spectra() %>%
-  coop::tcosine() %>%
-  delineate_with_similarity(threshold = 0.92) %>%
-  set_reference_spectra(processed$metadata) %>%
-  pick_spectra() %>%
-  dplyr::relocate(name, to_pick)
-```
-
-
 
 ## Installation
 
