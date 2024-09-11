@@ -1,0 +1,39 @@
+{
+        "creators": [
+        {
+            "orcid": "0000-0001-9832-2507",
+            "affiliation": "University Hospital of RWTH Aachen",
+            "name": "Pauvert, Charlie"
+        },
+        {
+            "affiliation": "University Hospital of RWTH Aachen",
+            "name": "Nüchtern, Selina"
+        },
+        {
+            "orcid": "0000-0002-8424-5712",
+            "affiliation": "University Hospital of RWTH Aachen",
+            "name": "Wylensek, David"
+        },
+        {
+            "orcid": "0000-0002-7229-5595",
+            "affiliation": "University Hospital of RWTH Aachen",
+            "name": "Clavel, Thomas"
+        }
+    ],
+
+    "license": "gpl-3.0-or-later",
+
+    "title": "maldipickr: Dereplicate and Cherry-Pick Mass Spectrometry Spectra",
+
+    "related_identifiers": [
+        {
+            "scheme": "doi",
+            "identifier": "10.32614/CRAN.package.maldipickr",
+            "relation": "isSupplementedBy",
+            "resource_type": "software"
+        }
+    ],
+
+    "keywords": ["R", "Rstats", "MALDI-TOF", "MALDI-TOF mass spectrometry", dereplication", "cherry-pick", "R-packages","bacteria", "cultivation"]
+
+}
