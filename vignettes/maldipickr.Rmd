@@ -118,6 +118,12 @@ processed %>%
   knitr::kable()
 ```
 
-This provides only a brief overview of the features of `{maldipickr}`, browse the  others vignettes to learn more about additional features.
+This provides only a brief overview of the features of `{maldipickr}`, browse the  other vignettes to learn more about additional features.
 
+
+## Session information
+
+```{r session, eval = TRUE}
+sessionInfo()
+```
 
