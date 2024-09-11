@@ -1,11 +1,11 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   dereplicate-bruker-maldi-biotyper-spectra: dereplicate-bruker-maldi-biotyper-spectra.html
   import-data-from-bruker-maldi-biotyper: import-data-from-bruker-maldi-biotyper.html
-last_built: 2024-06-13T15:22Z
+  maldipickr: maldipickr.html
+last_built: 2024-09-11T16:24Z
 urls:
   reference: https://clavellab.github.io/maldipickr/reference
   article: https://clavellab.github.io/maldipickr/articles
-
