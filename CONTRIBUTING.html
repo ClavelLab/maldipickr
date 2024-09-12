@@ -61,7 +61,7 @@
 
 <div id="contributing-to-maldipickr" class="section level1">
 
-<p>The following is a set of guidelines for contributing to {maldipickr}<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;These guidelines are heavily inspired by the contributing guidelines of the &lt;a href="https://github.com/ThinkR-open/fusen" class="external-link"&gt;&lt;code&gt;{fusen}&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;'><sup>1</sup></a>. These guidelines are not strict rules. Use your best judgment, and feel free to propose changes to this document in a pull request, as long as you are abiding to the <a href="https://clavellab.github.io/maldipickr/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>.</p>
+<p>The following is a set of guidelines for contributing to <a href="https://github.com/ClavelLab/maldipickr" class="external-link">maldipickr</a><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;These guidelines are heavily inspired by the contributing guidelines of the &lt;a href="https://github.com/ThinkR-open/fusen" class="external-link"&gt;&lt;code&gt;{fusen}&lt;/code&gt;&lt;/a&gt; package.&lt;/p&gt;'><sup>1</sup></a>. These guidelines are not strict rules. Use your best judgment, and feel free to propose changes to this document in a pull request, as long as you are abiding to the <a href="https://clavellab.github.io/maldipickr/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>.</p>
 <p><strong>All contribution welcomed</strong> We are open to any contribution, from typos to new features. Thank you for taking this time! We will guide you throughout the process and make you in a safe position to contribute, whatever is your level in R programming.</p>
 <div class="section level2">
 <h2 id="maldipickr-uses-fusen-with-flat-files-rmd">{maldipickr} uses {fusen} with flat files (.Rmd)<a class="anchor" aria-label="anchor" href="#maldipickr-uses-fusen-with-flat-files-rmd"></a></h2>
@@ -74,8 +74,11 @@
 <p>This way of developing is what <a href="https://thinkr-open.github.io/fusen/" class="external-link">fusen</a> is for, if you are new to it, the <a href="https://thinkr-open.github.io/fusen" class="external-link">illustration on the <code>{fusen}</code> documentation is of great help</a>.</p>
 <div class="section level3">
 <h3 id="the-case-of-readme">The case of README<a class="anchor" aria-label="anchor" href="#the-case-of-readme"></a></h3>
-<p>Changes to the <code>README.md</code> file should be done in the flat file <code>README.Rmd</code>. However, this file is not built by <a href="https://thinkr-open.github.io/fusen/" class="external-link">fusen</a> but you need to use <code>devtools::build_readme()</code>.</p>
-</div>
+<ul><li>
+<strong>Starting from v1.3.1</strong> Changes to the <code>README.md</code> file can be done in this file as no code is running in there anymore.</li>
+<li>
+<strong>Prior to v1.3.1</strong> Changes to the <code>README.md</code> file should be done in the flat file <code>README.Rmd</code>. However, this file is not built by <a href="https://thinkr-open.github.io/fusen/" class="external-link">fusen</a> but you need to use <code>devtools::build_readme()</code>.</li>
+</ul></div>
 </div>
 <div class="section level2">
 <h2 id="fixing-typos">Fixing typos<a class="anchor" aria-label="anchor" href="#fixing-typos"></a></h2>
