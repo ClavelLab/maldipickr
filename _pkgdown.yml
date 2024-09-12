@@ -69,6 +69,7 @@ reference:
   - title: "Miscellaneous"
     contents:
       - is_well_on_edge
+      - gather_spectra_stats
       - get_spectra_names
 
 news:
