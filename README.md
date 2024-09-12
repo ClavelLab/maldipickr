@@ -1,6 +1,6 @@
 
 
-# maldipickr <a href="https://clavellab.github.io/maldipickr"><img src="man/figures/logo.svg" align="right" height="139" alt="maldipickr website" /></a>
+# maldipickr <a href="https://clavellab.github.io/maldipickr/"><img src="man/figures/logo.svg" align="right" height="139" alt="maldipickr website" /></a>
 
 <!-- badges: start -->
 
