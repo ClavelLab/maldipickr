@@ -1,6 +1,6 @@
 # Contributing to {maldipickr}
 
-The following is a set of guidelines for contributing to {maldipickr}[^fusen].
+The following is a set of guidelines for contributing to `{maldipickr}`[^fusen].
 These guidelines are not strict rules. Use your best judgment, and feel free to
 propose changes to this document in a pull request, as long as you are abiding to the
 [Contributor Code of Conduct](https://clavellab.github.io/maldipickr/CODE_OF_CONDUCT.html).
@@ -32,7 +32,8 @@ This way of developing is what `{fusen}` is for, if you are new to it, the [illu
 
 ### The case of README
 
-Changes to the `README.md` file should be done in the flat file `README.Rmd`. However, this file is not built by `{fusen}` but you need to use `devtools::build_readme()`.
+* **Starting from v1.3.1** Changes to the `README.md` file can be done in this file as no code is running in there anymore.
+* **Prior to v1.3.1** Changes to the `README.md` file should be done in the flat file `README.Rmd`. However, this file is not built by `{fusen}` but you need to use `devtools::build_readme()`.
 
 ## Fixing typos
 
