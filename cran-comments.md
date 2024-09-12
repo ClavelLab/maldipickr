@@ -1,8 +1,8 @@
 Hello CRAN team,
 
-this release helps users to ensure unique names during spectra processing and better handle discarding spectra. It also deprecates now unecessary RDS read/write features. The notes were the same as for v1.2.0 release.
+this patch release adds a new functions (aggregate spectra quality-check statistics) but mostly improve documentation, findability and few fixes.
 
-Thank you for your time!
+Thank you for your time and engagement with the CRAN!
 
 ## R CMD check results
 
@@ -10,57 +10,21 @@ Thank you for your time!
 
 Tested locally:
 
-* Ubuntu 22.04.3 LTS R-4.3.1
+* Ubuntu 20.04.6 LTS R-4.3.1
 
-Tested remotely:
+Tested remotely on R-Hub:
 
-* rhub Windows Server 2022, R-release, 32/64 bit: *0 NOTE*
-* rhub Fedora Linux, R-devel, clang, gfortran: *2 NOTES*
-* rhub Ubuntu Linux 20.04.1 LTS, R-release, GCC: *2 NOTES*
-* rhub Windows Server 2022, R-devel, 64 bit: *4 NOTES*
-* winbuilder R Under development (unstable) (2023-12-12 r85669 ucrt): *1 NOTE*
+* gcc13 (R-devel, Fedora Linux 38)
+* linux (R-devel, 22.04.4 LTS )
+* macos (R-devel, x86_64-apple-darwin20): compilation failed for package ‘fs’
+* macos-arm64 (R-devel, aarch64-apple-darwin20)
+* windows (R-devel, Windows Server 2022)
 
-### NOTES
+Tested remotely (with `devtools::check_*`):
 
-```
-* checking CRAN incoming feasibility ... [24s] NOTE
-Maintainer: 'Charlie Pauvert <cpauvert@ukaachen.de>'
-
-Version contains large components (1.2.0.9000)
-```
-
-on: rhub Fedora Linux / rhub Ubuntu Linux / rhub Windows R-devel / winbuilder
-
-=> _The submitted version will be 1.3.0_
-
-
-```
-* checking HTML version of manual ... NOTE
-Skipping checking HTML validation: no command 'tidy' found
-Skipping checking math rendering: package 'V8' unavailable
-```
-
-on: rhub Fedora Linux / rhub Ubuntu Linux / rhub Windows R-devel
-
-```
-* checking for non-standard things in the check directory ... NOTE
-Skipping checking math rendering: package 'V8' unavailable
-Found the following files/directories:
-  ''NULL''
-```
-
-on: rhub Windows R-devel
-
-```
-* checking for detritus in the temp directory ... NOTE
-  'lastMiKTeXException'
-Found the following files/directories:
-```
-
-on: rhub Windows R-devel
-
-=> _The last 3 notes relate to the testing environment not to the package_
-
+* mac release 4.4.0 (2024-04-24) aarch64-apple-darwin20
+* winbuilder R Under development (unstable) (2024-09-10 r87115 ucrt): *1 NOTE* (large components version to be changed to 1.3.1 for submission)
+* winbuilder R release 4.4.1 (2024-06-14 ucrt): *1 NOTE* (large components version to be changed to 1.3.1 for submission)
 
 ## revdepcheck results
 
