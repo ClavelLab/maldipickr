@@ -17,6 +17,7 @@ Dereplication
 Desorption
 Dumolin
 Gibb
+Github
 Golay
 Hyperlegible
 Jeugt
@@ -25,7 +26,10 @@ MALDI
 MALDIquant
 MSPs
 MSystems
+Microbiota
+NFDI
 ORCID
+Opengraph
 Peiren
 Quickstart
 Rmarkdown
@@ -44,8 +48,10 @@ Uhlik
 Vandamme
 Verheyde
 Wieme
+Zenodo
 acqu
 al
+analytics
 bruker
 codebase
 codecov
@@ -59,8 +65,10 @@ et
 fmicb
 funder
 fusen
+js
 kDa
 magrittr
+matomo
 natively
 quickstart
 rRNA

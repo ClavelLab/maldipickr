@@ -15,6 +15,7 @@
 * Setup correct Opengraph metadata for the website
 * Setup analytics via the NFDI4Microbiota instance of matomo
 * Add `maldipickr` logo in vector format to edit in the future (#42)
+* Setup R-hub checks via Github Actions
 
 ## Changed
 
