@@ -1,4 +1,29 @@
-# maldipickr (development version)
+# maldipickr 1.3.1
+
+## Added
+
+### Features / Documentation
+
+* Add `gather_spectra_stats()`  to aggregate spectra quality-check statistics (#45)
+* Add "Get Started" vignette for a quickstart (#48)
+* Add graphical overview
+* Add example of filtering when delineating with identification (#42)
+
+### Visibility / Readability / FAIR
+
+* Setup integration of Github repository with Zenodo with additional metadata (#49)
+* Setup correct Opengraph metadata for the website
+* Setup analytics via the NFDI4Microbiota instance of matomo
+* Add `maldipickr` logo in vector format to edit in the future (#42)
+
+## Changed
+
+* Use directly a simpler and more compact `README.md` instead of `README.Rmd`
+
+## Fixed
+
+* Fix implicit `TRUE` as `T` in R code.
+* Bump Github Actions Node.js to v20 to fix warnings (#47)
 
 # maldipickr 1.3.0
 
