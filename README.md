@@ -3,14 +3,12 @@
 # maldipickr <a href="https://clavellab.github.io/maldipickr/"><img src="man/figures/logo.svg" align="right" height="139" alt="maldipickr website" /></a>
 
 <!-- badges: start -->
-
-[![CRAN
-status](https://www.r-pkg.org/badges/version/maldipickr.png)](https://CRAN.R-project.org/package=maldipickr)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
-developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN status](https://www.r-pkg.org/badges/version/maldipickr)](https://CRAN.R-project.org/package=maldipickr)
+[![CRAN checks](https://badges.cranchecks.info/worst/maldipickr.svg)](https://cran.r-project.org/web/checks/check_results_maldipickr.html)
 [![R-CMD-check](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ClavelLab/maldipickr/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/github/ClavelLab/maldipickr/branch/main/graph/badge.svg?token=JQABKDK2MB)](https://app.codecov.io/github/ClavelLab/maldipickr)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13759021.svg)](https://doi.org/10.5281/zenodo.13759021)
 <!-- badges: end -->
 
 - You are using the MALDI-TOF[^1] Biotyper to identify bacterial
