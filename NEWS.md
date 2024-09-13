@@ -1,3 +1,9 @@
+# maldipickr 1.3.2
+
+## Fixed
+
+* Fix typo that invalidated Zenodo integration
+
 # maldipickr 1.3.1
 
 ## Added
