@@ -110,7 +110,7 @@ After inflating the template
 #' @param long_format A logical indicating whether the table is in the long format (many rows) or wide format (many columns) when showing all the hits. This option has no effect when `best_hits = TRUE`.
 #'
 #' @return
-#' A tibble of 7 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
+#' A tibble of 8 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
 #'
 #' @seealso [read_many_biotyper_reports]
 #'

@@ -14,7 +14,7 @@ read_biotyper_report(path, best_hits = TRUE, long_format = TRUE)
 \item{long_format}{A logical indicating whether the table is in the long format (many rows) or wide format (many columns) when showing all the hits. This option has no effect when \code{best_hits = TRUE}.}
 }
 \value{
-A tibble of 7 columns (\code{best_hits = TRUE}) or 52 columns (\code{best_hits = FALSE}). See Details for the description of the columns.
+A tibble of 8 columns (\code{best_hits = TRUE}) or 52 columns (\code{best_hits = FALSE}). See Details for the description of the columns.
 }
 \description{
 The header-less table exported by the Compass software in the Bruker MALDI
