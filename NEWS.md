@@ -1,5 +1,9 @@
 # maldipickr (development version)
 
+## Fixed
+
+* Fix unwanted conversion to NAs when sample names were well numbers like E1 or E2 (#51, thanks for spotting this @sarah-lital)
+
 # maldipickr 1.3.1
 
 ## Added
