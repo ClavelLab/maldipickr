@@ -7,7 +7,7 @@
 # Test with a correct and empty datasets in "inst/"
 biotyper <- system.file("biotyper.csv", package = "maldipickr")
 biotyper_empty <- system.file("biotyper_empty.csv", package = "maldipickr")
-
+biotyper_fixNA_51 <- system.file("biotyper_fixNA_51.csv", package = "maldipickr")
 # Apply test on my function
 test_that("read_biotyper_report works properly with correct dataset and best hits", {
   expect_equal(
@@ -49,5 +49,17 @@ test_that("read_biotyper_report is empty when no peaks are found", {
   )
   expect_equal(
     nrow(out), 0
+  )
+})
+test_that("read_biotyper_report works properly when sample can be named E1, E2 which used to be NA values", {
+  expect_equal(
+    nrow(read_biotyper_report(biotyper_fixNA_51)), 2
+  )
+  expect_equal(
+    ncol(read_biotyper_report(biotyper_fixNA_51)), 8
+  )
+  expect_equal(
+    dplyr::pull(read_biotyper_report(biotyper_fixNA_51), bruker_taxid),
+    c(1351, NA)
   )
 })
