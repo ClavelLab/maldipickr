@@ -45,7 +45,7 @@
 #' @param long_format A logical indicating whether the table is in the long format (many rows) or wide format (many columns) when showing all the hits. This option has no effect when `best_hits = TRUE`.
 #'
 #' @return
-#' A tibble of 7 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
+#' A tibble of 8 columns (`best_hits = TRUE`) or 52 columns (`best_hits = FALSE`). See Details for the description of the columns.
 #'
 #' @seealso [read_many_biotyper_reports]
 #'
@@ -77,14 +77,25 @@ read_biotyper_report <- function(path, best_hits = TRUE, long_format = TRUE) {
     path,
     col.names = c("name", "sample_name", prep_names$col_names),
     sep = ";", header = FALSE,
-    na = c("NA", "E1", "E2", "") # Added E1 identification in taxid as NA
+    na = c("NA", "") # Added E1 identification in taxid as NA
   )
   no_peak_lgl <- breport$bruker_01_species == "no peaks found"
 
+
+  # E1 and E2 converted to NA is an issue if this are sample names (#51)
+  #  so using a more surgical replacement, but na_if cannot use vectors
+  sanitize_taxid <- function(vec_taxid, vec_to_convert){
+    pattern <- paste0(vec_to_convert, collapse = "|")
+    base::gsub(pattern, "replaceNA", vec_taxid) %>%
+      dplyr::na_if("replaceNA") %>% as.numeric()
+  }
   # Remove the spot name for which no peaks were detected, and warn the user
   breport <- tibble::as_tibble(breport) %>%
     # Empty sample_name are considered logical and this is undesirable
-    dplyr::mutate("sample_name" = as.character(.data$sample_name)) %>%
+    dplyr::mutate("sample_name" = as.character(.data$sample_name)) %>% 
+    dplyr::mutate(
+      dplyr::across(tidyselect::contains("taxid"), ~ sanitize_taxid(.x, c("E1","E2")))
+      ) %>%
     dplyr::filter(.data$bruker_01_species != "no peaks found")
   if (sum(no_peak_lgl) > 0) {
     warning(
