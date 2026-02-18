@@ -108,6 +108,10 @@ font](https://fonts.google.com/specimen/Atkinson+Hyperlegible/about)
 font and a color palette generated at
 [coolors.co](https://coolors.co/cf5c36-f0f0c9-555358).
 
+## Manuscript
+
+We are working on publishing our package and all the code for the analysis supporting the manuscript is available at [ClavelLab/maldipickr_manuscript](https://github.com/ClavelLab/maldipickr_manuscript) using data at [zenodo.org/10.5281/zenodo.15744631](https://doi.org/10.5281/zenodo.15744631).
+
 ## References
 
 - Gibb S & Strimmer K (2012). “MALDIquant: a versatile R package for the
