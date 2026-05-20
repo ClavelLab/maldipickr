@@ -112,6 +112,11 @@ font and a color palette generated at
 
 We are working on publishing our package and all the code for the analysis supporting the manuscript is available at [ClavelLab/maldipickr_manuscript](https://github.com/ClavelLab/maldipickr_manuscript) using data at [zenodo.org/10.5281/zenodo.15744631](https://doi.org/10.5281/zenodo.15744631).
 
+## Alternatives to maldipickr
+
+- [SPeDE](https://github.com/LM-UGent/SPeDE) is a Python/R based tool with good dereplication performance that creates OTU-like clusters of MALDI spectra.
+- [IDBac](https://idbac.org/) is an online tool for dereplication and identification that can include analysis of secondary metabolite production provided you have the data.
+
 ## References
 
 - Gibb S & Strimmer K (2012). “MALDIquant: a versatile R package for the
