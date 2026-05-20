@@ -1,6 +1,7 @@
 # Import data from Bruker MALDI Biotyper
 
 ``` r
+
 library(maldipickr)
 ```
 
@@ -37,6 +38,7 @@ explorations with the [`{tidyverse}`](https://tidyverse.tidyverse.org/)
 suite.
 
 ``` r
+
 # Get a example Bruker report
 biotyper <- system.file("biotyper.csv", package = "maldipickr")
 # Import the report as a tibble
@@ -62,6 +64,7 @@ Below is an example of such usage, where one report was artificially
 extended into multiple reports.
 
 ``` r
+
 # List of Bruker MALDI Biotyper reports
 reports_paths <- system.file(
   c("biotyper.csv", "biotyper.csv", "biotyper.csv"),
@@ -123,6 +126,7 @@ package and consist here of six spectra: \* 1 replicate of species 1 \*
 2 replicates of species 2 \* 3 replicates of species 3
 
 ``` r
+
 # Get an example directory of six Bruker MALDI Biotyper spectra
 directory_biotyper_spectra <- system.file(
   "toy-species-spectra",
@@ -139,7 +143,7 @@ spectra_list
 #> Range of intensity values: 2.4e+02 - 3.608e+04 
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species1.G2         
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species1/0_G2/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species1/0_G2/1/1SLin/fid
 #> 
 #> [[2]]
 #> S4 class type            : MassSpectrum        
@@ -148,7 +152,7 @@ spectra_list
 #> Range of intensity values: 1.82e+02 - 1.006e+04
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species2.E11        
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species2/0_E11/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species2/0_E11/1/1SLin/fid
 #> 
 #> [[3]]
 #> S4 class type            : MassSpectrum        
@@ -157,7 +161,7 @@ spectra_list
 #> Range of intensity values: 3.25e+02 - 2.115e+04
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species2.E12        
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species2/0_E12/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species2/0_E12/1/1SLin/fid
 #> 
 #> [[4]]
 #> S4 class type            : MassSpectrum        
@@ -166,7 +170,7 @@ spectra_list
 #> Range of intensity values: 1.94e+02 - 2.055e+04
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species3.F7         
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species3/0_F7/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species3/0_F7/1/1SLin/fid
 #> 
 #> [[5]]
 #> S4 class type            : MassSpectrum        
@@ -175,7 +179,7 @@ spectra_list
 #> Range of intensity values: 1.6e+02 - 1.814e+04 
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species3.F8         
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species3/0_F8/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species3/0_F8/1/1SLin/fid
 #> 
 #> [[6]]
 #> S4 class type            : MassSpectrum        
@@ -184,7 +188,7 @@ spectra_list
 #> Range of intensity values: 1.59e+02 - 1.449e+04
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species3.F9         
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species3/0_F9/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species3/0_F9/1/1SLin/fid
 ```
 
 ### Evaluate the quality of the spectra
@@ -200,6 +204,7 @@ each of the spectra are empty (`is_empty`), of an odd length
 (`is_outlier_length`) or not a profile spectra (`is_not_regular`).
 
 ``` r
+
 # Get an example directory of six Bruker MALDI Biotyper spectra
 directory_biotyper_spectra <- system.file(
   "toy-species-spectra",

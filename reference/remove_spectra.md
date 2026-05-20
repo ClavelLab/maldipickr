@@ -58,7 +58,7 @@ spectra_list %>%
 #> Range of intensity values: 2.4e+02 - 3.608e+04 
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species1.G2         
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species1/0_G2/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species1/0_G2/1/1SLin/fid
 #> 
 #> [[2]]
 #> S4 class type            : MassSpectrum        
@@ -67,7 +67,7 @@ spectra_list %>%
 #> Range of intensity values: 1.82e+02 - 1.006e+04
 #> Memory usage             : 337.062 KiB         
 #> Name                     : species2.E11        
-#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.5/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species2/0_E11/1/1SLin/fid
+#> File                     : /home/runner/.cache/R/renv/library/maldipickr-8ce40efa/R-4.6/x86_64-pc-linux-gnu/maldipickr/toy-species-spectra/species2/0_E11/1/1SLin/fid
 #> 
 
 # Get an example processed spectra

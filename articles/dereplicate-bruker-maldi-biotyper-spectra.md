@@ -1,6 +1,7 @@
 # Dereplicate Bruker MALDI Biotyper spectra
 
 ``` r
+
 library(maldipickr)
 ```
 
@@ -59,6 +60,7 @@ function enables storing these files locally for scalable
 high-throughput analyses.
 
 ``` r
+
 # Get an example directory of six Bruker MALDI Biotyper spectra
 directory_biotyper_spectra <- system.file(
   "toy-species-spectra",
@@ -113,13 +115,13 @@ comparison needs an additional step.
 The
 [`merge_processed_spectra()`](https://clavellab.github.io/maldipickr/reference/merge_processed_spectra.html)
 function aggregates the processed spectra and bins together the detected
-peaks, with a tolerance of $0.002$ between the average peak values in
+peaks, with a tolerance of $`0.002`$ between the average peak values in
 the bin (see
 [`MALDIquant::binPeaks`](https://rdrr.io/cran/MALDIquant/man/binPeaks-functions.html)),
 which translate to a tolerance of 2000 ppm. This binning step results in
-a $n \times p$ feature matrix (or intensity matrix), with $n$ rows for
-$n$ processed spectra (peak-less spectra are discarded) and $p$ columns
-for the $p$ peaks masses.
+a $`n\times p`$ feature matrix (or intensity matrix), with $`n`$ rows
+for $`n`$ processed spectra (peak-less spectra are discarded) and $`p`$
+columns for the $`p`$ peaks masses.
 
 By default, as in the Strejeck et al. (2018) procedure, the intensity
 values for spectra with missing peaks are interpolated from the
@@ -128,6 +130,7 @@ decide whether to interpolate the values or leave missing peaks as `NA`
 which would then be converted to an null intensity value.
 
 ``` r
+
 # Get an example directory of six Bruker MALDI Biotyper spectra
 directory_biotyper_spectra <- system.file(
   "toy-species-spectra",
@@ -188,6 +191,7 @@ matrix between spectra, either the feature matrix must be transposed or
 a dedicated function must be used.
 
 ``` r
+
 # A. Compute the similarity matrix on the transposed feature matrix
 #   using Pearson correlation coefficient
 sim_matrix <- stats::cor(t(fm), method = "pearson")
@@ -227,6 +231,7 @@ was assigned to and the size of the cluster, which is the total number
 of spectra in the cluster.
 
 ``` r
+
 # Toy similarity matrix between the six example spectra of
 #  three species. The cosine metric is used and a value of
 #  zero indicates dissimilar spectra and a value of one
@@ -283,6 +288,7 @@ additional column `is_reference` to indicate whether the corresponding
 spectrum is representative of the cluster.
 
 ``` r
+
 # Get an example directory of six Bruker MALDI Biotyper spectra
 # Import the six spectra and
 # Transform the spectra signals according to Strejcek et al. (2018)
@@ -352,6 +358,7 @@ the function
 will group spectra based on their identifications.
 
 ``` r
+
 report_unknown <- read_biotyper_report(
   system.file("biotyper_unknown.csv", package = "maldipickr")
 )
@@ -391,6 +398,7 @@ into R to be consistent with the dereplication table generated within
 the [`{maldipickr}`](https://github.com/ClavelLab/maldipickr) package.
 
 ``` r
+
 # Reformat the output from SPeDE table
 # https://github.com/LM-UGent/SPeDE
 import_spede_clusters(
@@ -454,6 +462,7 @@ indicate whether the colony associated with the spectra should be picked
 (`TRUE`) or not picked (`FALSE`).
 
 ``` r
+
 # 0. Load a toy example of a tibble of clusters created by
 #   the `delineate_with_similarity` function.
 clusters <- readRDS(

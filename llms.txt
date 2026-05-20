@@ -1,6 +1,6 @@
 # maldipickr
 
-- You are using the MALDI-TOF[¹](#fn1) Biotyper to identify bacterial
+- You are using the MALDI-TOF[^1] Biotyper to identify bacterial
   isolates
 - You want to select representative isolates for further experiments
 - You need fast and automated selection decisions that you can retrace
@@ -27,6 +27,7 @@ the [CRAN](https://cran.r-project.org/package=maldipickr) and on
 To install the latest CRAN release, use the following command in R:
 
 ``` r
+
 install.packages("maldipickr")
 ```
 
@@ -34,12 +35,14 @@ Or if you are using [`{renv}`](https://cran.r-project.org/package=renv),
 use:
 
 ``` r
+
 renv::install("maldipickr")
 ```
 
 To install the development version, use the following command in R:
 
 ``` r
+
 remotes::install_github("ClavelLab/maldipickr", build_vignettes = TRUE)
 # or with renv::install("ClavelLab/maldipickr") 
 ```
@@ -107,6 +110,15 @@ analysis supporting the manuscript is available at
 using data at
 [zenodo.org/10.5281/zenodo.15744631](https://doi.org/10.5281/zenodo.15744631).
 
+## Alternatives to maldipickr
+
+- [SPeDE](https://github.com/LM-UGent/SPeDE) is a Python/R based tool
+  with good dereplication performance that creates OTU-like clusters of
+  MALDI spectra.
+- [IDBac](https://idbac.org/) is an online tool for dereplication and
+  identification that can include analysis of secondary metabolite
+  production provided you have the data.
+
 ## References
 
 - Gibb S & Strimmer K (2012). “MALDIquant: a versatile R package for the
@@ -120,9 +132,7 @@ using data at
   Dereplication of Recurrent Bacterial Isolates.” *Frontiers in
   Microbiology* 9 <https://doi.org/10.3389/fmicb.2018.01294>.
 
-------------------------------------------------------------------------
-
-1.  Matrix-Assisted Laser Desorption/Ionization-Time-Of-Flight
+[^1]: Matrix-Assisted Laser Desorption/Ionization-Time-Of-Flight
     (MALDI-TOF)
 
 # Package index
