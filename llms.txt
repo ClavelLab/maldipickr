@@ -56,7 +56,7 @@ through the package functions and showcase how to:
 ![maldipickr-graphical-abstract](https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-graphical-abstract.png)
 
 > Find a detailed version of the workflow diagram in
-> `man/figures/`\](<https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png>)
+> [`man/figures/maldipickr-data-flow-portrait.png`](https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png)
 
 ## Troubleshoot and Contribute
 
@@ -111,7 +111,7 @@ If you use our package, please consider citing our work:
 All the code for the analysis in the manuscript is available at
 [ClavelLab/maldipickr_manuscript](https://github.com/ClavelLab/maldipickr_manuscript)
 or at a CodeOcean capsule
-([10.24433/CO.1202249.v2](https://doi.org/10.24433/CO.1202249.v2) using
+([10.24433/CO.1202249.v2](https://doi.org/10.24433/CO.1202249.v2)) using
 data at
 [zenodo.org/10.5281/zenodo.15744631](https://doi.org/10.5281/zenodo.15744631).
 

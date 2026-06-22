@@ -1,6 +1,6 @@
 # Changelog
 
-## maldipickr (development version)
+## maldipickr 1.3.3
 
 ### Fixed
 
@@ -8,6 +8,16 @@
   like E1 or E2
   ([\#51](https://github.com/ClavelLab/maldipickr/issues/51), thanks for
   spotting this [@sarah-lital](https://github.com/sarah-lital))
+- Fix wrong number of columns documented in
+  [`read_biotyper_report()`](https://clavellab.github.io/maldipickr/reference/read_biotyper_report.md)
+
+### Changed
+
+- Specify the peer-reviewed article as a preferred citation source
+
+### Added
+
+- List open-source alternatives to maldipickr
 
 ## maldipickr 1.3.2
 
