@@ -196,11 +196,12 @@ sessionInfo()
 #> [13] fastmap_1.2.0            R6_2.6.1                 generics_0.1.4          
 #> [16] knitr_1.51               tibble_3.3.1             desc_1.4.3              
 #> [19] readBrukerFlexData_1.9.3 bslib_0.11.0             pillar_1.11.1           
-#> [22] rlang_1.2.0              cachem_1.1.0             xfun_0.57               
-#> [25] fs_2.1.0                 sass_0.4.10              cli_3.6.6               
-#> [28] pkgdown_2.2.0            withr_3.0.2              magrittr_2.0.5          
-#> [31] digest_0.6.39            lifecycle_1.0.5          vctrs_0.7.3             
-#> [34] evaluate_1.0.5           glue_1.8.1               ragg_1.5.2              
-#> [37] coop_0.6-3               rmarkdown_2.31           purrr_1.2.2             
-#> [40] tools_4.6.0              pkgconfig_2.0.3          htmltools_0.5.9
+#> [22] rlang_1.2.0              cachem_1.1.0             xfun_0.59               
+#> [25] fs_2.1.0                 sass_0.4.10              otel_0.2.0              
+#> [28] cli_3.6.6                pkgdown_2.2.0            withr_3.0.3             
+#> [31] magrittr_2.0.5           digest_0.6.39            lifecycle_1.0.5         
+#> [34] vctrs_0.7.3              evaluate_1.0.5           glue_1.8.1              
+#> [37] ragg_1.5.2               coop_0.6-3               rmarkdown_2.31          
+#> [40] purrr_1.2.2              tools_4.6.0              pkgconfig_2.0.3         
+#> [43] htmltools_0.5.9
 ```

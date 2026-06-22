@@ -10,14 +10,6 @@ documented and tested R functions that will help you dereplicate
 MALDI-TOF data and cherry-pick representative spectra of microbial
 isolates.
 
-> Check out the **graphical overview**.
-> [maldipickr](https://github.com/ClavelLab/maldipickr) can use two
-> approaches: from taxonomic identification reports (left) or from
-> spectra data (right). Click on the thumbnail for a bigger version.
->
-> [![Thumbnail of maldipickr graphical
-> overview](reference/figures/maldipickr-data-flow-portrait-thumb.png)](https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png)
-
 ## Installation
 
 [maldipickr](https://github.com/ClavelLab/maldipickr) is available on
@@ -61,6 +53,11 @@ through the package functions and showcase how to:
     simple to complex
     design](https://clavellab.github.io/maldipickr/articles/dereplicate-bruker-maldi-biotyper-spectra.html).
 
+![maldipickr-graphical-abstract](https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-graphical-abstract.png)
+
+> Find a detailed version of the workflow diagram in
+> `man/figures/`\](<https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png>)
+
 ## Troubleshoot and Contribute
 
 **Troubleshoot** If something unexpected happened when using this
@@ -102,12 +99,20 @@ font](https://fonts.google.com/specimen/Atkinson+Hyperlegible/about)
 font and a color palette generated at
 [coolors.co](https://coolors.co/cf5c36-f0f0c9-555358).
 
-## Manuscript
+## Citation
 
-We are working on publishing our package and all the code for the
-analysis supporting the manuscript is available at
+If you use our package, please consider citing our work:
+
+> Charlie Pauvert, David Wylensek, Selina Nüchtern, Thomas Clavel,
+> maldipickr dereplicates microbial MALDI-TOF spectra to facilitate
+> multiplexed isolation, *Bioinformatics Advances*, 2026; vbag171,
+> <https://doi.org/10.1093/bioadv/vbag171>
+
+All the code for the analysis in the manuscript is available at
 [ClavelLab/maldipickr_manuscript](https://github.com/ClavelLab/maldipickr_manuscript)
-using data at
+or at a CodeOcean capsule
+([10.24433/CO.1202249.v2](https://doi.org/10.24433/CO.1202249.v2) using
+data at
 [zenodo.org/10.5281/zenodo.15744631](https://doi.org/10.5281/zenodo.15744631).
 
 ## Alternatives to maldipickr

@@ -18,14 +18,17 @@
 Source:
 [`inst/CITATION`](https://github.com/ClavelLab/maldipickr/blob/main/inst/CITATION)
 
-Pauvert C, Wylensek D, Nüchtern S, Clavel T (2023). *maldipickr:
-Dereplicate And Cherry-pick Mass Spectrometry Spectra in R*.
-https://clavellab.github.io/maldipickr,
-https://github.com/ClavelLab/maldipickr.
+Pauvert C, Wylensek D, Nüchtern S, Clavel T (2026). “maldipickr
+dereplicates microbial MALDI-TOF spectra to facilitate multiplexed
+isolation.” *Bioinformatics Advances*, vbag171.
+[doi:10.1093/bioadv/vbag171](https://doi.org/10.1093/bioadv/vbag171).
 
-    @Manual{pauvert_maldipickr_2023,
-      title = {maldipickr: Dereplicate And Cherry-pick Mass Spectrometry Spectra in R},
+    @Article{,
+      title = {maldipickr dereplicates microbial MALDI-TOF spectra to facilitate multiplexed isolation},
       author = {Charlie Pauvert and David Wylensek and Selina Nüchtern and Thomas Clavel},
-      year = {2023},
-      note = {https://clavellab.github.io/maldipickr, https://github.com/ClavelLab/maldipickr},
+      year = {2026},
+      month = {06},
+      journal = {Bioinformatics Advances},
+      pages = {vbag171},
+      doi = {10.1093/bioadv/vbag171},
     }
