@@ -20,12 +20,6 @@
 you dereplicate MALDI-TOF data and cherry-pick representative spectra of
 microbial isolates.
 
-> Check out the **graphical overview**.
-> `{maldipickr}` can use two approaches: 
-> from taxonomic identification reports (left) or from spectra data (right).
-> Click on the thumbnail for a bigger version.
->
-> <a href="https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png"><img src="man/figures/maldipickr-data-flow-portrait-thumb.png" alt="Thumbnail of maldipickr graphical overview" /></a>
 
 ## Installation
 
@@ -66,6 +60,10 @@ through the package functions and showcase how to:
 2.  [Process, dereplicate and cherry-pick representative spectra, from
     simple to complex
     design](https://clavellab.github.io/maldipickr/articles/dereplicate-bruker-maldi-biotyper-spectra.html).
+
+<img width="2433" height="1701" alt="maldipickr-graphical-abstract" src="https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-graphical-abstract.png"/>
+
+> Find a detailed version of the workflow diagram in `man/figures/`](https://raw.githubusercontent.com/ClavelLab/maldipickr/main/man/figures/maldipickr-data-flow-portrait.png)
 
 ## Troubleshoot and Contribute
 
