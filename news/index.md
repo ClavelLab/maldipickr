@@ -2,6 +2,8 @@
 
 ## maldipickr 1.3.3
 
+CRAN release: 2026-06-23
+
 ### Fixed
 
 - Fix unwanted conversion to NAs when sample names were well numbers
