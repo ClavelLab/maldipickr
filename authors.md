@@ -16,7 +16,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/ClavelLab/maldipickr/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/ClavelLab/maldipickr/blob/v1.3.3/inst/CITATION)
 
 Pauvert C, Wylensek D, Nüchtern S, Clavel T (2026). “maldipickr
 dereplicates microbial MALDI-TOF spectra to facilitate multiplexed
