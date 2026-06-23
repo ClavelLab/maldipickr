@@ -186,7 +186,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices datasets  utils     methods   base     
 #> 
 #> other attached packages:
-#> [1] maldipickr_1.3.1.9000
+#> [1] maldipickr_1.3.3
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] jsonlite_2.0.0           dplyr_1.2.1              compiler_4.6.0          

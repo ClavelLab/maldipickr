@@ -65,7 +65,7 @@ package, please first search the [current open or closed
 issues](https://github.com/ClavelLab/maldipickr/issues?q=is%3Aissue++)
 to look for similar problems. If you are the first, you are more than
 welcome to open a new issue using the “Bug report” template with a
-minimal [reprex](https://www.tidyverse.org/help/#reprex).
+minimal [reprex](https://tidyverse.org/help/#reprex).
 
 **Contribute** All contributions are welcome and the
 [`CONTRIBUTING.md`](https://clavellab.github.io/maldipickr/CONTRIBUTING.html)
