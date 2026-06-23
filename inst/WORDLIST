@@ -7,8 +7,11 @@ CMD
 Canck
 Carlier
 Changelog
+ClavelLab
 Cleenwerck
 Cnockaert
+CodeOcean
+DOI
 Dawyndt
 De
 Der
@@ -20,6 +23,7 @@ Gibb
 Github
 Golay
 Hyperlegible
+IDBac
 Jeugt
 Junkova
 MALDI
@@ -29,6 +33,7 @@ MSystems
 Microbiota
 NFDI
 ORCID
+OTU
 Opengraph
 Peiren
 Quickstart
@@ -58,6 +63,7 @@ codecov
 coolors
 csv
 dereplicate
+dereplicates
 dereplication
 desorption
 doi
@@ -76,4 +82,6 @@ reprex
 scalable
 spectrometry
 tibble
+vbag
+zenodo
 à
