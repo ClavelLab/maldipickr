@@ -1,6 +1,6 @@
 Hello CRAN team,
 
-this patch release adds a new functions (aggregate spectra quality-check statistics) but mostly improve documentation, findability and few fixes.
+this patch release fixes premature NA if samples were incorrectly named, and adds the proper citation to the peer-reviewed article.
 
 Thank you for your time and engagement with the CRAN!
 
@@ -12,20 +12,23 @@ Tested locally:
 
 * Ubuntu 20.04.6 LTS R-4.3.1
 
-Tested remotely on R-Hub:
+Tested remotely on R-Hub via Github Actions:
 
-* gcc13 (R-devel, Fedora Linux 38)
-* linux (R-devel, 22.04.4 LTS )
-* macos (R-devel, x86_64-apple-darwin20): compilation failed for package ‘fs’
-* macos-arm64 (R-devel, aarch64-apple-darwin20)
-* windows (R-devel, Windows Server 2022)
+* gcc16 (R-devel)
+* linux (R-devel)
+* macos (R-devel): no runner picked up so ran another mac test with devtools
+* macos-arm64 (R-devel)
+* windows (R-devel)
 
 Tested remotely (with `devtools::check_*`):
 
-* mac release 4.4.0 (2024-04-24) aarch64-apple-darwin20
-* winbuilder R Under development (unstable) (2024-09-10 r87115 ucrt): *1 NOTE* (large components version to be changed to 1.3.1 for submission)
-* winbuilder R release 4.4.1 (2024-06-14 ucrt): *1 NOTE* (large components version to be changed to 1.3.1 for submission)
+* mac release 4.6.0 r-release-macosx-arm64
+* winbuilder R Under development (unstable) (2026-06-19 r90183 ucrt)
+
 
 ## revdepcheck results
 
-There are currently no downstream dependencies for this package
+We checked 0 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
